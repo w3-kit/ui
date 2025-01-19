@@ -2,6 +2,7 @@ import React from 'react';
 import { ConnectWalletButton } from '../components/connect-wallet';
 import { TokenList } from '../components/token-list';
 import { TransactionHistory } from '../components/transaction-history';
+import { NFTCard } from '../components/nft-card';
 
 export default function Home() {
   const handleConnect = (address: string) => {
@@ -34,6 +35,26 @@ export default function Home() {
       nonce: 2
     },
     // Add more sample transactions...
+  ];
+
+  const sampleNFTs = [
+    {
+      id: '2',
+      name: 'Bored Ape #5678',
+      description: 'A unique Bored Ape NFT',
+      image: 'https://ipfs.io/ipfs/QmRRPWG96cmgTn2qSzjwr2qvfNEuhunv6FNeMFGa9bx6mQ',
+      owner: '0x9876543210fedcba9876543210fedcba98765432',
+      collection: 'Bored Ape Yacht Club',
+      tokenId: '5678',
+      contractAddress: '0x123456789abcdef123456789abcdef1234567890',
+      chainId: 1,
+      attributes: [
+        { trait_type: 'Background', value: 'Yellow' },
+        { trait_type: 'Fur', value: 'Brown' },
+        { trait_type: 'Eyes', value: 'Bored' },
+        { trait_type: 'Clothes', value: 'Suit' }
+      ]
+    }
   ];
 
   return (
@@ -118,6 +139,21 @@ export default function Home() {
                 onTransactionClick={(tx) => console.log('Clicked transaction:', tx)}
                 itemsPerPage={5}
               />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">NFT Gallery</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sampleNFTs.map((nft) => (
+                  <NFTCard
+                    key={nft.id}
+                    nft={nft}
+                    variant="expanded"
+                    onOwnerClick={(owner) => console.log('Owner clicked:', owner)}
+                    onNFTClick={(nft) => console.log('NFT clicked:', nft)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
