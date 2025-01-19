@@ -1,6 +1,7 @@
 import React from 'react';
 import { ConnectWalletButton } from '../components/connect-wallet';
 import { TokenList } from '../components/token-list';
+import { TransactionHistory } from '../components/transaction-history';
 
 export default function Home() {
   const handleConnect = (address: string) => {
@@ -12,6 +13,28 @@ export default function Home() {
     console.error('Wallet connection error:', error);
   };
 
+  const sampleTransactions = [
+    {
+      hash: '0x123...abc',
+      from: '0xabc...def',
+      to: '0xdef...789',
+      value: '1000000000000000000', // 1 ETH
+      timestamp: Math.floor(Date.now() / 1000),
+      status: 'success' as const,
+      nonce: 1,
+      blockNumber: 12345678
+    },
+    {
+      hash: '0x456...def',
+      from: '0xabc...def',
+      to: '0xghi...789',
+      value: '500000000000000000', // 0.5 ETH
+      timestamp: Math.floor(Date.now() / 1000) - 3600,
+      status: 'pending' as const,
+      nonce: 2
+    },
+    // Add more sample transactions...
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -85,6 +108,15 @@ export default function Home() {
                 tokens={['DOT', 'AVAX', 'LINK', 'UNI']}
                 onTokenSelect={(token) => console.log('Selected:', token)}
                 variant="grid"
+              />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Transaction History</h2>
+              <TransactionHistory 
+                transactions={sampleTransactions}
+                onTransactionClick={(tx) => console.log('Clicked transaction:', tx)}
+                itemsPerPage={5}
               />
             </div>
           </div>
