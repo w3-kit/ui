@@ -19,59 +19,47 @@ export default function Home() {
             Blockchain UI Library Demo
           </h1>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Ghost Variant */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Ghost Style
+                MetaMask
               </h2>
               <div className="mb-4">
                 <ConnectWalletButton
                   onConnect={handleConnect}
                   onError={handleError}
                   variant="ghost"
-                  customLabel="Connect Ghost"
+                  walletType="metamask"
                 />
               </div>
-              <p className="text-sm text-gray-600">
-                Minimal ghost-style button
-              </p>
             </div>
 
-            {/* Light Variant */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Light Style
-              </h2>
-              <div className="mb-4">
-                <ConnectWalletButton
-                  onConnect={handleConnect}
-                  onError={handleError}
-                  variant="light"
-                  customLabel="Connect Light"
-                />
-              </div>
-              <p className="text-sm text-gray-600">
-                Clean light-themed button
-              </p>
-            </div>
-
-            {/* Dark Variant */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Dark Style
+                WalletConnect
               </h2>
               <div className="mb-4">
                 <ConnectWalletButton
                   onConnect={handleConnect}
                   onError={handleError}
                   variant="dark"
-                  customLabel="Connect Dark"
+                  walletType="walletconnect"
                 />
               </div>
-              <p className="text-sm text-gray-600">
-                Bold dark-themed button
-              </p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Coinbase Wallet
+              </h2>
+              <div className="mb-4">
+                <ConnectWalletButton
+                  onConnect={handleConnect}
+                  onError={handleError}
+                  variant="dark"
+                  walletType="coinbase"
+                />
+              </div>
             </div>
           </div>
         </div>
