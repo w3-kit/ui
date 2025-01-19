@@ -1,5 +1,6 @@
 import React from 'react';
 import { ConnectWalletButton } from '../components/connect-wallet';
+import { TokenList } from '../components/token-list';
 
 export default function Home() {
   const handleConnect = (address: string) => {
@@ -10,6 +11,7 @@ export default function Home() {
   const handleError = (error: Error) => {
     console.error('Wallet connection error:', error);
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -60,6 +62,30 @@ export default function Home() {
                   walletType="coinbase"
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-4">All Tokens</h2>
+              <TokenList 
+                tokens={[
+                  'ETH', 'BTC', 'USDT', 'USDC', 'BNB', 'XRP', 'USDD', 'ADA',
+                  'DOGE', 'MATIC', 'DAI', 'DOT', 'SHIB', 'TRX', 'SOL', 'AVAX',
+                  'UNI', 'LINK', 'FPI'
+                ]}
+                onTokenSelect={(token) => console.log('Selected:', token)}
+                variant="table"
+              />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Grid View</h2>
+              <TokenList 
+                tokens={['DOT', 'AVAX', 'LINK', 'UNI']}
+                onTokenSelect={(token) => console.log('Selected:', token)}
+                variant="grid"
+              />
             </div>
           </div>
         </div>
