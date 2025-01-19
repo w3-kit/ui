@@ -1,0 +1,172 @@
+Roadmap for Blockchain UI Library
+Objective
+Build a customizable UI library for blockchain applications that developers can integrate into their projects. The library will provide essential components for wallet connections, token management, transactions, and more. It will also include a CLI to copy components directly into users' projects for further customization.
+
+1. Repository Structure
+Organize the project as follows:
+
+graphql
+Copy
+Edit
+blockchain-ui-library/
+├── components/            # Core UI components
+│   ├── connect-wallet/
+│   ├── wallet-modal/
+│   ├── token-list/
+│   ├── transaction-history/
+│   ├── nft-card/
+│   ├── price-ticker/
+│   ├── network-switcher/
+│   ├── gas-fee-calculator/
+│   ├── contract-interaction-form/
+│   ├── qr-code-scanner/
+│   └── index.ts            # Exports all components
+├── cli/                   # CLI for generating components
+│   ├── templates/         # Templates for each component
+│   ├── commands/          # CLI command logic
+│   ├── index.ts           # Main CLI entry
+├── docs/                  # Documentation
+├── src/                   # Support scripts/utilities
+├── tests/                 # Unit tests for components and CLI
+├── tailwind.config.js     # Tailwind configuration
+├── tsconfig.json          # TypeScript configuration
+├── package.json           # Project metadata
+└── README.md              # Project description
+2. Component Development
+Build the following 10 components first, each focusing on blockchain functionality.
+
+2.1 Connect Wallet Button
+Description: Button for connecting wallets like MetaMask, WalletConnect, and Coinbase Wallet.
+Features:
+Supports multiple wallet providers.
+Emits an event or callback when connected.
+Displays loading and error states.
+2.2 Wallet Modal
+Description: Modal to display the connected wallet address with options to disconnect or switch wallets.
+Features:
+Wallet address masking.
+Copy wallet address functionality.
+Clear session on disconnect.
+2.3 Token List
+Description: Component to show a list of tokens with details like icons, balances, and price conversions.
+Features:
+Sortable and filterable list.
+Fetch token balances dynamically.
+2.4 Transaction History
+Description: Displays a list of wallet transactions with status and details.
+Features:
+Pagination for large histories.
+Indicators for pending, successful, and failed transactions.
+2.5 NFT Card
+Description: Card component to display NFT details such as image, name, and owner.
+Features:
+Image preview with lazy loading.
+Owner wallet link to explore.
+2.6 Price Ticker
+Description: Displays live prices for cryptocurrencies or tokens.
+Features:
+Real-time price updates using WebSocket or API polling.
+Configurable refresh intervals.
+2.7 Network Switcher
+Description: Dropdown for switching blockchain networks (e.g., Ethereum, Polygon).
+Features:
+Network validation and connection.
+Displays current network.
+2.8 Gas Fee Calculator
+Description: Dynamic calculator to estimate gas fees based on network activity.
+Features:
+Fetch current gas prices from APIs.
+Display low, medium, and high options.
+2.9 Contract Interaction Form
+Description: A form for interacting with smart contracts, supporting read and write operations.
+Features:
+Auto-generated inputs from ABI.
+Error handling for failed transactions.
+2.10 QR Code Scanner
+Description: Component for scanning wallet addresses or transaction details.
+Features:
+Integrate a library like react-qr-reader.
+Provide scanned data as callback or state.
+3. CLI Development
+Build a CLI tool to let developers copy components into their projects.
+
+Commands
+init: Set up Tailwind CSS and ui/ folder in the user’s project.
+
+Copies tailwind.config.js and basic setup files.
+Adds Tailwind CSS to the project.
+add <component>: Copies a specific component to the user’s ui/ folder.
+
+Fetches the corresponding files from cli/templates/.
+Ensures all dependencies are installed.
+list: Lists all available components with descriptions.
+
+Example CLI Code
+typescript
+Copy
+Edit
+import { Command } from "commander";
+import fs from "fs";
+import path from "path";
+
+const program = new Command();
+
+program
+  .command("add <component>")
+  .description("Add a UI component to your project.")
+  .action((component) => {
+    const src = path.resolve(__dirname, "templates", component);
+    const dest = path.resolve(process.cwd(), "ui", component);
+
+    if (!fs.existsSync(src)) {
+      console.error(`Component ${component} not found.`);
+      return;
+    }
+
+    fs.mkdirSync(dest, { recursive: true });
+    fs.readdirSync(src).forEach((file) => {
+      fs.copyFileSync(path.join(src, file), path.join(dest, file));
+    });
+
+    console.log(`Component ${component} added to your project.`);
+  });
+
+program.parse(process.argv);
+4. Documentation
+README.md
+
+Brief introduction to the library.
+Installation and usage instructions.
+CLI commands and examples.
+Component Usage
+
+Include examples for integrating each component.
+Document available props and customization options.
+Website
+
+Use Next.js for documentation hosting.
+Add live component previews.
+5. Testing
+Unit Tests: Use Jest and React Testing Library.
+Ensure component rendering and prop handling.
+E2E Tests: Use Cypress to test component functionality in a sample blockchain app.
+6. Publishing
+npm Registry
+
+Package CLI as an npm module.
+Include bin in package.json:
+json
+Copy
+Edit
+"bin": {
+  "blockchain-ui-cli": "./cli/index.js"
+}
+Publish:
+bash
+Copy
+Edit
+npm publish --access public
+GitHub Repository
+
+Push the code to a public repository.
+Add labels like good first issue for community contributions.
