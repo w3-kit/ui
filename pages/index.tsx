@@ -5,6 +5,7 @@ import { TransactionHistory } from '../components/transaction-history';
 import { NFTCard } from '../components/nft-card';
 import { PriceTicker } from '../components/price-ticker';
 import { NetworkSwitcher, Network } from '../components/network-switcher';
+import { GasCalculator } from '../components/gas-calculator';
 
 export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
@@ -208,6 +209,17 @@ export default function Home() {
                   />
                 </div>
               </div>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Gas Calculator</h2>
+              <GasCalculator
+                onGasSelect={(gasLimit, price) => {
+                  console.log('Selected gas config:', { gasLimit, price });
+                }}
+                chainId={currentNetwork?.chainId}
+                refreshInterval={10000}
+              />
             </div>
           </div>
         </div>
