@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/contracts": "^5.7.0",
+    "@ethersproject/providers": "^5.7.2",
     "@metamask/providers": "^10.0.0",
     "@walletconnect/web3-provider": "^1.8.0",
     "@web3-react/walletconnect-connector": "^6.2.13",

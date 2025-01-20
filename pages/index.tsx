@@ -6,6 +6,7 @@ import { NFTCard } from '../components/nft-card';
 import { PriceTicker } from '../components/price-ticker';
 import { NetworkSwitcher, Network } from '../components/network-switcher';
 import { GasCalculator } from '../components/gas-calculator';
+import { ContractInteraction } from '../components/contract-interaction';
 
 export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
@@ -66,6 +67,29 @@ export default function Home() {
     setCurrentNetwork(network);
     console.log('Switched to network:', network.name);
   };
+
+  // Example ERC20 ABI
+  const sampleAbi = [
+    {
+      "constant": true,
+      "inputs": [{"name": "account", "type": "address"}],
+      "name": "balanceOf",
+      "outputs": [{"name": "", "type": "uint256"}],
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {"name": "recipient", "type": "address"},
+        {"name": "amount", "type": "uint256"}
+      ],
+      "name": "transfer",
+      "outputs": [{"name": "", "type": "bool"}],
+      "type": "function",
+      "stateMutability": "nonpayable"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -219,6 +243,16 @@ export default function Home() {
                 }}
                 chainId={currentNetwork?.chainId}
                 refreshInterval={10000}
+              />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Contract Interaction</h2>
+              <ContractInteraction
+                abi={sampleAbi}
+                contractAddress="0x123..." // Replace with actual contract address
+                onSuccess={(result) => console.log('Transaction successful:', result)}
+                onError={(error) => console.error('Transaction failed:', error)}
               />
             </div>
           </div>
