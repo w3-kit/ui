@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ConnectWalletButton } from '../components/connect-wallet';
 import { TokenList } from '../components/token-list';
 import { TransactionHistory } from '../components/transaction-history';
 import { NFTCard } from '../components/nft-card';
 import { PriceTicker } from '../components/price-ticker';
+import { NetworkSwitcher, Network } from '../components/network-switcher';
 
 export default function Home() {
+  const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
+
   const handleConnect = (address: string) => {
     console.log('Connected wallet address:', address);
     alert(`Connected to wallet: ${address}`);
@@ -57,6 +60,11 @@ export default function Home() {
       ]
     }
   ];
+
+  const handleNetworkChange = (network: Network) => {
+    setCurrentNetwork(network);
+    console.log('Switched to network:', network.name);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -111,6 +119,27 @@ export default function Home() {
           </div>
 
           <div className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Network Switcher</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Default View</h3>
+                  <NetworkSwitcher
+                    currentNetwork={currentNetwork}
+                    onNetworkChange={handleNetworkChange}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Minimal View</h3>
+                  <NetworkSwitcher
+                    currentNetwork={currentNetwork}
+                    onNetworkChange={handleNetworkChange}
+                    variant="minimal"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div>
               <h2 className="text-2xl font-bold mb-4">All Tokens</h2>
               <TokenList 
