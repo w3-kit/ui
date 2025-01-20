@@ -3,6 +3,7 @@ import { ConnectWalletButton } from '../components/connect-wallet';
 import { TokenList } from '../components/token-list';
 import { TransactionHistory } from '../components/transaction-history';
 import { NFTCard } from '../components/nft-card';
+import { PriceTicker } from '../components/price-ticker';
 
 export default function Home() {
   const handleConnect = (address: string) => {
@@ -153,6 +154,30 @@ export default function Home() {
                     onNFTClick={(nft) => console.log('NFT clicked:', nft)}
                   />
                 ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Price Ticker</h2>
+              
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Detailed View</h3>
+                  <PriceTicker 
+                    tokens={['BTC', 'ETH', 'USDT', 'BNB', 'MATIC']}
+                    refreshInterval={5000}
+                    onPriceUpdate={(prices) => console.log('Updated prices:', prices)}
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Compact View</h3>
+                  <PriceTicker 
+                    tokens={['BTC', 'ETH', 'USDT']}
+                    variant="compact"
+                    refreshInterval={5000}
+                  />
+                </div>
               </div>
             </div>
           </div>
