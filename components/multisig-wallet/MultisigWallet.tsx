@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MultisigWalletProps, Transaction } from './types';
-import { formatAddress, formatEther, formatTimestamp } from './utils';
+import { formatAddress, formatEther, formatTimestamp } from './utils';	
 
 export const MultisigWallet: React.FC<MultisigWalletProps> = ({
   walletAddress,

@@ -1,123 +1,98 @@
-import React, { useState, useCallback } from 'react';
-import { NetworkSwitcherProps, Network, NETWORKS } from './types';
-import { switchNetwork } from './utils';
+import React, { useState } from 'react';
+import { Network, NetworkSwitcherProps } from './types';
+import { NETWORKS, TEST_NETWORKS } from './networks';
 
 export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({
   currentNetwork,
-  onNetworkChange,
-  className = '',
-  variant = 'default'
+  onNetworkChange = () => {},
+  className = ''
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleNetworkSwitch = useCallback(async (network: Network) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      await switchNetwork(network);
-      onNetworkChange?.(network);
-      setIsOpen(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to switch network');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onNetworkChange]);
-
-  if (variant === 'minimal') {
-    return (
-      <div className="relative">
-        <select
-          className={`block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md ${className}`}
-          value={currentNetwork?.chainId}
-          onChange={(e) => {
-            const network = NETWORKS.find(n => n.chainId === Number(e.target.value));
-            if (network) handleNetworkSwitch(network);
-          }}
-        >
-          {NETWORKS.map((network) => (
-            <option key={network.chainId} value={network.chainId}>
-              {network.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
+  const [showTestnets, setShowTestnets] = useState(false);
+  const networks = showTestnets ? TEST_NETWORKS : NETWORKS;
 
   return (
-    <div className="relative">
-      <div className={`${className}`}>
-        <button
-          type="button"
-          className={`inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-            isLoading ? 'opacity-75 cursor-not-allowed' : ''
-          }`}
-          onClick={() => setIsOpen(!isOpen)}
-          disabled={isLoading}
-        >
-          {currentNetwork?.logoURI && (
-            <img
-              src={currentNetwork.logoURI}
-              alt={currentNetwork.name}
-              className="w-5 h-5 mr-2 rounded-full"
-            />
-          )}
-          <span>{currentNetwork?.name || 'Select Network'}</span>
-          <svg
-            className={`ml-2 h-5 w-5 transform ${isOpen ? 'rotate-180' : ''}`}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+    <div className={`bg-white rounded-lg border shadow-sm ${className}`}>
+      <div className="p-6 border-b">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold">Network</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Select a blockchain network to connect to
+            </p>
+          </div>
+          <button
+            onClick={() => setShowTestnets(!showTestnets)}
+            className="text-sm px-3 py-1 border rounded-full
+              hover:bg-gray-50 transition-colors"
           >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+            {showTestnets ? 'Show Mainnets' : 'Show Testnets'}
+          </button>
+        </div>
       </div>
 
-      {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-10">
-          {NETWORKS.map((network) => (
-            <div
+      <div className="p-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {networks.map((network) => (
+            <button
               key={network.chainId}
-              className={`group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer ${
-                currentNetwork?.chainId === network.chainId ? 'bg-gray-50' : ''
-              }`}
-              onClick={() => handleNetworkSwitch(network)}
+              onClick={() => onNetworkChange(network)}
+              className={`relative p-4 text-left border rounded-lg transition-all
+                ${currentNetwork?.chainId === network.chainId
+                  ? 'border-black bg-gray-50'
+                  : 'border-gray-200 hover:border-gray-300'
+                }`}
             >
-              {network.logoURI && (
-                <img
-                  src={network.logoURI}
-                  alt={network.name}
-                  className="w-6 h-6 mr-3 rounded-full"
-                />
-              )}
-              <div className="flex-1">
-                <p className="font-medium">{network.name}</p>
-                <p className="text-xs text-gray-500">{network.symbol}</p>
+              <div className="flex items-center space-x-3">
+                {network.icon && (
+                  <img
+                    src={network.icon}
+                    alt={network.name}
+                    className="w-8 h-8 rounded-full"
+                  />
+                )}
+                <div>
+                  <div className="font-medium">{network.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Chain ID: {network.chainId}
+                  </div>
+                </div>
               </div>
+
               {currentNetwork?.chainId === network.chainId && (
-                <svg className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                <div className="absolute top-3 right-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                </div>
               )}
-            </div>
+            </button>
           ))}
         </div>
-      )}
 
-      {error && (
-        <div className="mt-2 text-sm text-red-600">
-          {error}
-        </div>
-      )}
+        {currentNetwork && (
+          <div className="mt-6 border rounded-lg divide-y">
+            <div className="p-3 flex justify-between items-center">
+              <span className="text-sm text-gray-600">RPC URL</span>
+              <code className="text-sm text-gray-900 font-mono">
+                {currentNetwork.rpcUrl}
+              </code>
+            </div>
+            <div className="p-3 flex justify-between items-center">
+              <span className="text-sm text-gray-600">Currency</span>
+              <span className="font-medium">{currentNetwork.currency}</span>
+            </div>
+            <div className="p-3 flex justify-between items-center">
+              <span className="text-sm text-gray-600">Explorer</span>
+              <a
+                href={currentNetwork.blockExplorer}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-black hover:underline"
+              >
+                View Explorer ↗
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
-}; 
+};

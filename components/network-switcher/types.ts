@@ -1,17 +1,18 @@
+import { Network } from './types';
+
 export interface Network {
   chainId: number;
   name: string;
-  symbol: string;
   rpcUrl: string;
+  currency: string;
   blockExplorer: string;
-  logoURI?: string;
+  icon?: string;
 }
 
 export interface NetworkSwitcherProps {
-  currentNetwork?: Network;
+  currentNetwork?: Network | null;
   onNetworkChange?: (network: Network) => void;
   className?: string;
-  variant?: 'default' | 'minimal';
 }
 
 export const NETWORKS: Network[] = [

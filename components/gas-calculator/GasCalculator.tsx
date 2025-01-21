@@ -48,139 +48,124 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
   const getSpeedLabel = (speed: 'low' | 'medium' | 'high') => {
     switch (speed) {
       case 'low':
-        return { label: 'Economy', time: '5+ mins' };
+        return { label: 'Economy', time: '5+ mins', icon: '🐢' };
       case 'medium':
-        return { label: 'Standard', time: '< 2 mins' };
+        return { label: 'Standard', time: '< 2 mins', icon: '🚶' };
       case 'high':
-        return { label: 'Fast', time: '< 30 secs' };
+        return { label: 'Fast', time: '< 30 secs', icon: '⚡' };
     }
   };
 
-  if (loading) {
-    return (
-      <div className="animate-pulse space-y-4 bg-white rounded-xl p-6 shadow-lg">
-        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-        <div className="space-y-3">
-          <div className="h-12 bg-gray-200 rounded-lg"></div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm text-red-700">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
+    <div className={`bg-white rounded-lg border shadow-sm ${className}`}>
+      {/* Header */}
+      <div className="p-6 border-b">
+        <h2 className="text-xl font-semibold">Gas Calculator</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Estimate transaction costs based on current network conditions
+        </p>
+      </div>
+
       <div className="p-6 space-y-6">
-        {/* Gas Limit Section */}
+        {/* Gas Limit Input */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <label htmlFor="gasLimit" className="text-sm font-medium text-gray-700">
-              Gas Limit
-            </label>
+            <label className="text-sm font-medium">Gas Limit</label>
             <div className="flex space-x-2">
               {[21000, 65000, 100000].map((preset) => (
                 <button
                   key={preset}
                   onClick={() => setGasLimit(preset)}
-                  className={`px-2 py-1 text-xs rounded-md transition-colors ${
-                    gasLimit === preset
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-500 hover:bg-gray-100'
-                  }`}
+                  className={`px-2 py-1 text-xs rounded transition-colors
+                    ${gasLimit === preset
+                      ? 'bg-black text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                    }`}
                 >
                   {preset.toLocaleString()}
                 </button>
               ))}
             </div>
           </div>
-          <div className="relative mt-1 rounded-md shadow-sm">
+          <div className="relative">
             <input
               type="number"
-              id="gasLimit"
               value={gasLimit}
               onChange={(e) => setGasLimit(Number(e.target.value))}
-              className="block w-full rounded-md border-gray-300 pl-3 pr-12 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="w-full px-3 py-2 text-sm border rounded-md
+                focus:outline-none focus:ring-1 focus:ring-black"
+              placeholder="Enter gas limit"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-gray-500 sm:text-sm">units</span>
+              <span className="text-sm text-gray-500">units</span>
             </div>
           </div>
         </div>
 
-        {/* Gas Price Options */}
-        {gasPrice && (
-          <div className="grid grid-cols-3 gap-4">
-            {(['low', 'medium', 'high'] as const).map((speed) => {
-              const { label, time } = getSpeedLabel(speed);
-              return (
-                <button
-                  key={speed}
-                  onClick={() => handleSpeedSelect(speed)}
-                  className={`relative p-4 rounded-xl border-2 transition-all hover:shadow-md ${
-                    selectedSpeed === speed
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">{label}</span>
+        {loading ? (
+          <div className="space-y-4 animate-pulse">
+            <div className="h-[120px] bg-gray-100 rounded-lg" />
+            <div className="h-[80px] bg-gray-100 rounded-lg" />
+          </div>
+        ) : error ? (
+          <div className="p-3 border border-red-200 rounded-lg bg-red-50 text-sm text-red-600">
+            {error}
+          </div>
+        ) : gasPrice && (
+          <>
+            {/* Speed Options */}
+            <div className="grid grid-cols-3 gap-3">
+              {(['low', 'medium', 'high'] as const).map((speed) => {
+                const { label, time, icon } = getSpeedLabel(speed);
+                return (
+                  <button
+                    key={speed}
+                    onClick={() => handleSpeedSelect(speed)}
+                    className={`relative p-4 text-left border rounded-lg transition-all
+                      ${selectedSpeed === speed
+                        ? 'border-black bg-gray-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-2xl" role="img" aria-label={label}>
+                        {icon}
+                      </span>
                       <span className="text-xs text-gray-500">{time}</span>
                     </div>
-                    <div className="text-2xl font-bold text-gray-900">
-                      {formatGwei(gasPrice[speed])}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      Gwei
-                    </div>
-                    {estimate && (
-                      <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200">
-                        ≈ {estimate.estimatedCost[speed]} ETH
+                    <div className="space-y-1">
+                      <div className="font-medium">{label}</div>
+                      <div className="text-2xl font-bold">
+                        {formatGwei(gasPrice[speed])}
                       </div>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                      <div className="text-sm text-gray-500">Gwei</div>
+                      {estimate && (
+                        <div className="text-xs text-gray-500 mt-2 pt-2 border-t">
+                          ≈ {estimate.estimatedCost[speed]} ETH
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
 
-        {/* Network Info */}
-        {gasPrice && (
-          <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Base Fee</span>
-              <span className="font-medium text-gray-900">{formatGwei(gasPrice.baseFee)} Gwei</span>
+            {/* Network Info */}
+            <div className="border rounded-lg divide-y">
+              <div className="p-3 flex justify-between items-center">
+                <span className="text-sm text-gray-600">Base Fee</span>
+                <span className="font-medium">{formatGwei(gasPrice.baseFee)} Gwei</span>
+              </div>
+              <div className="p-3 flex justify-between items-center">
+                <span className="text-sm text-gray-600">Last Block</span>
+                <span className="font-medium">#{gasPrice.lastBlock}</span>
+              </div>
+              <div className="p-3 flex justify-between items-center text-xs text-gray-500">
+                <span>Last updated</span>
+                <span>{new Date().toLocaleTimeString()}</span>
+              </div>
             </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Last Block</span>
-              <span className="font-medium text-gray-900">#{gasPrice.lastBlock}</span>
-            </div>
-            <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200">
-              Last updated: {new Date().toLocaleTimeString()}
-            </div>
-          </div>
+          </>
         )}
       </div>
     </div>

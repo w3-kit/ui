@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { ContractFunction } from './types';
+import { Fragment } from '@ethersproject/abi';
 
 export function getInputType(abiType: string): string {
   if (abiType.includes('int')) return 'number';
@@ -38,13 +39,14 @@ export function formatInputValue(value: any): string {
   return String(value);
 }
 
-export function categorizeFunction(functions: ContractFunction[]) {
+export function categorizeFunction(functions: Fragment[]) {
   return functions.reduce(
     (acc, fn) => {
-      if (fn.stateMutability === 'view' || fn.stateMutability === 'pure') {
-        acc.readFunctions.push(fn);
+      const func = fn as ContractFunction;
+      if (func.stateMutability === 'view' || func.stateMutability === 'pure') {
+        acc.readFunctions.push(func);
       } else {
-        acc.writeFunctions.push(fn);
+        acc.writeFunctions.push(func);
       }
       return acc;
     },
