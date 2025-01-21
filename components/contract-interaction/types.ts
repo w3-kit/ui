@@ -17,7 +17,7 @@ export interface ContractFunction {
 }
 
 export interface ContractInteractionProps {
-  abi: Fragment[];
+  abi: readonly Fragment[];
   contractAddress: string;
   className?: string;
   onSuccess?: (result: any) => void;

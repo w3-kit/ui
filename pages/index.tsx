@@ -7,6 +7,8 @@ import { PriceTicker } from '../components/price-ticker';
 import { NetworkSwitcher, Network } from '../components/network-switcher';
 import { GasCalculator } from '../components/gas-calculator';
 import { ContractInteraction } from '../components/contract-interaction';
+import { Interface } from '@ethersproject/abi';
+import { MultisigWallet } from '../components/multisig-wallet';
 
 export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
@@ -20,27 +22,39 @@ export default function Home() {
     console.error('Wallet connection error:', error);
   };
 
-  const sampleTransactions = [
+  const sampleSigners = [
+    { address: '0x1234...5678', name: 'Alice', hasApproved: false },
+    { address: '0x5678...9abc', name: 'Bob', hasApproved: true },
+    { address: '0x9abc...def0', name: 'Charlie', hasApproved: false },
+  ];
+
+  const sampleMultisigTransactions = [
+    {
+      id: '1',
+      description: 'Send ETH to Treasury',
+      to: '0xdef0...1234',
+      value: '1000000000000000000',
+      data: '0x',
+      status: 'pending' as const,
+      approvals: 1,
+      requiredApprovals: 2,
+      proposer: '0x1234...5678',
+      timestamp: Date.now(),
+      signers: sampleSigners
+    }
+  ];
+
+  const sampleTransactionHistory = [
     {
       hash: '0x123...abc',
       from: '0xabc...def',
       to: '0xdef...789',
-      value: '1000000000000000000', // 1 ETH
+      value: '1000000000000000000',
       timestamp: Math.floor(Date.now() / 1000),
       status: 'success' as const,
       nonce: 1,
       blockNumber: 12345678
-    },
-    {
-      hash: '0x456...def',
-      from: '0xabc...def',
-      to: '0xghi...789',
-      value: '500000000000000000', // 0.5 ETH
-      timestamp: Math.floor(Date.now() / 1000) - 3600,
-      status: 'pending' as const,
-      nonce: 2
-    },
-    // Add more sample transactions...
+    }
   ];
 
   const sampleNFTs = [
@@ -90,6 +104,9 @@ export default function Home() {
       "stateMutability": "nonpayable"
     }
   ];
+
+  // Convert raw ABI to Fragment[]
+  const parsedAbi = new Interface(sampleAbi).fragments;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -190,7 +207,7 @@ export default function Home() {
             <div>
               <h2 className="text-2xl font-bold mb-4">Transaction History</h2>
               <TransactionHistory 
-                transactions={sampleTransactions}
+                transactions={sampleTransactionHistory}
                 onTransactionClick={(tx) => console.log('Clicked transaction:', tx)}
                 itemsPerPage={5}
               />
@@ -249,10 +266,23 @@ export default function Home() {
             <div>
               <h2 className="text-2xl font-bold mb-4">Contract Interaction</h2>
               <ContractInteraction
-                abi={sampleAbi}
-                contractAddress="0x123..." // Replace with actual contract address
+                abi={parsedAbi}
+                contractAddress="0x123..."
                 onSuccess={(result) => console.log('Transaction successful:', result)}
                 onError={(error) => console.error('Transaction failed:', error)}
+              />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Multi-Signature Wallet</h2>
+              <MultisigWallet
+                walletAddress="0xabcd...ef01"
+                signers={sampleSigners}
+                transactions={sampleMultisigTransactions}
+                requiredApprovals={2}
+                onPropose={(tx) => console.log('New transaction:', tx)}
+                onApprove={(txId) => console.log('Approved:', txId)}
+                onReject={(txId) => console.log('Rejected:', txId)}
               />
             </div>
           </div>

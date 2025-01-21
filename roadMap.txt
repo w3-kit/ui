@@ -32,61 +32,78 @@ blockchain-ui-library/
 ├── tsconfig.json          # TypeScript configuration
 ├── package.json           # Project metadata
 └── README.md              # Project description
-2. Component Development
-Build the following 10 components first, each focusing on blockchain functionality.
+Here are 10 additional components for your dApp UI library to enhance functionality and user experience:
 
-2.1 Connect Wallet Button
-Description: Button for connecting wallets like MetaMask, WalletConnect, and Coinbase Wallet.
+1. Multi-Signature Wallet Manager
+Description: Component for managing multi-signature wallets and approvals.
 Features:
-Supports multiple wallet providers.
-Emits an event or callback when connected.
-Displays loading and error states.
-2.2 Wallet Modal
-Description: Modal to display the connected wallet address with options to disconnect or switch wallets.
+
+Display list of signers and their approval statuses.
+Allow users to propose, approve, or reject transactions.
+Show pending transactions and their details.
+2. Token Swap Widget
+Description: A user-friendly interface for swapping tokens directly within the dApp.
 Features:
-Wallet address masking.
-Copy wallet address functionality.
-Clear session on disconnect.
-2.3 Token List
-Description: Component to show a list of tokens with details like icons, balances, and price conversions.
+
+Input fields for token pairs and amounts.
+Real-time price estimates and slippage settings.
+Connects to decentralized exchanges (e.g., Uniswap, PancakeSwap).
+3. Portfolio Dashboard
+Description: Dashboard summarizing the user's assets across wallets.
 Features:
-Sortable and filterable list.
-Fetch token balances dynamically.
-2.4 Transaction History
-Description: Displays a list of wallet transactions with status and details.
+
+Displays total wallet balance and token allocations (e.g., pie chart).
+Fetches real-time token prices and balances.
+Supports multiple wallets and networks.
+4. Voting & Governance Interface
+Description: Interface for blockchain-based voting and DAO governance participation.
 Features:
-Pagination for large histories.
-Indicators for pending, successful, and failed transactions.
-2.5 NFT Card
-Description: Card component to display NFT details such as image, name, and owner.
+
+Show proposals with voting options (e.g., Yes/No/Abstain).
+Display voting deadlines and quorum requirements.
+Fetch and display results in real time.
+5. Event Log Viewer
+Description: Displays real-time blockchain event logs from smart contracts.
 Features:
-Image preview with lazy loading.
-Owner wallet link to explore.
-2.6 Price Ticker
-Description: Displays live prices for cryptocurrencies or tokens.
+
+Filter by event type or contract address.
+Automatically fetch logs via WebSocket or API.
+Show event details and timestamps.
+6. Staking Dashboard
+Description: Component to view and manage token staking.
 Features:
-Real-time price updates using WebSocket or API polling.
-Configurable refresh intervals.
-2.7 Network Switcher
-Description: Dropdown for switching blockchain networks (e.g., Ethereum, Polygon).
+
+Show staked balance, rewards earned, and total staking APY.
+Allow users to stake, unstake, and claim rewards.
+Display real-time updates from staking contracts.
+7. Cross-Chain Bridge Interface
+Description: Simplified interface for transferring assets across blockchains.
 Features:
-Network validation and connection.
-Displays current network.
-2.8 Gas Fee Calculator
-Description: Dynamic calculator to estimate gas fees based on network activity.
+
+Input fields for source and destination chains.
+Show estimated fees and processing time.
+Provide transaction progress and status.
+8. Account Security Settings
+Description: Allows users to manage account security settings for dApp access.
 Features:
-Fetch current gas prices from APIs.
-Display low, medium, and high options.
-2.9 Contract Interaction Form
-Description: A form for interacting with smart contracts, supporting read and write operations.
+
+Enable/disable features like session timeout or 2FA prompts.
+Display recent login attempts.
+Integrate with wallet authentication methods.
+9. ENS/DNS Resolver
+Description: Search and display information about ENS (Ethereum Name Service) or DNS domains.
 Features:
-Auto-generated inputs from ABI.
-Error handling for failed transactions.
-2.10 QR Code Scanner
-Description: Component for scanning wallet addresses or transaction details.
+
+Resolve domain to wallet address.
+Check availability and expiration dates of domains.
+Allow direct registration or renewal.
+10. Referral & Reward Tracker
+Description: Tracks referral programs and rewards for users.
 Features:
-Integrate a library like react-qr-reader.
-Provide scanned data as callback or state.
+
+Show referral codes and earnings from referred users.
+Display reward history and claimable balances.
+Integrate with blockchain for payout transactions.
 3. CLI Development
 Build a CLI tool to let developers copy components into their projects.
 
