@@ -10,6 +10,9 @@ import { ContractInteraction } from "../components/contract-interaction";
 import { Interface } from "@ethersproject/abi";
 import { MultisigWallet } from "../components/multisig-wallet";
 import { TokenSwapWidget } from "../components/token-swap";
+import { BridgeWidget } from "../components/bridge";
+import { Network as BridgeNetwork } from "../components/bridge";
+import { TokenSymbol } from "../components/token-list/tokenConfigs";
 
 export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
@@ -110,9 +113,19 @@ export default function Home() {
   // Convert raw ABI to Fragment[]
   const parsedAbi = new Interface(sampleAbi).fragments;
 
-  const handleSwap = async (fromToken: string, toToken: string, amount: string) => {
+  const handleSwap = async (fromToken: TokenSymbol, toToken: TokenSymbol, amount: string) => {
     console.log('Swapping tokens:', { fromToken, toToken, amount });
     // Implement actual swap logic here
+  };
+
+  const handleBridge = async (params: {
+    fromNetwork: BridgeNetwork;
+    toNetwork: BridgeNetwork;
+    token: TokenSymbol;
+    amount: string;
+  }) => {
+    console.log("Bridging assets:", params);
+    // Implement actual bridge logic here
   };
 
   return (
@@ -169,6 +182,11 @@ export default function Home() {
 
           <div className="w-full mx-auto mb-12">
             <TokenSwapWidget onSwap={handleSwap} />
+          </div>
+
+          <div className="w-full mx-auto mb-12">
+            <h1>Bridge Widget</h1>
+            <BridgeWidget onBridge={handleBridge} />
           </div>
 
           <div className="space-y-8">
