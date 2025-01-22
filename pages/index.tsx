@@ -9,6 +9,7 @@ import { GasCalculator } from "../components/gas-calculator";
 import { ContractInteraction } from "../components/contract-interaction";
 import { Interface } from "@ethersproject/abi";
 import { MultisigWallet } from "../components/multisig-wallet";
+import { TokenSwapWidget } from "../components/token-swap";
 
 export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<Network | undefined>();
@@ -109,6 +110,11 @@ export default function Home() {
   // Convert raw ABI to Fragment[]
   const parsedAbi = new Interface(sampleAbi).fragments;
 
+  const handleSwap = async (fromToken: string, toToken: string, amount: string) => {
+    console.log('Swapping tokens:', { fromToken, toToken, amount });
+    // Implement actual swap logic here
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -159,6 +165,10 @@ export default function Home() {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="w-full mx-auto mb-12">
+            <TokenSwapWidget onSwap={handleSwap} />
           </div>
 
           <div className="space-y-8">
