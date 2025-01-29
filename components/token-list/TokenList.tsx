@@ -73,7 +73,7 @@ export const TokenList: React.FC<TokenListProps> = ({
     switch (variant) {
       case 'grid':
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {filteredAndSortedTokens.map((token) => (
               <TokenCard
                 key={`${token.chainId}-${token.address}`}
@@ -89,82 +89,107 @@ export const TokenList: React.FC<TokenListProps> = ({
 
       default:
         return (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                    onClick={() => handleSort('name')}
-                  >
-                    Token
-                  </th>
-                  {showBalances && (
-                    <th 
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => handleSort('balance')}
-                    >
-                      Balance
-                    </th>
-                  )}
-                  {showPrices && (
-                    <>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Price
-                      </th>
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <div className="min-w-full inline-block align-middle">
+              <div className="overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
                       <th 
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                        onClick={() => handleSort('value')}
+                        className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                        onClick={() => handleSort('name')}
                       >
-                        Value
+                        <span className="flex items-center gap-2">
+                          Token
+                          {sortField === 'name' && (
+                            <span className="text-gray-400">
+                              {sortDirection === 'asc' ? '↑' : '↓'}
+                            </span>
+                          )}
+                        </span>
                       </th>
-                    </>
-                  )}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredAndSortedTokens.map((token) => (
-                  <tr 
-                    key={`${token.chainId}-${token.address}`}
-                    onClick={() => onTokenSelect?.(token)}
-                    className="hover:bg-gray-50 cursor-pointer"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {token.logoURI && (
-                          <img 
-                            src={token.logoURI} 
-                            alt={token.symbol}
-                            className="w-8 h-8 rounded-full mr-3"
-                          />
+                      {showBalances && (
+                        <th 
+                          className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                          onClick={() => handleSort('balance')}
+                        >
+                          <span className="flex items-center gap-2">
+                            Balance
+                            {sortField === 'balance' && (
+                              <span className="text-gray-400">
+                                {sortDirection === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
+                          </span>
+                        </th>
+                      )}
+                      {showPrices && (
+                        <>
+                          <th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Price
+                          </th>
+                          <th 
+                            className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                            onClick={() => handleSort('value')}
+                          >
+                            <span className="flex items-center gap-2">
+                              Value
+                              {sortField === 'value' && (
+                                <span className="text-gray-400">
+                                  {sortDirection === 'asc' ? '↑' : '↓'}
+                                </span>
+                              )}
+                            </span>
+                          </th>
+                        </>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredAndSortedTokens.map((token) => (
+                      <tr 
+                        key={`${token.chainId}-${token.address}`}
+                        onClick={() => onTokenSelect?.(token)}
+                        className="hover:bg-gray-50 cursor-pointer transition-colors"
+                      >
+                        <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            {token.logoURI && (
+                              <img 
+                                src={token.logoURI} 
+                                alt={token.symbol}
+                                className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                              />
+                            )}
+                            <div>
+                              <div className="font-medium text-sm sm:text-base">{token.name}</div>
+                              <div className="text-xs sm:text-sm text-gray-500">{token.symbol}</div>
+                            </div>
+                          </div>
+                        </td>
+                        {showBalances && (
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base">
+                            {formatBalance(token.balance, token.decimals)}
+                          </td>
                         )}
-                        <div>
-                          <div className="font-medium text-gray-900">{token.name}</div>
-                          <div className="text-gray-500">{token.symbol}</div>
-                        </div>
-                      </div>
-                    </td>
-                    {showBalances && (
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {formatBalance(token.balance, token.decimals)}
-                      </td>
-                    )}
-                    {showPrices && (
-                      <>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {token.price ? formatCurrency(token.price) : '-'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {token.price && token.balance
-                            ? formatCurrency(Number(token.balance) * token.price)
-                            : '-'}
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        {showPrices && (
+                          <>
+                            <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base">
+                              {token.price ? formatCurrency(token.price) : '-'}
+                            </td>
+                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base">
+                              {token.price && token.balance
+                                ? formatCurrency(Number(token.balance) * token.price)
+                                : '-'}
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         );
     }
@@ -178,7 +203,8 @@ export const TokenList: React.FC<TokenListProps> = ({
           placeholder="Search tokens..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg 
+            focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
         />
       </div>
       {renderVariant()}
