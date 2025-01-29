@@ -150,7 +150,7 @@ export default function Home() {
                   onConnect={handleConnect}
                   onError={handleError}
                   variant="ghost"
-                  walletType="metamask"
+                  walletType="phantom"
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function Home() {
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-4">Network Switcher</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Default View</h3>
                   <NetworkSwitcher
