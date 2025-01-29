@@ -113,8 +113,12 @@ export default function Home() {
   // Convert raw ABI to Fragment[]
   const parsedAbi = new Interface(sampleAbi).fragments;
 
-  const handleSwap = async (fromToken: TokenSymbol, toToken: TokenSymbol, amount: string) => {
-    console.log('Swapping tokens:', { fromToken, toToken, amount });
+  const handleSwap = async (
+    fromToken: TokenSymbol,
+    toToken: TokenSymbol,
+    amount: string
+  ) => {
+    console.log("Swapping tokens:", { fromToken, toToken, amount });
     // Implement actual swap logic here
   };
 
