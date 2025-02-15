@@ -1,118 +1,83 @@
-import React, { useState, useCallback } from 'react';
-import { Contract } from '@ethersproject/contracts';
-import { Web3Provider } from '@ethersproject/providers';
-import { ContractInteractionProps, ContractFunction, FunctionCallResult } from './types';
-import { formatInputValue, parseInputValue, getInputType, categorizeFunction } from './utils';
-import { Fragment } from '@ethersproject/abi';
+import { useState } from 'react';
+
+interface ContractInteractionProps {
+  className?: string;
+}
+
+type TabType = 'read' | 'write';
+type FunctionType = {
+  name: string;
+  inputs: number;
+  type: 'view' | 'write';
+};
+
+const FUNCTIONS: FunctionType[] = [
+  { name: 'balanceOf', inputs: 1, type: 'view' },
+  { name: 'transfer', inputs: 2, type: 'write' },
+  { name: 'approve', inputs: 2, type: 'write' },
+  { name: 'allowance', inputs: 2, type: 'view' },
+  { name: 'totalSupply', inputs: 0, type: 'view' },
+  { name: 'name', inputs: 0, type: 'view' },
+];
 
 export const ContractInteraction: React.FC<ContractInteractionProps> = ({
-  abi,
-  contractAddress,
-  className = '',
-  onSuccess,
-  onError
+  className = ''
 }) => {
-  const [selectedFunction, setSelectedFunction] = useState<ContractFunction | null>(null);
-  const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
-  const [results, setResults] = useState<FunctionCallResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'read' | 'write'>('read');
+  const [activeTab, setActiveTab] = useState<TabType>('read');
+  const [selectedFunction, setSelectedFunction] = useState<FunctionType | null>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [results, setResults] = useState<Array<{ function: string; result: string; time: string }>>([]);
 
-  const functions = abi.filter((item): item is Fragment & ContractFunction => 
-    item.type === 'function'
+  const filteredFunctions = FUNCTIONS.filter(fn => 
+    activeTab === 'read' ? fn.type === 'view' : fn.type === 'write'
   );
 
-  const { readFunctions, writeFunctions } = categorizeFunction(functions);
-  const displayFunctions = activeTab === 'read' ? readFunctions : writeFunctions;
-
-  const handleInputChange = (name: string, value: string) => {
-    setInputValues(prev => ({ ...prev, [name]: value }));
-  };
-
-  const getContract = useCallback(async () => {
-    if (!window.ethereum) {
-      throw new Error('No Web3 Provider found');
-    }
-
-    const provider = new Web3Provider(window.ethereum as any);
-    await provider.send('eth_requestAccounts', []);
-    const signer = provider.getSigner();
-    
-    return new Contract(contractAddress, abi, signer);
-  }, [abi, contractAddress]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFunction) return;
 
-    setLoading(true);
-    setError(null);
+    const mockResult = {
+      function: selectedFunction.name,
+      result: '1000000000000000000',
+      time: new Date().toLocaleTimeString()
+    };
 
-    try {
-      const contract = await getContract();
-      const params = selectedFunction.inputs.map(input => 
-        parseInputValue(inputValues[input.name], input.type)
-      );
-
-      let result;
-      if (selectedFunction.stateMutability === 'view' || selectedFunction.stateMutability === 'pure') {
-        result = await contract[selectedFunction.name](...params);
-      } else {
-        const tx = await contract[selectedFunction.name](...params);
-        await tx.wait();
-        result = tx.hash;
-      }
-
-      const callResult = {
-        functionName: selectedFunction.name,
-        result,
-        timestamp: Date.now()
-      };
-
-      setResults(prev => [callResult, ...prev]);
-      onSuccess?.(result);
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onError?.(error);
-    } finally {
-      setLoading(false);
-    }
+    setResults(prev => [mockResult, ...prev]);
+    setInputValue('');
   };
 
   return (
-    <div className={`bg-white rounded-lg border shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-gray-900 rounded-lg border dark:border-gray-800 shadow-sm ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b">
+      <div className="p-6 border-b dark:border-gray-800">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">Contract Interaction</h2>
+            <h2 className="text-xl font-semibold dark:text-white">Contract Interaction</h2>
             <div className="flex items-center mt-2 space-x-2">
-              <span className="text-sm text-gray-500">Contract:</span>
-              <code className="text-sm bg-gray-100 px-2 py-1 rounded">
-                {contractAddress}
+              <span className="text-sm text-gray-500 dark:text-gray-400">Contract:</span>
+              <code className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded dark:text-gray-300">
+                0x1234...5678
               </code>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Function Type Tabs */}
-      <div className="border-b">
+      {/* Interactive Tabs */}
+      <div className="border-b dark:border-gray-800">
         <div className="flex">
-          {(['read', 'write'] as const).map((tab) => (
+          {(['read', 'write'] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => {
                 setActiveTab(tab);
                 setSelectedFunction(null);
-                setInputValues({});
+                setInputValue('');
               }}
               className={`flex-1 px-3 py-2 text-sm transition-colors
-                ${activeTab === tab 
-                  ? 'border-b-2 border-black font-medium'
-                  : 'text-gray-500 hover:text-gray-900'
+                ${activeTab === tab
+                  ? 'border-b-2 border-black dark:border-white font-medium dark:text-white'
+                  : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-300'
                 }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)} Functions
@@ -122,102 +87,81 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
       </div>
 
       <div className="p-6">
-        {/* Function Grid */}
+        {/* Interactive Function Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-          {displayFunctions.map((fn) => (
+          {filteredFunctions.map((fn) => (
             <button
               key={fn.name}
-              onClick={() => {
-                setSelectedFunction(fn);
-                setInputValues({});
-                setError(null);
-              }}
-              className={`p-3 text-left border rounded transition-colors
+              onClick={() => setSelectedFunction(fn)}
+              className={`p-3 text-left border rounded transition-colors dark:border-gray-700
                 ${selectedFunction?.name === fn.name
-                  ? 'border-black bg-gray-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-black dark:border-white bg-gray-50 dark:bg-gray-800'
+                  : 'border-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
             >
-              <div className="font-medium">{fn.name}</div>
-              <div className="text-xs text-gray-500 mt-1">
-                {fn.inputs.length} input(s) • {fn.stateMutability}
+              <div className="font-medium dark:text-white">{fn.name}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {fn.inputs} input(s) • {fn.type}
               </div>
             </button>
           ))}
         </div>
 
-        {/* Function Inputs */}
+        {/* Interactive Function Inputs */}
         {selectedFunction && (
-          <div className="space-y-4 border rounded-lg p-4 bg-gray-50">
+          <div className="space-y-4 border dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium">{selectedFunction.name}</h3>
-              <span className="text-xs text-gray-500">{selectedFunction.stateMutability}</span>
+              <h3 className="font-medium dark:text-white">{selectedFunction.name}</h3>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{selectedFunction.type}</span>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {selectedFunction.inputs.map((input) => (
-                <div key={input.name} className="space-y-1">
-                  <label className="text-sm font-medium">
-                    {input.name}
-                    <span className="text-gray-500 ml-1">({input.type})</span>
+              {selectedFunction.inputs > 0 && (
+                <div className="space-y-1">
+                  <label className="text-sm font-medium dark:text-gray-300">
+                    address
+                    <span className="text-gray-500 dark:text-gray-400 ml-1">(address)</span>
                   </label>
                   <input
-                    type={getInputType(input.type)}
-                    placeholder={`Enter ${input.type}`}
-                    value={inputValues[input.name] || ''}
-                    onChange={(e) => handleInputChange(input.name, e.target.value)}
-                    className="w-full px-3 py-2 text-sm border rounded-md
-                      focus:outline-none focus:ring-1 focus:ring-black"
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Enter address"
+                    className="w-full px-3 py-2 text-sm border dark:border-gray-700 rounded-md
+                      focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white
+                      dark:bg-gray-900 dark:text-gray-300"
                   />
                 </div>
-              ))}
+              )}
 
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full px-4 py-2 bg-black text-white rounded-md text-sm
-                  hover:bg-gray-800 transition-colors disabled:opacity-50"
+                className="w-full px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md text-sm
+                  hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50"
               >
-                {loading ? (
-                  <div className="flex items-center justify-center space-x-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    <span>Processing...</span>
-                  </div>
-                ) : (
-                  `Execute ${selectedFunction.name}`
-                )}
+                Execute {selectedFunction.name}
               </button>
             </form>
           </div>
         )}
 
-        {/* Error Display */}
-        {error && (
-          <div className="mt-4 p-3 border border-red-200 rounded-lg bg-red-50 text-sm text-red-600">
-            {error}
-          </div>
-        )}
-
-        {/* Results */}
+        {/* Results Display */}
         {results.length > 0 && (
           <div className="mt-6 space-y-3">
-            <h3 className="text-sm font-medium">Recent Results</h3>
+            <h3 className="text-sm font-medium dark:text-white">Recent Results</h3>
             {results.map((result, index) => (
               <div
                 key={index}
-                className="p-3 border rounded-lg hover:shadow-sm transition-shadow"
+                className="p-3 border dark:border-gray-700 rounded-lg hover:shadow-sm transition-shadow dark:bg-gray-800"
               >
                 <div className="flex justify-between">
-                  <span className="font-medium">{result.functionName}</span>
-                  <span className="text-xs text-gray-500">
-                    {new Date(result.timestamp).toLocaleTimeString()}
+                  <span className="font-medium dark:text-white">{result.function}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {result.time}
                   </span>
                 </div>
-                <div className="mt-1 text-sm text-gray-600 font-mono break-all">
-                  {formatInputValue(result.result)}
+                <div className="mt-1 text-sm text-gray-600 dark:text-gray-400 font-mono break-all">
+                  {result.result}
                 </div>
               </div>
             ))}

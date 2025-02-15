@@ -1,4 +1,4 @@
 export * from './TokenList';
-export * from './TokenCard';
+export * from '../token-card/TokenCard';
 export * from './types';
 export * from './utils'; 

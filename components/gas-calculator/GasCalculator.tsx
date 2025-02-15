@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { GasCalculatorProps, GasPrice, GasEstimate } from './types';
-import { fetchGasPrice, estimateTransactionCost, formatGwei, formatEther } from './utils';
+import { fetchGasPrice, estimateTransactionCost, formatGwei } from './utils';
 
 export const GasCalculator: React.FC<GasCalculatorProps> = ({
   className = '',
@@ -14,7 +14,7 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [selectedSpeed, setSelectedSpeed] = useState<'low' | 'medium' | 'high'>('medium');
 
-  const updateGasPrice = async () => {
+  const updateGasPrice = useCallback(async () => {
     try {
       const price = await fetchGasPrice(chainId);
       setGasPrice(price);
@@ -25,13 +25,13 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [chainId]);
 
   useEffect(() => {
     updateGasPrice();
     const interval = setInterval(updateGasPrice, refreshInterval);
     return () => clearInterval(interval);
-  }, [chainId, refreshInterval]);
+  }, [refreshInterval, updateGasPrice]);
 
   const estimate: GasEstimate | null = gasPrice
     ? estimateTransactionCost(gasPrice, gasLimit)
@@ -57,11 +57,11 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg border shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b">
-        <h2 className="text-xl font-semibold">Gas Calculator</h2>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Gas Calculator</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Estimate transaction costs based on current network conditions
         </p>
       </div>
@@ -70,7 +70,7 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
         {/* Gas Limit Input */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <label className="text-sm font-medium">Gas Limit</label>
+            <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Gas Limit</label>
             <div className="flex space-x-2">
               {[21000, 65000, 100000].map((preset) => (
                 <button
@@ -78,8 +78,8 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
                   onClick={() => setGasLimit(preset)}
                   className={`px-2 py-1 text-xs rounded transition-colors
                     ${gasLimit === preset
-                      ? 'bg-black text-white'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   {preset.toLocaleString()}
@@ -92,23 +92,24 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
               type="number"
               value={gasLimit}
               onChange={(e) => setGasLimit(Number(e.target.value))}
-              className="w-full px-3 py-2 text-sm border rounded-md
-                focus:outline-none focus:ring-1 focus:ring-black"
+              className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
               placeholder="Enter gas limit"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-sm text-gray-500">units</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">units</span>
             </div>
           </div>
         </div>
 
         {loading ? (
           <div className="space-y-4 animate-pulse">
-            <div className="h-[120px] bg-gray-100 rounded-lg" />
-            <div className="h-[80px] bg-gray-100 rounded-lg" />
+            <div className="h-[120px] bg-gray-100 dark:bg-gray-700 rounded-lg" />
+            <div className="h-[80px] bg-gray-100 dark:bg-gray-700 rounded-lg" />
           </div>
         ) : error ? (
-          <div className="p-3 border border-red-200 rounded-lg bg-red-50 text-sm text-red-600">
+          <div className="p-3 border border-red-200 dark:border-red-800 rounded-lg bg-red-50 dark:bg-red-900/30 text-sm text-red-600 dark:text-red-400">
             {error}
           </div>
         ) : gasPrice && (
@@ -123,24 +124,24 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
                     onClick={() => handleSpeedSelect(speed)}
                     className={`relative p-4 text-left border rounded-lg transition-all
                       ${selectedSpeed === speed
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                       }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-2xl" role="img" aria-label={label}>
                         {icon}
                       </span>
-                      <span className="text-xs text-gray-500">{time}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{time}</span>
                     </div>
                     <div className="space-y-1">
-                      <div className="font-medium">{label}</div>
-                      <div className="text-2xl font-bold">
+                      <div className="font-medium text-gray-900 dark:text-white">{label}</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">
                         {formatGwei(gasPrice[speed])}
                       </div>
-                      <div className="text-sm text-gray-500">Gwei</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Gwei</div>
                       {estimate && (
-                        <div className="text-xs text-gray-500 mt-2 pt-2 border-t">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                           ≈ {estimate.estimatedCost[speed]} ETH
                         </div>
                       )}
@@ -151,16 +152,16 @@ export const GasCalculator: React.FC<GasCalculatorProps> = ({
             </div>
 
             {/* Network Info */}
-            <div className="border rounded-lg divide-y">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg divide-y divide-gray-200 dark:divide-gray-700">
               <div className="p-3 flex justify-between items-center">
-                <span className="text-sm text-gray-600">Base Fee</span>
-                <span className="font-medium">{formatGwei(gasPrice.baseFee)} Gwei</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Base Fee</span>
+                <span className="font-medium text-gray-900 dark:text-white">{formatGwei(gasPrice.baseFee)} Gwei</span>
               </div>
               <div className="p-3 flex justify-between items-center">
-                <span className="text-sm text-gray-600">Last Block</span>
-                <span className="font-medium">#{gasPrice.lastBlock}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Last Block</span>
+                <span className="font-medium text-gray-900 dark:text-white">#{gasPrice.lastBlock}</span>
               </div>
-              <div className="p-3 flex justify-between items-center text-xs text-gray-500">
+              <div className="p-3 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                 <span>Last updated</span>
                 <span>{new Date().toLocaleTimeString()}</span>
               </div>

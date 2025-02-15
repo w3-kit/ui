@@ -6,11 +6,17 @@ declare global {
   interface Window {
     ethereum?: MetaMaskInpageProvider;
     coinbaseWalletExtension?: any;
+    solana?: any;
+    phantom?: {
+      solana?: {
+        connect(): Promise<{ publicKey: { toString(): string } }>;
+      };
+    };
   }
 }
 
 type ButtonVariant = 'ghost' | 'light' | 'dark';
-type WalletType = 'metamask' | 'walletconnect' | 'coinbase';
+type WalletType = 'metamask' | 'walletconnect' | 'coinbase' | 'phantom';
 
 interface ConnectWalletButtonProps {
   onConnect?: (address: string) => void;
@@ -40,22 +46,29 @@ const walletConnectConfig = {
 
 const WalletIcons = {
   metamask: (
-    <svg className="w-5 h-5 mr-2" viewBox="0 0 35 33" fill="none">
-      <path d="M32.9582 1L19.8241 10.7183L22.2665 4.99099L32.9582 1Z" fill="currentColor" fillOpacity="0.8"/>
-      <path d="M2.04183 1L15.0446 10.809L12.7335 4.99099L2.04183 1Z" fill="currentColor" fillOpacity="0.8"/>
-      <path d="M28.2036 23.3094L24.7358 28.5863L32.2621 30.6244L34.3857 23.4519L28.2036 23.3094Z" fill="currentColor" fillOpacity="0.8"/>
-      <path d="M0.623322 23.4519L2.73785 30.6244L10.2642 28.5863L6.79636 23.3094L0.623322 23.4519Z" fill="currentColor" fillOpacity="0.8"/>
+    <svg className="w-6 h-6 mr-2" viewBox="0 0 318.6 318.6" fill="none">
+      <path d="M274.1 35.5l-99.5 73.9L193 65.8z" fill="#E2761B" stroke="#E2761B" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M44.4 35.5l98.7 74.6-17.5-44.3zm193.9 171.3l-26.5 40.6 56.7 15.6 16.3-55.3zm-204.4.9L50.1 263l56.7-15.6-26.5-40.6z" fill="#E4761B" stroke="#E4761B" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M103.6 138.2l-15.8 23.9 56.3 2.5-2-60.5zm111.3 0l-39-34.8-1.3 61.2 56.2-2.5zM106.8 247.4l33.8-16.5-29.2-22.8zm71.1-16.5l33.9 16.5-4.7-39.3z" fill="#E4761B" stroke="#E4761B" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
   walletconnect: (
-    <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none">
-      <path d="M6 16.5L12 21l6-4.5M6 7.5L12 3l6 4.5M12 21v-4.5m0-9V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg className="w-6 h-6 mr-2" viewBox="0 0 96 96" fill="none">
+      <path
+        d="M25.322 33.597c12.525-12.263 32.83-12.263 45.355 0l1.507 1.476a1.547 1.547 0 0 1 0 2.22l-5.156 5.048a.814.814 0 0 1-1.134 0l-2.074-2.03c-8.737-8.555-22.903-8.555-31.64 0l-2.222 2.175a.814.814 0 0 1-1.134 0l-5.156-5.049a1.547 1.547 0 0 1 0-2.22l1.654-1.62zm56.019 10.44l4.589 4.494a1.547 1.547 0 0 1 0 2.22l-20.693 20.26a1.628 1.628 0 0 1-2.267 0L48.283 56.632a.407.407 0 0 0-.567 0L33.03 71.011a1.628 1.628 0 0 1-2.267 0L10.07 50.75a1.547 1.547 0 0 1 0-2.22l4.59-4.494a1.628 1.628 0 0 1 2.266 0l14.687 14.38a.407.407 0 0 0 .567 0l14.685-14.38a1.628 1.628 0 0 1 2.267 0l14.687 14.38a.407.407 0 0 0 .567 0l14.687-14.38a1.628 1.628 0 0 1 2.267 0z"
+        fill="#3B99FC"
+      />
     </svg>
   ),
   coinbase: (
-    <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-      <path d="M12 6v12M6 12h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <svg className="w-6 h-6 mr-2" viewBox="0 0 1024 1024" fill="none">
+      <circle cx="512" cy="512" r="512" fill="#0052FF"/>
+      <path d="M512 152C306.6 152 140 318.6 140 524s166.6 372 372 372 372-166.6 372-372S717.4 152 512 152zm0 560c-104 0-188-84-188-188s84-188 188-188 188 84 188 188-84 188-188 188z" fill="white"/>
+    </svg>
+  ),
+  phantom: (
+    <svg className="w-6 h-6 mr-2" viewBox="0 0 128 128" fill="none">
+      <path d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64c11.2 0 21.7-2.9 30.8-7.9L48.4 55.3v36.6h-6.8V41.8h6.8l50.5 75.8C116.4 106.2 128 86.5 128 64c0-35.3-28.7-64-64-64zm22.1 84.6l-7.5-11.3V41.8h7.5v42.8z" fill="#AB9FF2"/>
     </svg>
   ),
 };
@@ -79,6 +92,8 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
         return 'WalletConnect';
       case 'coinbase':
         return 'Coinbase Wallet';
+      case 'phantom':
+        return 'Phantom Wallet';
       default:
         return 'Connect Wallet';
     }
@@ -165,6 +180,27 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     }
   }, [onConnect, onError]);
 
+  const connectPhantom = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if (!window.phantom?.solana) {
+        throw new Error('Phantom wallet is not installed');
+      }
+
+      const response = await window.phantom.solana.connect();
+      const address = response.publicKey.toString();
+      onConnect?.(address);
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message);
+      onError?.(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [onConnect, onError]);
+
   const handleConnect = useCallback(() => {
     switch (walletType) {
       case 'metamask':
@@ -173,10 +209,12 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
         return connectWalletConnect();
       case 'coinbase':
         return connectCoinbase();
+      case 'phantom':
+        return connectPhantom();
       default:
         return connectMetaMask();
     }
-  }, [walletType, connectMetaMask, connectWalletConnect, connectCoinbase]);
+  }, [walletType, connectMetaMask, connectWalletConnect, connectCoinbase, connectPhantom]);
 
   return (
     <div className="flex flex-col items-center">

@@ -25,6 +25,7 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo
+.next
 
 # OS generated files
 .DS_Store

@@ -1,4 +1,4 @@
-import { TokenSymbol } from './tokenConfigs';
+import { TokenSymbol } from '../../config/tokens';
 
 export interface Token {
   address: string;
@@ -13,12 +13,14 @@ export interface Token {
 }
 
 export interface TokenListProps {
-  tokens: TokenSymbol[];
+  tokens: TokenSymbol[] | Token[];  // Allow both symbol array or token array
   onTokenSelect?: (token: Token) => void;
   className?: string;
   showBalances?: boolean;
   showPrices?: boolean;
-  variant?: 'table' | 'grid';
+  showValue?: boolean;
+  variant?: 'table' | 'grid' | 'list';
+  selectedToken?: TokenSymbol;
 }
 
 export type SortField = 'name' | 'balance' | 'value' | 'symbol';

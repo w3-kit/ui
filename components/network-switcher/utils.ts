@@ -1,8 +1,9 @@
 import { Network } from './types';
+import { MetaMaskInpageProvider } from '@metamask/providers';
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: MetaMaskInpageProvider;
   }
 }
 
@@ -17,9 +18,9 @@ export async function switchNetwork(network: Network): Promise<void> {
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: `0x${network.chainId.toString(16)}` }],
     });
-  } catch (switchError: any) {
+  } catch (switchError: unknown) {
     // This error code indicates that the chain has not been added to MetaMask
-    if (switchError.code === 4902) {
+    if (typeof switchError === 'object' && switchError && 'code' in switchError && switchError.code === 4902) {
       try {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
@@ -37,11 +38,13 @@ export async function switchNetwork(network: Network): Promise<void> {
             },
           ],
         });
-      } catch (addError) {
+      } catch (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        addError: unknown
+      ) {
         throw new Error('Failed to add network');
       }
-    } else {
-      throw new Error('Failed to switch network');
     }
+    throw new Error('Failed to switch network');
   }
 } 

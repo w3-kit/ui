@@ -34,43 +34,46 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           placeholder="Search by hash or address..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg 
+            bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+            focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 
+            placeholder-gray-500 dark:placeholder-gray-400 transition-all"
         />
       </div>
 
       {/* Transaction List */}
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-800/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Transaction Hash
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 From
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 To
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Value (ETH)
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Timestamp
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {paginatedTransactions.map((tx) => (
               <tr 
                 key={tx.hash}
                 onClick={() => onTransactionClick?.(tx)}
-                className="hover:bg-gray-50 cursor-pointer"
+                className="hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 dark:text-blue-400 font-medium">
                   {formatAddress(tx.hash)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -78,16 +81,16 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                     {tx.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   {formatAddress(tx.from)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   {formatAddress(tx.to)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                   {formatEther(tx.value)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   {formatTimestamp(tx.timestamp)}
                 </td>
               </tr>
@@ -102,7 +105,10 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50"
+            className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md 
+              text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
+              hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 
+              disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
@@ -110,10 +116,10 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 border rounded-md ${
+              className={`px-3 py-1 border rounded-md transition-colors ${
                 currentPage === page
-                  ? 'bg-blue-600 text-white'
-                  : 'border-gray-300 hover:bg-gray-50'
+                  ? 'bg-blue-600 dark:bg-blue-500 text-white border-blue-600 dark:border-blue-500'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               {page}
@@ -122,7 +128,10 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50"
+            className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md 
+              text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
+              hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 
+              disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>
