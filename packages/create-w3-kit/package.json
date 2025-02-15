@@ -1,0 +1,31 @@
+{
+  "name": "create-w3-kit",
+  "version": "0.1.0",
+  "description": "CLI to add Web3 components to your project",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "create-w3-kit": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "src/components"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.5.9",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+} 

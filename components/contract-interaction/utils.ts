@@ -42,7 +42,7 @@ export function formatInputValue(value: any): string {
 export function categorizeFunction(functions: Fragment[]) {
   return functions.reduce(
     (acc, fn) => {
-      const func = fn as ContractFunction;
+      const func = fn as unknown as ContractFunction;
       if (func.stateMutability === 'view' || func.stateMutability === 'pure') {
         acc.readFunctions.push(func);
       } else {
