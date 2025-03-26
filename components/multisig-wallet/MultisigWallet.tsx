@@ -49,7 +49,7 @@ export const MultisigWallet: React.FC<MultisigWalletProps> = ({
     if (transactions.length > 0) {
       const latestTx = transactions[0];
       if (latestTx && !newTransactions.has(latestTx.id)) {
-        setNewTransactions(prev => new Set([...prev, latestTx.id]));
+        setNewTransactions(prev => new Set(Array.from(prev).concat(latestTx.id)));
       }
     }
   }, [transactions]);
