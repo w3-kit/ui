@@ -1,16 +1,23 @@
 import React, { useState, useCallback } from 'react';
 import { MetaMaskInpageProvider } from '@metamask/providers';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import Image from 'next/image';
+
+interface CoinbaseWalletProvider {
+  request: (args: { method: string }) => Promise<string[]>;
+}
+
+interface SolanaProvider {
+  connect(): Promise<{ publicKey: { toString(): string } }>;
+}
 
 declare global {
   interface Window {
     ethereum?: MetaMaskInpageProvider;
-    coinbaseWalletExtension?: any;
-    solana?: any;
+    coinbaseWalletExtension?: CoinbaseWalletProvider;
+    solana?: SolanaProvider;
     phantom?: {
-      solana?: {
-        connect(): Promise<{ publicKey: { toString(): string } }>;
-      };
+      solana?: SolanaProvider;
     };
   }
 }
@@ -28,12 +35,31 @@ interface ConnectWalletButtonProps {
 }
 
 const variantStyles = {
-  ghost: `bg-transparent hover:bg-gray-100 text-gray-700 border-2 border-gray-300
-    hover:border-gray-400`,
-  light: `bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 
-    hover:border-gray-300 shadow-sm`,
-  dark: `bg-gray-900 hover:bg-gray-800 text-white shadow-md 
-    hover:shadow-lg`,
+  ghost: `
+    bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 
+    text-gray-900 dark:text-gray-100
+    border-2 border-gray-200 dark:border-gray-700
+    hover:border-gray-300 dark:hover:border-gray-600
+    shadow-sm hover:shadow
+    transition-all duration-200
+  `,
+  light: `
+    bg-white dark:bg-gray-800 
+    hover:bg-gray-50 dark:hover:bg-gray-700
+    text-gray-900 dark:text-gray-100 
+    border border-gray-200 dark:border-gray-700
+    hover:border-gray-300 dark:hover:border-gray-600
+    shadow-sm hover:shadow
+    transition-all duration-200
+  `,
+  dark: `
+    bg-gray-900 dark:bg-gray-100
+    hover:bg-gray-800 dark:hover:bg-white
+    text-white dark:text-gray-900
+    border border-transparent
+    shadow-md hover:shadow-lg
+    transition-all duration-200
+  `,
 };
 
 const walletConnectConfig = {
@@ -46,31 +72,37 @@ const walletConnectConfig = {
 
 const WalletIcons = {
   metamask: (
-    <svg className="w-6 h-6 mr-2" viewBox="0 0 318.6 318.6" fill="none">
-      <path d="M274.1 35.5l-99.5 73.9L193 65.8z" fill="#E2761B" stroke="#E2761B" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M44.4 35.5l98.7 74.6-17.5-44.3zm193.9 171.3l-26.5 40.6 56.7 15.6 16.3-55.3zm-204.4.9L50.1 263l56.7-15.6-26.5-40.6z" fill="#E4761B" stroke="#E4761B" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M103.6 138.2l-15.8 23.9 56.3 2.5-2-60.5zm111.3 0l-39-34.8-1.3 61.2 56.2-2.5zM106.8 247.4l33.8-16.5-29.2-22.8zm71.1-16.5l33.9 16.5-4.7-39.3z" fill="#E4761B" stroke="#E4761B" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
+    <Image 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
+      alt="MetaMask"
+      width={24}
+      height={24}
+      className="rounded-sm"
+    />
   ),
   walletconnect: (
-    <svg className="w-6 h-6 mr-2" viewBox="0 0 96 96" fill="none">
-      <path
-        d="M25.322 33.597c12.525-12.263 32.83-12.263 45.355 0l1.507 1.476a1.547 1.547 0 0 1 0 2.22l-5.156 5.048a.814.814 0 0 1-1.134 0l-2.074-2.03c-8.737-8.555-22.903-8.555-31.64 0l-2.222 2.175a.814.814 0 0 1-1.134 0l-5.156-5.049a1.547 1.547 0 0 1 0-2.22l1.654-1.62zm56.019 10.44l4.589 4.494a1.547 1.547 0 0 1 0 2.22l-20.693 20.26a1.628 1.628 0 0 1-2.267 0L48.283 56.632a.407.407 0 0 0-.567 0L33.03 71.011a1.628 1.628 0 0 1-2.267 0L10.07 50.75a1.547 1.547 0 0 1 0-2.22l4.59-4.494a1.628 1.628 0 0 1 2.266 0l14.687 14.38a.407.407 0 0 0 .567 0l14.685-14.38a1.628 1.628 0 0 1 2.267 0l14.687 14.38a.407.407 0 0 0 .567 0l14.687-14.38a1.628 1.628 0 0 1 2.267 0z"
-        fill="#3B99FC"
-      />
-    </svg>
+    <Image
+      src="https://cdn-images-1.medium.com/max/1200/1*fgRGbOjhoJMHqh9czHETZQ.png"
+      alt="WalletConnect"
+      width={24}
+      height={24}
+    />
   ),
   coinbase: (
-    <svg className="w-6 h-6 mr-2" viewBox="0 0 1024 1024" fill="none">
-      <circle cx="512" cy="512" r="512" fill="#0052FF"/>
-      <path d="M512 152C306.6 152 140 318.6 140 524s166.6 372 372 372 372-166.6 372-372S717.4 152 512 152zm0 560c-104 0-188-84-188-188s84-188 188-188 188 84 188 188-84 188-188 188z" fill="white"/>
-    </svg>
+    <Image
+      src="https://cdn.iconscout.com/icon/free/png-256/free-coinbase-logo-icon-download-in-svg-png-gif-file-formats--web-crypro-trading-platform-logos-pack-icons-7651204.png"
+      alt="Coinbase"
+      width={24}
+      height={24}
+      className="rounded-sm"
+    />
   ),
   phantom: (
-    <svg className="w-6 h-6 mr-2" viewBox="0 0 128 128" fill="none">
-      <path d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64c11.2 0 21.7-2.9 30.8-7.9L48.4 55.3v36.6h-6.8V41.8h6.8l50.5 75.8C116.4 106.2 128 86.5 128 64c0-35.3-28.7-64-64-64zm22.1 84.6l-7.5-11.3V41.8h7.5v42.8z" fill="#AB9FF2"/>
+    <svg width="24" height="24" viewBox="0 0 128 128" fill="none">
+      <rect width="128" height="128" rx="64" fill="#AB9FF2"/>
+      <path d="M110.984 64.206C110.984 89.2476 90.7077 109.524 65.666 109.524C40.6244 109.524 20.3477 89.2476 20.3477 64.206C20.3477 39.1644 40.6244 18.8877 65.666 18.8877C90.7077 18.8877 110.984 39.1644 110.984 64.206Z" fill="white"/>
     </svg>
-  ),
+  )
 };
 
 export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
@@ -104,10 +136,18 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     setError(null);
 
     try {
-      if (!window.ethereum) {
+      // First check if MetaMask is actually installed
+      if (typeof window.ethereum === 'undefined') {
         throw new Error('MetaMask is not installed');
       }
 
+      // Check if the provider is actually MetaMask
+     
+      if (!window.ethereum.isMetaMask) {
+        throw new Error('Please switch to MetaMask');
+      }
+
+      // This is the actual connection request to MetaMask
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts'
       });
@@ -158,6 +198,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     setError(null);
 
     try {
+      // Check specifically for Coinbase Wallet
       if (!window.coinbaseWalletExtension) {
         throw new Error('Coinbase Wallet is not installed');
       }
@@ -222,9 +263,10 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
         onClick={handleConnect}
         disabled={isLoading}
         className={`
-          px-6 py-2.5 rounded-lg font-medium transition-all duration-200
-          flex items-center justify-center min-w-[200px]
+          px-6 py-3 rounded-xl font-medium
+          flex items-center justify-center min-w-[240px]
           disabled:opacity-50 disabled:cursor-not-allowed
+          transform hover:scale-[1.02] active:scale-[0.98]
           ${variantStyles[variant]}
           ${className}
         `}
@@ -250,14 +292,16 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
             <span>Connecting...</span>
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
-            {WalletIcons[walletType]}
-            <span>{customLabel || getDefaultLabel(walletType)}</span>
+          <div className="flex items-center space-x-3">
+            <div className="w-6 h-6 flex items-center justify-center">
+              {WalletIcons[walletType]}
+            </div>
+            <span className="text-[15px]">{customLabel || getDefaultLabel(walletType)}</span>
           </div>
         )}
       </button>
       {error && (
-        <p className="mt-2 text-red-500 text-sm">{error}</p>
+        <p className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</p>
       )}
     </div>
   );
