@@ -6,19 +6,31 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function copyComponent(componentName: string) {
-  const sourceDir = path.join(__dirname, '..', '..', 'components', componentName);
-  const targetDir = path.join(process.cwd(), 'components', componentName);
+  // Source paths
+  const sourceComponentDir = path.join(__dirname, '..', '..', 'components', componentName);
+  const sourceTokensFile = path.join(__dirname, '..', '..', 'config', 'tokens.ts');
+
+  // Target paths
+  const targetComponentDir = path.join(process.cwd(), 'components', 'ui', componentName);
+  const targetConfigDir = path.join(process.cwd(), 'config');
+  const targetTokensFile = path.join(targetConfigDir, 'tokens.ts');
 
   // Check if component exists
-  if (!fs.existsSync(sourceDir)) {
+  if (!fs.existsSync(sourceComponentDir)) {
     throw new Error(`Component ${componentName} not found`);
   }
 
-  // Create components directory if it doesn't exist
-  await fs.ensureDir(path.join(process.cwd(), 'components'));
+  // Create necessary directories
+  await fs.ensureDir(path.join(process.cwd(), 'components', 'ui'));
+  await fs.ensureDir(targetConfigDir);
 
   // Copy component files
-  await fs.copy(sourceDir, targetDir);
+  await fs.copy(sourceComponentDir, targetComponentDir);
+
+  // Copy tokens config if it doesn't exist
+  if (!fs.existsSync(targetTokensFile)) {
+    await fs.copy(sourceTokensFile, targetTokensFile);
+  }
 
   // Check for dependencies and add them to package.json
   const dependencies = getDependencies(componentName);
@@ -29,29 +41,36 @@ function getDependencies(componentName: string) {
   const commonDeps = {
     'lucide-react': '^0.284.0',
     'tailwindcss': '^3.3.0',
+    '@ethersproject/abi': '^5.7.0',
+    '@ethersproject/bignumber': '^5.7.0',
+    '@ethersproject/contracts': '^5.7.0',
+    '@ethersproject/providers': '^5.7.2',
+    '@metamask/providers': '^11.1.0',
+    '@web3-react/core': '^8.2.3',
+    '@web3-react/walletconnect-connector': '^6.2.13',
+    'chart.js': '^4.4.7',
+    'react-chartjs-2': '^5.3.0'
   };
 
   const componentDeps: Record<string, Record<string, string>> = {
-    'bridge': {},
-    'connect-wallet': {
-      '@metamask/providers': '^11.1.0',
-      '@web3-react/walletconnect-connector': '^6.2.13'
+    'nft-collection-grid': {
+      'next': '^13.0.0'
     },
-    'contract-interaction': {
-      'ethers': '^6.7.1'
-    },
-    'gas-calculator': {},
-    'network-switcher': {
-      '@metamask/providers': '^11.1.0'
-    },
-    'nft-card': {
+    'token-swap': {
       'next': '^13.0.0'
     },
     'price-ticker': {
       'next': '^13.0.0'
     },
-    'token-list': {},
-    'token-swap': {}
+    'nft-card': {
+      'next': '^13.0.0'
+    },
+    'network-switcher': {
+      '@metamask/providers': '^11.1.0'
+    },
+    'contract-interaction': {
+      'ethers': '^6.7.1'
+    }
   };
 
   return {
