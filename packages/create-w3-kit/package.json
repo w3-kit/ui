@@ -1,6 +1,6 @@
 {
   "name": "w3-kit",
-  "version": "0.1.3",
+  "version": "0.1.6",
   "description": "CLI tool to add Web3 components to your project",
   "main": "dist/index.js",
   "bin": {
@@ -23,8 +23,8 @@
   },
   "files": [
     "dist",
-    "components",
-    "config"
+    "components/**/*",
+    "config/**/*"
   ],
   "keywords": [
     "web3",

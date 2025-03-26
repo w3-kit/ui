@@ -6,13 +6,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function copyComponent(componentName: string) {
-  // Source paths
-  const sourceComponentDir = path.join(__dirname, '..', '..', 'components', componentName);
-  const sourceTokensFile = path.join(__dirname, '..', '..', 'config', 'tokens.ts');
+  // Source paths - components are in the package root
+  const sourceComponentDir = path.join(__dirname, '..', 'components', componentName);
+  const sourceTokensFile = path.join(__dirname, '..', 'config', 'tokens.ts');
 
-  // Target paths
-  const targetComponentDir = path.join(process.cwd(), 'components', 'ui', componentName);
-  const targetConfigDir = path.join(process.cwd(), 'config');
+  // Target paths - now inside src directory
+  const targetComponentDir = path.join(process.cwd(), 'src', 'components', 'ui', componentName);
+  const targetConfigDir = path.join(process.cwd(), 'src', 'config');
   const targetTokensFile = path.join(targetConfigDir, 'tokens.ts');
 
   // Check if component exists
@@ -21,7 +21,7 @@ export async function copyComponent(componentName: string) {
   }
 
   // Create necessary directories
-  await fs.ensureDir(path.join(process.cwd(), 'components', 'ui'));
+  await fs.ensureDir(path.join(process.cwd(), 'src', 'components', 'ui'));
   await fs.ensureDir(targetConfigDir);
 
   // Copy component files
