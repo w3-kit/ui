@@ -4,23 +4,22 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/address-book",
+      "name": "@w3-kit/connect-wallet",
       "type": "registry:component",
-      "title": "Address Book",
-      "description": "A Web3 address book component with ENS support, search, and CRUD operations.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "input", "card", "dialog", "textarea"],
+      "title": "Connect Wallet Button",
+      "description": "A multi-wallet connect button supporting MetaMask, WalletConnect, Coinbase Wallet, and Phantom (Solana).",
+      "dependencies": ["@web3-react/walletconnect-connector"],
       "files": [
         {
-          "path": "registry/w3-kit/address-book/address-book.tsx",
+          "path": "registry/w3-kit/connect-wallet/connect-wallet.tsx",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/address-book/types.ts",
+          "path": "registry/w3-kit/connect-wallet/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/address-book/utils.ts",
+          "path": "registry/w3-kit/connect-wallet/utils.ts",
           "type": "registry:component"
         }
       ]
