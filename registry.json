@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "@w3-kit/contract-interaction",
+      "type": "registry:component",
+      "title": "Contract Interaction",
+      "description": "A smart contract interaction component with read/write function tabs, input validation, and result history.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/contract-interaction/contract-interaction.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/contract-interaction/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/contract-interaction/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
