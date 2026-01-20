@@ -4,194 +4,24 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "subscription-payments",
+      "name": "@w3-kit/address-book",
       "type": "registry:component",
-      "title": "Subscription Payments",
-      "description": "Subscription payment component with plan selection, token support, and auto-renewal",
+      "title": "Address Book",
+      "description": "A Web3 address book component with ENS support, search, and CRUD operations.",
       "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "input", "card", "dialog", "textarea"],
       "files": [
         {
-          "path": "registry/w3-kit/subscription-payments/subscription-payments.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/subscription-payments.tsx"
+          "path": "registry/w3-kit/address-book/address-book.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/subscription-payments/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/subscription-payments-types.ts"
+          "path": "registry/w3-kit/address-book/types.ts",
+          "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/subscription-payments/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/subscription-payments-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "token-airdrop",
-      "type": "registry:component",
-      "title": "Token Airdrop",
-      "description": "Token airdrop claiming interface with merkle proof verification and status tracking",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/w3-kit/token-airdrop/token-airdrop.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-airdrop.tsx"
-        },
-        {
-          "path": "registry/w3-kit/token-airdrop/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-airdrop-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/token-airdrop/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-airdrop-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "token-card",
-      "type": "registry:component",
-      "title": "Token Card",
-      "description": "Rich token display card with price change, market stats, favorites, and multiple variants",
-      "dependencies": ["lucide-react"],
-      "files": [
-        {
-          "path": "registry/w3-kit/token-card/token-card.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-card.tsx"
-        },
-        {
-          "path": "registry/w3-kit/token-card/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-card-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/token-card/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-card-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "token-list",
-      "type": "registry:component",
-      "title": "Token List",
-      "description": "Token list with search, sorting, grid/list/table variants, and balance display",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/w3-kit/token-list/token-list.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-list.tsx"
-        },
-        {
-          "path": "registry/w3-kit/token-list/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-list-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/token-list/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-list-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "token-swap",
-      "type": "registry:component",
-      "title": "Token Swap Widget",
-      "description": "Token swap interface with slippage settings, exchange rate display, and token selection",
-      "dependencies": ["lucide-react"],
-      "files": [
-        {
-          "path": "registry/w3-kit/token-swap/token-swap.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-swap.tsx"
-        },
-        {
-          "path": "registry/w3-kit/token-swap/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-swap-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/token-swap/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-swap-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "token-vesting",
-      "type": "registry:component",
-      "title": "Token Vesting",
-      "description": "Token vesting schedule display with progress tracking and claim functionality",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/w3-kit/token-vesting/token-vesting.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-vesting.tsx"
-        },
-        {
-          "path": "registry/w3-kit/token-vesting/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-vesting-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/token-vesting/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/token-vesting-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "transaction-history",
-      "type": "registry:component",
-      "title": "Transaction History",
-      "description": "Transaction history table with search, filtering, pagination, and expandable details",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/w3-kit/transaction-history/transaction-history.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/transaction-history.tsx"
-        },
-        {
-          "path": "registry/w3-kit/transaction-history/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/transaction-history-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/transaction-history/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/transaction-history-utils.ts"
-        }
-      ]
-    },
-    {
-      "name": "wallet-balance",
-      "type": "registry:component",
-      "title": "Wallet Balance",
-      "description": "Wallet balance display with token list, sorting, search, and compact/default variants",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/w3-kit/wallet-balance/wallet-balance.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/wallet-balance.tsx"
-        },
-        {
-          "path": "registry/w3-kit/wallet-balance/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/wallet-balance-types.ts"
-        },
-        {
-          "path": "registry/w3-kit/wallet-balance/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/wallet-balance-utils.ts"
+          "path": "registry/w3-kit/address-book/utils.ts",
+          "type": "registry:component"
         }
       ]
     }
