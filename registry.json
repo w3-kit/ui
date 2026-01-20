@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "@w3-kit/bridge",
+      "type": "registry:component",
+      "title": "Bridge Widget",
+      "description": "A cross-chain bridge widget for transferring assets between networks with token selection and fee estimation.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/bridge/bridge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/bridge/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/bridge/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
