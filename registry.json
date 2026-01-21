@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "staking-interface",
+      "type": "registry:component",
+      "title": "Staking Interface",
+      "description": "Token staking interface with pool selection, APR display, and stake/unstake actions",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/staking-interface/staking-interface.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/staking-interface.tsx"
+        },
+        {
+          "path": "registry/w3-kit/staking-interface/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/staking-interface-types.ts"
+        },
+        {
+          "path": "registry/w3-kit/staking-interface/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/staking-interface-utils.ts"
+        }
+      ]
+    }
+  ]
+}
