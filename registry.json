@@ -4,26 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "gas-calculator",
+      "name": "limit-order-manager",
       "type": "registry:component",
-      "title": "Gas Calculator",
-      "description": "Real-time Ethereum gas price calculator with transaction type presets and speed selection.",
+      "title": "Limit Order Manager",
+      "description": "Manage limit orders and stop-loss orders with creation, cancellation, and status tracking.",
       "dependencies": ["lucide-react"],
       "files": [
         {
-          "path": "registry/w3-kit/gas-calculator/gas-calculator.tsx",
+          "path": "registry/w3-kit/limit-order-manager/limit-order-manager.tsx",
           "type": "registry:component",
-          "target": "components/w3-kit/gas-calculator.tsx"
+          "target": "components/w3-kit/limit-order-manager.tsx"
         },
         {
-          "path": "registry/w3-kit/gas-calculator/types.ts",
+          "path": "registry/w3-kit/limit-order-manager/types.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/gas-calculator/types.ts"
+          "target": "components/w3-kit/limit-order-manager/types.ts"
         },
         {
-          "path": "registry/w3-kit/gas-calculator/utils.ts",
+          "path": "registry/w3-kit/limit-order-manager/utils.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/gas-calculator/utils.ts"
+          "target": "components/w3-kit/limit-order-manager/utils.ts"
         }
       ]
     }
