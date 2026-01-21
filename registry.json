@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "nft-marketplace-aggregator",
+      "type": "registry:component",
+      "title": "NFT Marketplace Aggregator",
+      "description": "Aggregates NFT listings from multiple marketplaces with protocol risk scanning",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/nft-marketplace-aggregator.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/nft-marketplace-aggregator.tsx"
+        },
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/nft-marketplace-aggregator-types.ts"
+        },
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/nft-marketplace-aggregator-utils.ts"
+        }
+      ]
+    }
+  ]
+}
