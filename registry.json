@@ -4,26 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "nft-card",
+      "name": "nft-collection-grid",
       "type": "registry:component",
-      "title": "NFT Card",
-      "description": "Display NFT details with image, attributes, owner info, and chain explorer links.",
+      "title": "NFT Collection Grid",
+      "description": "Grid display for NFT collections with search, chain filtering, sorting, and grid/list view modes.",
       "dependencies": [],
       "files": [
         {
-          "path": "registry/w3-kit/nft-card/nft-card.tsx",
+          "path": "registry/w3-kit/nft-collection-grid/nft-collection-grid.tsx",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-card.tsx"
+          "target": "components/w3-kit/nft-collection-grid.tsx"
         },
         {
-          "path": "registry/w3-kit/nft-card/types.ts",
+          "path": "registry/w3-kit/nft-collection-grid/types.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-card/types.ts"
+          "target": "components/w3-kit/nft-collection-grid/types.ts"
         },
         {
-          "path": "registry/w3-kit/nft-card/utils.ts",
+          "path": "registry/w3-kit/nft-collection-grid/utils.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-card/utils.ts"
+          "target": "components/w3-kit/nft-collection-grid/utils.ts"
         }
       ]
     }
