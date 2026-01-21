@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "smart-contract-scanner",
+      "type": "registry:component",
+      "title": "Smart Contract Scanner",
+      "description": "Security scanner for Ethereum smart contracts with code preview and analysis",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/smart-contract-scanner.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/smart-contract-scanner.tsx"
+        },
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/smart-contract-scanner-types.ts"
+        },
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/smart-contract-scanner-utils.ts"
+        }
+      ]
+    }
+  ]
+}
