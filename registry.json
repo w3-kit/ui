@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "w3-kit",
+  "homepage": "https://w3-kit.com",
+  "items": [
+    {
+      "name": "network-switcher",
+      "type": "registry:component",
+      "title": "Network Switcher",
+      "description": "Blockchain network selector with search, mainnet/testnet toggle, and network details display.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/w3-kit/network-switcher/network-switcher.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/network-switcher.tsx"
+        },
+        {
+          "path": "registry/w3-kit/network-switcher/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/network-switcher/types.ts"
+        },
+        {
+          "path": "registry/w3-kit/network-switcher/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/network-switcher/utils.ts"
+        },
+        {
+          "path": "registry/w3-kit/network-switcher/networks.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/network-switcher/networks.ts"
+        }
+      ]
+    }
+  ]
+}
