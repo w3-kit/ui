@@ -4,26 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "nft-collection-grid",
+      "name": "price-ticker",
       "type": "registry:component",
-      "title": "NFT Collection Grid",
-      "description": "Grid display for NFT collections with search, chain filtering, sorting, and grid/list view modes.",
+      "title": "Price Ticker",
+      "description": "Real-time cryptocurrency price ticker with auto-refresh and detailed market stats",
       "dependencies": [],
       "files": [
         {
-          "path": "registry/w3-kit/nft-collection-grid/nft-collection-grid.tsx",
+          "path": "registry/w3-kit/price-ticker/price-ticker.tsx",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-collection-grid.tsx"
+          "target": "components/w3-kit/price-ticker.tsx"
         },
         {
-          "path": "registry/w3-kit/nft-collection-grid/types.ts",
+          "path": "registry/w3-kit/price-ticker/types.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-collection-grid/types.ts"
+          "target": "components/w3-kit/price-ticker-types.ts"
         },
         {
-          "path": "registry/w3-kit/nft-collection-grid/utils.ts",
+          "path": "registry/w3-kit/price-ticker/utils.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/nft-collection-grid/utils.ts"
+          "target": "components/w3-kit/price-ticker-utils.ts"
         }
       ]
     }
