@@ -4,22 +4,22 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/connect-wallet",
+      "name": "@w3-kit/defi-position-manager",
       "type": "registry:component",
-      "title": "Connect Wallet Button",
-      "description": "A multi-wallet connect button supporting MetaMask, WalletConnect, Coinbase Wallet, and Phantom (Solana).",
-      "dependencies": ["@web3-react/walletconnect-connector"],
+      "title": "DeFi Position Manager",
+      "description": "A DeFi position management component with health factor monitoring, APY display, rewards tracking, and deposit/withdraw actions.",
+      "dependencies": ["lucide-react"],
       "files": [
         {
-          "path": "registry/w3-kit/connect-wallet/connect-wallet.tsx",
+          "path": "registry/w3-kit/defi-position-manager/defi-position-manager.tsx",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/connect-wallet/types.ts",
+          "path": "registry/w3-kit/defi-position-manager/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/connect-wallet/utils.ts",
+          "path": "registry/w3-kit/defi-position-manager/utils.ts",
           "type": "registry:component"
         }
       ]
