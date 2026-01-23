@@ -4,26 +4,24 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "liquidity-pool-stats",
+      "name": "@w3-kit/asset-portfolio",
       "type": "registry:component",
-      "title": "Liquidity Pool Stats",
-      "description": "Display liquidity pool statistics including TVL, volume, APR, and fees with tooltips and loading states.",
-      "dependencies": ["lucide-react"],
+      "title": "Asset Portfolio",
+      "description": "A Web3 portfolio component with price charts, distribution visualization, and multi-chain support.",
+      "dependencies": ["lucide-react", "chart.js", "react-chartjs-2"],
+      "registryDependencies": ["button", "card"],
       "files": [
         {
-          "path": "registry/w3-kit/liquidity-pool-stats/liquidity-pool-stats.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/liquidity-pool-stats.tsx"
+          "path": "registry/w3-kit/asset-portfolio/asset-portfolio.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/liquidity-pool-stats/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/liquidity-pool-stats/types.ts"
+          "path": "registry/w3-kit/asset-portfolio/types.ts",
+          "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/liquidity-pool-stats/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/liquidity-pool-stats/utils.ts"
+          "path": "registry/w3-kit/asset-portfolio/utils.ts",
+          "type": "registry:component"
         }
       ]
     }
