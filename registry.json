@@ -4,23 +4,22 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/asset-portfolio",
+      "name": "@w3-kit/ens-resolver",
       "type": "registry:component",
-      "title": "Asset Portfolio",
-      "description": "A Web3 portfolio component with price charts, distribution visualization, and multi-chain support.",
-      "dependencies": ["lucide-react", "chart.js", "react-chartjs-2"],
-      "registryDependencies": ["button", "card"],
+      "title": "ENS Resolver",
+      "description": "An ENS name resolver component with address lookup, avatar display, and recent search history.",
+      "dependencies": ["lucide-react"],
       "files": [
         {
-          "path": "registry/w3-kit/asset-portfolio/asset-portfolio.tsx",
+          "path": "registry/w3-kit/ens-resolver/ens-resolver.tsx",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/asset-portfolio/types.ts",
+          "path": "registry/w3-kit/ens-resolver/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/asset-portfolio/utils.ts",
+          "path": "registry/w3-kit/ens-resolver/utils.ts",
           "type": "registry:component"
         }
       ]
