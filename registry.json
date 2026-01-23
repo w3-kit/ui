@@ -4,23 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/defi-position-manager",
+      "name": "gas-calculator",
       "type": "registry:component",
-      "title": "DeFi Position Manager",
-      "description": "A DeFi position management component with health factor monitoring, APY display, rewards tracking, and deposit/withdraw actions.",
+      "title": "Gas Calculator",
+      "description": "Real-time Ethereum gas price calculator with transaction type presets and speed selection.",
       "dependencies": ["lucide-react"],
       "files": [
         {
-          "path": "registry/w3-kit/defi-position-manager/defi-position-manager.tsx",
-          "type": "registry:component"
+          "path": "registry/w3-kit/gas-calculator/gas-calculator.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/gas-calculator.tsx"
         },
         {
-          "path": "registry/w3-kit/defi-position-manager/types.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/gas-calculator/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/gas-calculator/types.ts"
         },
         {
-          "path": "registry/w3-kit/defi-position-manager/utils.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/gas-calculator/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/gas-calculator/utils.ts"
         }
       ]
     }
