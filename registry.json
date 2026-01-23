@@ -4,22 +4,22 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/ens-resolver",
+      "name": "@w3-kit/flash-loan-executor",
       "type": "registry:component",
-      "title": "ENS Resolver",
-      "description": "An ENS name resolver component with address lookup, avatar display, and recent search history.",
+      "title": "Flash Loan Executor",
+      "description": "A flash loan execution component with protocol/token selection, amount input, and profit/risk estimation.",
       "dependencies": ["lucide-react"],
       "files": [
         {
-          "path": "registry/w3-kit/ens-resolver/ens-resolver.tsx",
+          "path": "registry/w3-kit/flash-loan-executor/flash-loan-executor.tsx",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/ens-resolver/types.ts",
+          "path": "registry/w3-kit/flash-loan-executor/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "registry/w3-kit/ens-resolver/utils.ts",
+          "path": "registry/w3-kit/flash-loan-executor/utils.ts",
           "type": "registry:component"
         }
       ]
