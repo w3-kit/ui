@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { RefreshCw, Search, X, Send, ArrowLeftRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Token, WalletBalanceProps, SortOption } from "./types";
-import { formatBalance, formatCurrency, animationStyles } from "./utils";
+import { formatBalance, formatCurrency } from "./utils";
 
 export const WalletBalance: React.FC<WalletBalanceProps> = ({
   tokens,
@@ -17,16 +23,6 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
   const [showAllTokens, setShowAllTokens] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = animationStyles;
-    document.head.appendChild(styleTag);
-
-    return () => {
-      document.head.removeChild(styleTag);
-    };
-  }, []);
 
   const totalValue = tokens.reduce(
     (sum, token) => sum + Number(token.balance) * (token.price || 0),
@@ -92,476 +88,322 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
       ? sortedTokens.slice(0, 3)
       : sortedTokens;
 
+  const getPriceChangeBadgeVariant = (change: number | undefined) => {
+    if (change === undefined) return "secondary";
+    if (change > 0) return "success";
+    if (change < 0) return "destructive";
+    return "secondary";
+  };
+
   if (variant === "compact") {
     return (
-      <div
-        className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 w-full animate-fadeIn ${className}`}
-      >
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
-            Wallet Balance
-          </h2>
-          <div className="flex items-center space-x-2">
-            <span className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-              {formatCurrency(totalValue)}
-            </span>
-            <button
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Refresh balances"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-4 w-4 text-gray-500 dark:text-gray-400 ${isRefreshing ? "animate-spin" : ""}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+      <Card className={cn("w-full", className)}>
+        <CardHeader className="p-3 sm:p-4 pb-0">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base sm:text-lg">Wallet Balance</CardTitle>
+            <div className="flex items-center gap-2">
+              <span className="text-lg sm:text-2xl font-bold">
+                {formatCurrency(totalValue)}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="h-8 w-8"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div className="relative mb-3">
-          <input
-            type="text"
-            placeholder="Search tokens..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg
-              bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-              focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
-          />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm("")}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          {displayTokens.map((token, index) => {
-            const tokenValue = Number(token.balance) * (token.price || 0);
-            const isSelected = selectedToken?.symbol === token.symbol;
-
-            return (
-              <div
-                key={token.symbol}
-                className={`flex items-center justify-between p-2
-                  ${isSelected ? "" : "hover:bg-gray-50 dark:hover:bg-gray-700/50"}
-                  rounded-lg cursor-pointer transition-all duration-200 animate-slideIn`}
-                style={{ animationDelay: `${index * 50}ms` }}
-                onClick={() => handleTokenClick(token)}
-              >
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="relative">
-                    <img
-                      src={token.logoURI}
-                      alt={token.symbol}
-                      width={24}
-                      height={24}
-                      className="rounded-full w-6 h-6 sm:w-7 sm:h-7 object-contain bg-white dark:bg-gray-700"
-                      style={{ width: 24, height: 24 }}
-                    />
-                    {token.priceChange24h !== undefined && (
-                      <div
-                        className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center
-                          ${
-                            token.priceChange24h > 0
-                              ? "bg-green-500"
-                              : token.priceChange24h < 0
-                                ? "bg-red-500"
-                                : "bg-gray-400"
-                          }`}
-                        title={`${token.priceChange24h > 0 ? "+" : ""}${token.priceChange24h.toFixed(2)}% (24h)`}
-                      ></div>
-                    )}
-                  </div>
-                  <div>
-                    <div className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
-                      {token.symbol}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[100px] sm:max-w-[150px]">
-                      {token.name}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
-                    {formatBalance(token.balance, token.decimals)}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    {formatCurrency(tokenValue)}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {sortedTokens.length === 0 && (
-            <div className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-              No tokens found
+                <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
+              </Button>
             </div>
-          )}
-
-          {sortedTokens.length > 3 && (
-            <button
-              onClick={() => setShowAllTokens(!showAllTokens)}
-              className="w-full py-2 mt-1 text-xs font-medium text-blue-600 dark:text-blue-400
-                hover:text-blue-800 dark:hover:text-blue-300 transition-colors rounded-lg
-                hover:bg-blue-50 dark:hover:bg-blue-900/20"
-            >
-              {showAllTokens
-                ? "Show Less"
-                : `Show All (${sortedTokens.length})`}
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full animate-fadeIn ${className}`}
-    >
-      <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2 sm:mb-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-            Total Balance
-          </h2>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Refresh balances"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-5 w-5 text-gray-500 dark:text-gray-400 ${isRefreshing ? "animate-spin" : ""}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </button>
           </div>
-        </div>
-        <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-          {formatCurrency(totalValue)}
-        </div>
-        <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {tokens.length} tokens in wallet
-        </div>
-      </div>
+        </CardHeader>
 
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex flex-col gap-3">
-          <div className="relative w-full">
-            <input
+        <CardContent className="p-3 sm:p-4">
+          <div className="relative mb-3">
+            <Input
               type="text"
               placeholder="Search tokens..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 pl-9 border border-gray-200 dark:border-gray-700 rounded-lg
-                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="pr-8"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
             {searchTerm && (
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                <X className="h-4 w-4" />
+              </Button>
             )}
           </div>
 
-          <div className="w-full">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
-              <button
-                onClick={() => handleSort("value")}
-                className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                  ${
-                    sortBy === "value"
-                      ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
-                      : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-              >
-                Value {sortBy === "value" && (sortDirection === "asc" ? "↑" : "↓")}
-              </button>
-              <button
-                onClick={() => handleSort("name")}
-                className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                  ${
-                    sortBy === "name"
-                      ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
-                      : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-              >
-                Name {sortBy === "name" && (sortDirection === "asc" ? "↑" : "↓")}
-              </button>
-              <button
-                onClick={() => handleSort("balance")}
-                className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                  ${
-                    sortBy === "balance"
-                      ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
-                      : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-              >
-                Balance{" "}
-                {sortBy === "balance" && (sortDirection === "asc" ? "↑" : "↓")}
-              </button>
-              <button
-                onClick={() => handleSort("change")}
-                className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                  ${
-                    sortBy === "change"
-                      ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
-                      : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-              >
-                24h {sortBy === "change" && (sortDirection === "asc" ? "↑" : "↓")}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+          <div className="space-y-2">
+            {displayTokens.map((token) => {
+              const tokenValue = Number(token.balance) * (token.price || 0);
+              const isSelected = selectedToken?.symbol === token.symbol;
 
-      <div
-        className="divide-y divide-gray-200 dark:divide-gray-700 max-h-[300px] sm:max-h-[400px]
-        overflow-y-auto scrollbar-thin"
-      >
-        {sortedTokens.length === 0 ? (
-          <div className="py-8 text-center text-gray-500 dark:text-gray-400">
-            No tokens found matching your search
-          </div>
-        ) : (
-          sortedTokens.map((token, index) => {
-            const tokenValue = Number(token.balance) * (token.price || 0);
-            const isSelected = selectedToken?.symbol === token.symbol;
-
-            return (
-              <div
-                key={token.symbol}
-                className={`p-3 sm:p-4
-                  ${isSelected ? "" : "hover:bg-gray-50 dark:hover:bg-gray-700/50"}
-                  cursor-pointer transition-colors animate-slideIn`}
-                style={{ animationDelay: `${index * 30}ms` }}
-                onClick={() => handleTokenClick(token)}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+              return (
+                <div
+                  key={token.symbol}
+                  className={cn(
+                    "flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors",
+                    !isSelected && "hover:bg-accent"
+                  )}
+                  onClick={() => handleTokenClick(token)}
+                >
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <div className="relative">
                       <img
                         src={token.logoURI}
                         alt={token.symbol}
-                        width={40}
-                        height={40}
-                        className="rounded-full w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 object-contain bg-white dark:bg-gray-700"
-                        style={{ width: 40, height: 40 }}
+                        className="rounded-full w-6 h-6 sm:w-7 sm:h-7 object-contain bg-background"
                       />
                       {token.priceChange24h !== undefined && (
                         <div
-                          className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center
-                            ${
-                              token.priceChange24h > 0
-                                ? "bg-green-500"
-                                : token.priceChange24h < 0
-                                  ? "bg-red-500"
-                                  : "bg-gray-400"
-                            }`}
-                        ></div>
+                          className={cn(
+                            "absolute -bottom-1 -right-1 w-3 h-3 rounded-full",
+                            token.priceChange24h > 0 && "bg-green-500",
+                            token.priceChange24h < 0 && "bg-red-500",
+                            token.priceChange24h === 0 && "bg-muted-foreground"
+                          )}
+                        />
                       )}
                     </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-sm sm:text-base text-gray-900 dark:text-white truncate">
-                        {token.name}
+                    <div>
+                      <div className="font-medium text-sm sm:text-base">
+                        {token.symbol}
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                        <span>{token.symbol}</span>
-                        {token.priceChange24h !== undefined && (
-                          <span
-                            className={`ml-2 ${
-                              token.priceChange24h > 0
-                                ? "text-green-500"
-                                : token.priceChange24h < 0
-                                  ? "text-red-500"
-                                  : "text-gray-400"
-                            }`}
-                          >
-                            {token.priceChange24h > 0 ? "+" : ""}
-                            {token.priceChange24h.toFixed(2)}%
-                          </span>
-                        )}
+                      <div className="text-xs text-muted-foreground truncate max-w-[100px] sm:max-w-[150px]">
+                        {token.name}
                       </div>
                     </div>
                   </div>
-                  <div className="text-right flex-shrink-0 ml-2">
-                    <div className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
+                  <div className="text-right">
+                    <div className="font-medium text-sm sm:text-base">
                       {formatBalance(token.balance, token.decimals)}
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    <div className="text-xs text-muted-foreground">
                       {formatCurrency(tokenValue)}
                     </div>
                   </div>
                 </div>
+              );
+            })}
 
-                {isSelected && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
-                    <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 dark:bg-gray-750 rounded-lg p-3">
-                      <div className="border-r border-gray-200 dark:border-gray-700 pr-3">
-                        <div className="text-gray-500 dark:text-gray-400 mb-1 text-xs">
-                          Price
-                        </div>
-                        <div className="font-medium text-gray-900 dark:text-white">
-                          {formatCurrency(token.price || 0)}
-                        </div>
-                      </div>
-                      <div className="pl-3">
-                        <div className="text-gray-500 dark:text-gray-400 mb-1 text-xs">
-                          Value
-                        </div>
-                        <div className="font-medium text-gray-900 dark:text-white">
-                          {formatCurrency(tokenValue)}
-                        </div>
-                      </div>
-                      {token.priceChange24h !== undefined && (
-                        <div className="col-span-2 border-t border-gray-200 dark:border-gray-700 pt-2 mt-1">
-                          <div className="text-gray-500 dark:text-gray-400 mb-1 text-xs">
-                            24h Change
-                          </div>
+            {sortedTokens.length === 0 && (
+              <div className="py-4 text-center text-sm text-muted-foreground">
+                No tokens found
+              </div>
+            )}
+
+            {sortedTokens.length > 3 && (
+              <Button
+                variant="ghost"
+                onClick={() => setShowAllTokens(!showAllTokens)}
+                className="w-full text-xs"
+              >
+                {showAllTokens ? "Show Less" : `Show All (${sortedTokens.length})`}
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className={cn("w-full", className)}>
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between mb-2">
+          <CardTitle>Total Balance</CardTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            <RefreshCw className={cn("h-5 w-5", isRefreshing && "animate-spin")} />
+          </Button>
+        </div>
+        <div className="text-2xl sm:text-3xl font-bold">
+          {formatCurrency(totalValue)}
+        </div>
+        <div className="mt-2 text-sm text-muted-foreground">
+          {tokens.length} tokens in wallet
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        <div className="flex flex-col gap-3">
+          <div className="relative w-full">
+            <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search tokens..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchTerm && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSearchTerm("")}
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
+            {(["value", "name", "balance", "change"] as const).map((option) => (
+              <Button
+                key={option}
+                variant={sortBy === option ? "default" : "outline"}
+                size="sm"
+                onClick={() => handleSort(option)}
+                className="text-xs capitalize"
+              >
+                {option === "change" ? "24h" : option}{" "}
+                {sortBy === option && (sortDirection === "asc" ? "↑" : "↓")}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="divide-y divide-border max-h-[300px] sm:max-h-[400px] overflow-y-auto -mx-6 px-6">
+          {sortedTokens.length === 0 ? (
+            <div className="py-8 text-center text-muted-foreground">
+              No tokens found matching your search
+            </div>
+          ) : (
+            sortedTokens.map((token) => {
+              const tokenValue = Number(token.balance) * (token.price || 0);
+              const isSelected = selectedToken?.symbol === token.symbol;
+
+              return (
+                <div
+                  key={token.symbol}
+                  className={cn(
+                    "py-3 sm:py-4 cursor-pointer transition-colors",
+                    !isSelected && "hover:bg-accent/50"
+                  )}
+                  onClick={() => handleTokenClick(token)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                      <div className="relative">
+                        <img
+                          src={token.logoURI}
+                          alt={token.symbol}
+                          className="rounded-full w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 object-contain bg-background"
+                        />
+                        {token.priceChange24h !== undefined && (
                           <div
-                            className={`font-medium text-xs ${
-                              token.priceChange24h > 0
-                                ? "text-green-500"
-                                : token.priceChange24h < 0
-                                  ? "text-red-500"
-                                  : "text-gray-500 dark:text-gray-400"
-                            }`}
-                          >
-                            {token.priceChange24h > 0 ? "+" : ""}
-                            {token.priceChange24h.toFixed(2)}%
-                          </div>
+                            className={cn(
+                              "absolute -bottom-1 -right-1 w-4 h-4 rounded-full",
+                              token.priceChange24h > 0 && "bg-green-500",
+                              token.priceChange24h < 0 && "bg-red-500",
+                              token.priceChange24h === 0 && "bg-muted-foreground"
+                            )}
+                          />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-medium text-sm sm:text-base truncate">
+                          {token.name}
                         </div>
-                      )}
+                        <div className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
+                          <span>{token.symbol}</span>
+                          {token.priceChange24h !== undefined && (
+                            <Badge variant={getPriceChangeBadgeVariant(token.priceChange24h)} className="text-xs">
+                              {token.priceChange24h > 0 ? "+" : ""}
+                              {token.priceChange24h.toFixed(2)}%
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="mt-3 grid grid-cols-2 gap-2">
-                      <button
-                        className="py-1.5 sm:py-2 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300
-                          rounded hover:bg-blue-200 dark:hover:bg-blue-800/70 transition-colors flex items-center justify-center"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          alert(`Send ${token.symbol} functionality would go here`);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3 w-3 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                          />
-                        </svg>
-                        Send
-                      </button>
-                      <button
-                        className="py-1.5 sm:py-2 text-xs sm:text-sm bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300
-                          rounded hover:bg-green-200 dark:hover:bg-green-800/70 transition-colors flex items-center justify-center"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          alert(`Swap ${token.symbol} functionality would go here`);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3 w-3 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                          />
-                        </svg>
-                        Swap
-                      </button>
+                    <div className="text-right flex-shrink-0 ml-2">
+                      <div className="font-medium text-sm sm:text-base">
+                        {formatBalance(token.balance, token.decimals)}
+                      </div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">
+                        {formatCurrency(tokenValue)}
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
-            );
-          })
-        )}
-      </div>
-    </div>
+
+                  {isSelected && (
+                    <div className="mt-3 pt-3 border-t">
+                      <Card className="bg-muted/50">
+                        <CardContent className="p-3 grid grid-cols-2 gap-4 text-sm">
+                          <div className="border-r pr-3">
+                            <div className="text-muted-foreground mb-1 text-xs">
+                              Price
+                            </div>
+                            <div className="font-medium">
+                              {formatCurrency(token.price || 0)}
+                            </div>
+                          </div>
+                          <div className="pl-3">
+                            <div className="text-muted-foreground mb-1 text-xs">
+                              Value
+                            </div>
+                            <div className="font-medium">
+                              {formatCurrency(tokenValue)}
+                            </div>
+                          </div>
+                          {token.priceChange24h !== undefined && (
+                            <div className="col-span-2 border-t pt-2 mt-1">
+                              <div className="text-muted-foreground mb-1 text-xs">
+                                24h Change
+                              </div>
+                              <Badge variant={getPriceChangeBadgeVariant(token.priceChange24h)}>
+                                {token.priceChange24h > 0 ? "+" : ""}
+                                {token.priceChange24h.toFixed(2)}%
+                              </Badge>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert(`Send ${token.symbol} functionality would go here`);
+                          }}
+                        >
+                          <Send className="h-3 w-3 mr-1" />
+                          Send
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/50 dark:text-green-300 dark:hover:bg-green-800/70"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert(`Swap ${token.symbol} functionality would go here`);
+                          }}
+                        >
+                          <ArrowLeftRight className="h-3 w-3 mr-1" />
+                          Swap
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
