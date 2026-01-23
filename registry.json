@@ -4,26 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "multisig-wallet",
+      "name": "nft-card",
       "type": "registry:component",
-      "title": "Multisig Wallet",
-      "description": "Multi-signature wallet interface for managing signers, proposing transactions, and approving/rejecting with threshold requirements.",
+      "title": "NFT Card",
+      "description": "Display NFT details with image, attributes, owner info, and chain explorer links.",
       "dependencies": [],
       "files": [
         {
-          "path": "registry/w3-kit/multisig-wallet/multisig-wallet.tsx",
+          "path": "registry/w3-kit/nft-card/nft-card.tsx",
           "type": "registry:component",
-          "target": "components/w3-kit/multisig-wallet.tsx"
+          "target": "components/w3-kit/nft-card.tsx"
         },
         {
-          "path": "registry/w3-kit/multisig-wallet/types.ts",
+          "path": "registry/w3-kit/nft-card/types.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/multisig-wallet/types.ts"
+          "target": "components/w3-kit/nft-card/types.ts"
         },
         {
-          "path": "registry/w3-kit/multisig-wallet/utils.ts",
+          "path": "registry/w3-kit/nft-card/utils.ts",
           "type": "registry:component",
-          "target": "components/w3-kit/multisig-wallet/utils.ts"
+          "target": "components/w3-kit/nft-card/utils.ts"
         }
       ]
     }
