@@ -4,23 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/flash-loan-executor",
+      "name": "multisig-wallet",
       "type": "registry:component",
-      "title": "Flash Loan Executor",
-      "description": "A flash loan execution component with protocol/token selection, amount input, and profit/risk estimation.",
-      "dependencies": ["lucide-react"],
+      "title": "Multisig Wallet",
+      "description": "Multi-signature wallet interface for managing signers, proposing transactions, and approving/rejecting with threshold requirements.",
+      "dependencies": [],
       "files": [
         {
-          "path": "registry/w3-kit/flash-loan-executor/flash-loan-executor.tsx",
-          "type": "registry:component"
+          "path": "registry/w3-kit/multisig-wallet/multisig-wallet.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/multisig-wallet.tsx"
         },
         {
-          "path": "registry/w3-kit/flash-loan-executor/types.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/multisig-wallet/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/multisig-wallet/types.ts"
         },
         {
-          "path": "registry/w3-kit/flash-loan-executor/utils.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/multisig-wallet/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/multisig-wallet/utils.ts"
         }
       ]
     }
