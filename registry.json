@@ -23,6 +23,27 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "@w3-kit/token-vesting",
+      "type": "registry:component",
+      "title": "Token Vesting",
+      "description": "A component for managing and tracking token vesting schedules with detailed progress visualization.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-vesting/token-vesting.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-vesting/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-vesting/utils.ts",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }
