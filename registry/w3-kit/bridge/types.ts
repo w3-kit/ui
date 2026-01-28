@@ -18,12 +18,10 @@ export interface BridgeWidgetProps {
   tokens?: Token[];
   tokenFees?: Record<string, string>;
   estimatedTime?: string;
-  onBridge?: (params: BridgeParams) => void | Promise<void>;
-}
-
-export interface BridgeParams {
-  fromNetwork: Network;
-  toNetwork: Network;
-  token: Token;
-  amount: string;
+  onBridge?: (params: {
+    fromNetwork: Network;
+    toNetwork: Network;
+    token: Token;
+    amount: string;
+  }) => Promise<void>;
 }

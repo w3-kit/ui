@@ -4,23 +4,26 @@
   "homepage": "https://w3-kit.com",
   "items": [
     {
-      "name": "@w3-kit/bridge",
+      "name": "price-ticker",
       "type": "registry:component",
-      "title": "Bridge Widget",
-      "description": "A cross-chain bridge widget for transferring assets between networks with token selection and fee estimation.",
-      "dependencies": ["lucide-react"],
+      "title": "Price Ticker",
+      "description": "Real-time cryptocurrency price ticker with auto-refresh and detailed market stats",
+      "dependencies": [],
       "files": [
         {
-          "path": "registry/w3-kit/bridge/bridge.tsx",
-          "type": "registry:component"
+          "path": "registry/w3-kit/price-ticker/price-ticker.tsx",
+          "type": "registry:component",
+          "target": "components/w3-kit/price-ticker.tsx"
         },
         {
-          "path": "registry/w3-kit/bridge/types.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/price-ticker/types.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/price-ticker-types.ts"
         },
         {
-          "path": "registry/w3-kit/bridge/utils.ts",
-          "type": "registry:component"
+          "path": "registry/w3-kit/price-ticker/utils.ts",
+          "type": "registry:component",
+          "target": "components/w3-kit/price-ticker-utils.ts"
         }
       ]
     },
