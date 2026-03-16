@@ -3,11 +3,11 @@ import { OrderData, FormErrors } from "./types";
 export function getStatusColor(status: OrderData["status"]): string {
   switch (status) {
     case "active":
-      return "text-green-500 dark:text-green-400";
+      return "text-success";
     case "executed":
-      return "text-blue-500 dark:text-blue-400";
+      return "text-primary";
     case "cancelled":
-      return "text-red-500 dark:text-red-400";
+      return "text-destructive";
   }
 }
 

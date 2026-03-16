@@ -73,11 +73,11 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}
+      className={`bg-card rounded-lg shadow-lg p-4 ${className}`}
     >
       <div className="space-y-6">
         {/* Plan Tabs */}
-        <div className="flex flex-wrap w-full gap-2 border-b border-gray-200 dark:border-gray-700 pb-2">
+        <div className="flex flex-wrap w-full gap-2 border-b border-border pb-2">
           {plans.map((plan) => (
             <button
               key={plan.id}
@@ -85,9 +85,9 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
               className={`relative flex-1 min-w-[140px] sm:min-w-[150px] flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 ${
                 activeTab === plan.id
                   ? plan.isPopular
-                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
-                    : "bg-blue-500 text-white shadow-md"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-primary to-primary-hover text-primary-foreground shadow-md"
+                    : "bg-primary text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:bg-accent"
               }`}
             >
               <div className="flex items-center space-x-2">
@@ -97,7 +97,7 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                 </span>
               </div>
               {plan.isPopular && (
-                <span className="absolute -top-3 -right-2 bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
+                <span className="absolute -top-3 -right-2 bg-warning text-warning-foreground text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
                   <Star className="w-3 h-3 mr-1" />
                   Popular
                 </span>
@@ -115,17 +115,17 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                 {getIcon(currentPlan.icon)}
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+                    <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                       {currentPlan.name}
                     </h3>
                     {currentPlan.isPopular && (
-                      <span className="bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
+                      <span className="bg-warning text-warning-foreground text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
                         <Star className="w-3 h-3 mr-1" />
                         Popular
                       </span>
                     )}
                   </div>
-                  <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     {currentPlan.description}
                   </p>
                 </div>
@@ -139,10 +139,10 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                   className="rounded-full"
                   style={{ width: 24, height: 24 }}
                 />
-                <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                <span className="text-xl sm:text-2xl font-bold text-foreground">
                   {currentPlan.price}
                 </span>
-                <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+                <span className="text-sm sm:text-base text-muted-foreground">
                   /{currentPlan.interval}
                 </span>
               </div>
@@ -152,8 +152,8 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
             <div className="grid grid-cols-1 gap-4">
               {currentPlan.features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-3">
-                  <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-600 dark:text-gray-300">
+                  <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground">
                     {feature}
                   </span>
                 </div>
@@ -164,17 +164,17 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
             <button
               onClick={handleSubscribe}
               disabled={isSubscribing || showSuccess}
-              className={`group relative w-full px-4 py-3 bg-blue-500 text-white rounded-lg transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center overflow-hidden ${
+              className={`group relative w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 flex items-center justify-center overflow-hidden ${
                 isSubscribing || showSuccess
                   ? "opacity-90 cursor-not-allowed"
-                  : "hover:bg-blue-600"
+                  : "hover:bg-primary-hover"
               }`}
             >
               {/* Loading state background effect */}
               {isSubscribing && (
                 <div className="absolute inset-0 overflow-hidden">
                   <div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 bg-[length:200%_100%] animate-loading-shine"
+                    className="absolute inset-0 bg-gradient-to-r from-primary-hover via-primary to-primary-hover bg-[length:200%_100%] animate-loading-shine"
                     style={
                       {
                         "--loading-shine": "rgba(255, 255, 255, 0.1)",
@@ -237,7 +237,7 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
             </button>
 
             {/* Warning Message */}
-            <div className="flex flex-wrap items-center text-sm text-yellow-600 dark:text-yellow-400">
+            <div className="flex flex-wrap items-center text-sm text-warning">
               <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
               <span>
                 Subscriptions will automatically renew unless cancelled

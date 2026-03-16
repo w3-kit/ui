@@ -162,16 +162,16 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
   if (variant === "compact") {
     return (
       <div
-        className={`bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden ${className}`}
+        className={`bg-card rounded-lg shadow-md overflow-hidden ${className}`}
       >
-        <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="flex items-center justify-between p-3 border-b border-border">
+          <h3 className="text-sm font-medium text-foreground">
             Market Prices
           </h3>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowDetails(!showDetails)}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               <svg
                 className="w-4 h-4"
@@ -190,7 +190,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
             <button
               onClick={handleManualRefresh}
               disabled={isLoading}
-              className={`text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200
+              className={`text-muted-foreground hover:text-foreground
                 transition-all duration-300 ${refreshing ? "rotate-180" : ""}`}
             >
               <svg
@@ -220,8 +220,8 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
               {prices.map((token) => (
                 <div
                   key={token.symbol}
-                  className="flex-shrink-0 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-full
-                    flex items-center space-x-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600
+                  className="flex-shrink-0 px-3 py-1.5 bg-muted rounded-full
+                    flex items-center space-x-2 cursor-pointer hover:bg-accent
                     transition-all duration-200 transform hover:scale-105"
                   onClick={() => handleTokenClick(token.symbol)}
                 >
@@ -234,14 +234,14 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       className="rounded-full w-4 h-4"
                     />
                   )}
-                  <span className="text-xs font-medium text-gray-900 dark:text-white">
+                  <span className="text-xs font-medium text-foreground">
                     {token.symbol}
                   </span>
                   <span
                     className={`text-xs font-medium ${
                       token.priceChange["24h"] > 0
-                        ? "text-green-600 dark:text-green-400"
-                        : "text-red-600 dark:text-red-400"
+                        ? "text-success"
+                        : "text-destructive"
                     }`}
                   >
                     {formatPercentage(token.priceChange["24h"])}
@@ -251,7 +251,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
             </div>
 
             {showDetails && (
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-3 border-t border-border">
                 <div className="space-y-3">
                   {prices.map((token) => (
                     <div
@@ -259,8 +259,8 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       className={`p-2 rounded-lg transition-all duration-200
                         ${
                           selectedToken === token.symbol
-                            ? "bg-blue-50 dark:bg-blue-900/20"
-                            : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            ? "bg-info-muted"
+                            : "hover:bg-accent"
                         }`}
                       onClick={() => handleTokenClick(token.symbol)}
                     >
@@ -276,23 +276,23 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                             />
                           )}
                           <div>
-                            <div className="font-medium text-gray-900 dark:text-white">
+                            <div className="font-medium text-foreground">
                               {token.name}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                            <div className="text-xs text-muted-foreground">
                               {token.symbol}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-medium text-gray-900 dark:text-white">
+                          <div className="font-medium text-foreground">
                             {formatCurrency(token.price)}
                           </div>
                           <div
                             className={`text-xs ${
                               token.priceChange["24h"] > 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {formatPercentage(token.priceChange["24h"])}
@@ -301,42 +301,42 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       </div>
 
                       {selectedToken === token.symbol && (
-                        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 gap-3 text-sm animate-fadeIn">
+                        <div className="mt-3 pt-3 border-t border-border grid grid-cols-2 gap-3 text-sm animate-fadeIn">
                           <div>
-                            <div className="text-gray-500 dark:text-gray-400">
+                            <div className="text-muted-foreground">
                               Market Cap
                             </div>
-                            <div className="font-medium text-gray-900 dark:text-white">
+                            <div className="font-medium text-foreground">
                               {formatMarketCap(token.marketCap)}
                             </div>
                           </div>
                           <div>
-                            <div className="text-gray-500 dark:text-gray-400">
+                            <div className="text-muted-foreground">
                               Volume (24h)
                             </div>
-                            <div className="font-medium text-gray-900 dark:text-white">
+                            <div className="font-medium text-foreground">
                               {formatMarketCap(token.volume["24h"])}
                             </div>
                           </div>
                           <div>
-                            <div className="text-gray-500 dark:text-gray-400">
+                            <div className="text-muted-foreground">
                               Change (7d)
                             </div>
                             <div
                               className={`font-medium ${
                                 token.priceChange["7d"] > 0
-                                  ? "text-green-600 dark:text-green-400"
-                                  : "text-red-600 dark:text-red-400"
+                                  ? "text-success"
+                                  : "text-destructive"
                               }`}
                             >
                               {formatPercentage(token.priceChange["7d"])}
                             </div>
                           </div>
                           <div>
-                            <div className="text-gray-500 dark:text-gray-400">
+                            <div className="text-muted-foreground">
                               Last Updated
                             </div>
-                            <div className="font-medium text-gray-900 dark:text-white">
+                            <div className="font-medium text-foreground">
                               {formatTime(token.lastUpdated)}
                             </div>
                           </div>
@@ -355,21 +355,21 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden ${className}`}
+      className={`bg-card rounded-lg shadow-md overflow-hidden ${className}`}
     >
-      <div className="flex flex-wrap items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 sm:mb-0">
+      <div className="flex flex-wrap items-center justify-between p-4 border-b border-border">
+        <h3 className="text-lg font-medium text-foreground mb-2 sm:mb-0">
           Market Prices
         </h3>
         <div className="flex items-center space-x-3">
-          <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
+          <span className="text-xs text-muted-foreground hidden sm:inline">
             Auto-refresh: {refreshInterval / 1000}s
           </span>
           <button
             onClick={handleManualRefresh}
             disabled={isLoading}
-            className={`p-1.5 rounded-full bg-gray-100 dark:bg-gray-700
-              text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600
+            className={`p-1.5 rounded-full bg-muted
+              text-muted-foreground hover:bg-accent
               transition-all duration-300 ${refreshing ? "rotate-180" : ""}`}
             aria-label="Refresh prices"
           >
@@ -391,27 +391,27 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
       </div>
 
       <div className="overflow-x-auto">
-        <div className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <div className="bg-gray-50 dark:bg-gray-700/50 hidden sm:flex">
-            <div className="px-4 py-3 w-2/5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <div className="min-w-full divide-y divide-border">
+          <div className="bg-muted hidden sm:flex">
+            <div className="px-4 py-3 w-2/5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Token
             </div>
-            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Price
             </div>
-            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
               24h Change
             </div>
-            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden lg:block">
+            <div className="px-4 py-3 w-1/5 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider hidden lg:block">
               Market Cap
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="bg-card divide-y divide-border">
             {prices.map((token) => (
               <div key={token.symbol} className="transition-colors duration-150">
                 <div
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer"
+                  className="hover:bg-accent cursor-pointer transition-colors duration-200"
                   onClick={() => handleTokenClick(token.symbol)}
                 >
                   <div className="flex flex-wrap items-center py-4 px-4">
@@ -426,10 +426,10 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                         />
                       )}
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white flex items-center">
+                        <div className="text-sm font-medium text-foreground flex items-center">
                           {token.name}
                           <svg
-                            className={`w-4 h-4 ml-1 text-gray-500 dark:text-gray-400 transition-transform duration-300 ${
+                            className={`w-4 h-4 ml-1 text-muted-foreground transition-transform duration-300 ${
                               selectedToken === token.symbol ? "rotate-180" : ""
                             }`}
                             fill="none"
@@ -444,14 +444,14 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                             />
                           </svg>
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div className="text-xs text-muted-foreground">
                           {token.symbol}
                         </div>
                       </div>
                     </div>
 
                     <div className="w-1/3 sm:w-1/5 text-right">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white group relative">
+                      <div className="text-sm font-medium text-foreground group relative">
                         <span
                           className={`transition-all duration-300 ${
                             refreshing ? "opacity-0" : "opacity-100"
@@ -471,8 +471,8 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       <div
                         className={`text-sm font-medium ${
                           token.priceChange["24h"] > 0
-                            ? "text-green-600 dark:text-green-400"
-                            : "text-red-600 dark:text-red-400"
+                            ? "text-success"
+                            : "text-destructive"
                         } group relative`}
                       >
                         <span
@@ -491,7 +491,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                     </div>
 
                     <div className="hidden lg:block w-1/5 text-right">
-                      <div className="text-sm text-gray-900 dark:text-white">
+                      <div className="text-sm text-foreground">
                         {formatMarketCap(token.marketCap)}
                       </div>
                     </div>
@@ -499,7 +499,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                 </div>
 
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden bg-gray-50 dark:bg-gray-700/20 border-t border-gray-200 dark:border-gray-700
+                  className={`transition-all duration-300 ease-in-out overflow-hidden bg-muted border-t border-border
                     ${
                       selectedToken === token.symbol
                         ? "max-h-96 opacity-100"
@@ -507,62 +507,62 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                     }`}
                 >
                   <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    <div className="bg-card p-4 rounded-lg shadow-sm">
+                      <h4 className="text-sm font-medium text-foreground mb-3">
                         Price Changes
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             1h
                           </span>
                           <span
                             className={`text-sm font-medium ${
                               token.priceChange["1h"] > 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {formatPercentage(token.priceChange["1h"])}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             24h
                           </span>
                           <span
                             className={`text-sm font-medium ${
                               token.priceChange["24h"] > 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {formatPercentage(token.priceChange["24h"])}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             7d
                           </span>
                           <span
                             className={`text-sm font-medium ${
                               token.priceChange["7d"] > 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {formatPercentage(token.priceChange["7d"])}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             30d
                           </span>
                           <span
                             className={`text-sm font-medium ${
                               token.priceChange["30d"] > 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {formatPercentage(token.priceChange["30d"])}
@@ -571,41 +571,41 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       </div>
                     </div>
 
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    <div className="bg-card p-4 rounded-lg shadow-sm">
+                      <h4 className="text-sm font-medium text-foreground mb-3">
                         Market Stats
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             Market Cap
                           </span>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm font-medium text-foreground">
                             {formatMarketCap(token.marketCap)}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             Volume (24h)
                           </span>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm font-medium text-foreground">
                             {formatMarketCap(token.volume["24h"])}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             Circulating Supply
                           </span>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm font-medium text-foreground">
                             {token.circulatingSupply.toLocaleString()}{" "}
                             {token.symbol}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
+                          <span className="text-sm text-muted-foreground">
                             Max Supply
                           </span>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm font-medium text-foreground">
                             {token.maxSupply
                               ? token.maxSupply.toLocaleString()
                               : "∞"}{" "}
@@ -615,8 +615,8 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       </div>
                     </div>
 
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    <div className="bg-card p-4 rounded-lg shadow-sm">
+                      <h4 className="text-sm font-medium text-foreground mb-3">
                         Price Chart (7d)
                       </h4>
                       <div className="h-24 flex items-end space-x-1">
@@ -625,13 +625,13 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                           return (
                             <div
                               key={i}
-                              className="w-full bg-blue-500 dark:bg-blue-400 rounded-t transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-500"
+                              className="w-full bg-primary rounded-t transition-all duration-300 hover:bg-primary-hover"
                               style={{ height: `${height}%` }}
                             ></div>
                           );
                         })}
                       </div>
-                      <div className="mt-2 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                      <div className="mt-2 flex justify-between text-xs text-muted-foreground">
                         <span>7d ago</span>
                         <span>Today</span>
                       </div>

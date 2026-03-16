@@ -37,7 +37,7 @@ function getSpeedConfig(speed: SpeedType) {
         label: "Economy",
         time: "5+ mins",
         icon: Clock,
-        color: "text-green-500",
+        color: "text-success",
         description: "Best for non-urgent transactions",
       };
     case "medium":
@@ -45,7 +45,7 @@ function getSpeedConfig(speed: SpeedType) {
         label: "Standard",
         time: "< 2 mins",
         icon: Wallet,
-        color: "text-blue-500",
+        color: "text-primary",
         description: "Recommended for most transactions",
       };
     case "high":
@@ -53,7 +53,7 @@ function getSpeedConfig(speed: SpeedType) {
         label: "Fast",
         time: "< 30 secs",
         icon: Zap,
-        color: "text-purple-500",
+        color: "text-info",
         description: "Priority transactions",
       };
   }
@@ -117,24 +117,23 @@ export function GasCalculator({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200
-      dark:border-gray-700 shadow-sm overflow-hidden ${className}`}
+      className={`bg-card rounded-xl border border-border shadow-sm overflow-hidden ${className}`}
     >
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-6 border-b border-border">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-foreground">
               Gas Calculator
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Current network gas prices and estimates
             </p>
           </div>
           <button
             onClick={() => updateGasPrice()}
             disabled={loading || isRefreshing}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400
-              dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700
+            className="p-2 text-muted-foreground hover:text-foreground
+              rounded-lg hover:bg-accent
               transition-all duration-200 disabled:opacity-50"
           >
             <RefreshCw
@@ -144,17 +143,17 @@ export function GasCalculator({
         </div>
 
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
+              <div className="w-2 h-2 rounded-full bg-success" />
               Low Traffic
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <div className="w-2 h-2 rounded-full bg-primary" />
               Normal
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-purple-500" />
+              <div className="w-2 h-2 rounded-full bg-info" />
               High Priority
             </div>
           </div>
@@ -163,7 +162,7 @@ export function GasCalculator({
 
       <div className="p-6 space-y-6">
         <div className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-foreground">
             Transaction Type
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -177,8 +176,8 @@ export function GasCalculator({
                 className={`p-3 text-left rounded-lg transition-all duration-200 group
                   ${
                     selectedPreset === name
-                      ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      ? "bg-foreground text-background"
+                      : "text-muted-foreground hover:bg-accent"
                   }
                 `}
               >
@@ -198,27 +197,27 @@ export function GasCalculator({
                 setGasLimit(Number(e.target.value));
                 setSelectedPreset("" as keyof typeof gasPresets);
               }}
-              className="w-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-700
-                rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+              className="w-full px-4 py-2 text-sm border border-border
+                rounded-lg bg-card text-foreground
+                focus:outline-none focus:ring-2 focus:ring-ring
                 transition-all duration-200 pr-20
                 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               placeholder="Custom gas limit"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-4 gap-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-muted-foreground">
                 Gas units
               </span>
               <div className="flex flex-col -space-y-1">
                 <button
                   onClick={() => setGasLimit(gasLimit + 1000)}
-                  className="p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="p-0.5 text-muted-foreground hover:text-foreground transition-colors duration-200"
                 >
                   <ChevronUp className="w-3 h-3" />
                 </button>
                 <button
                   onClick={() => setGasLimit(Math.max(0, gasLimit - 1000))}
-                  className="p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="p-0.5 text-muted-foreground hover:text-foreground transition-colors duration-200"
                 >
                   <ChevronDown className="w-3 h-3" />
                 </button>
@@ -229,16 +228,16 @@ export function GasCalculator({
 
         {loading ? (
           <div className="space-y-4 animate-pulse">
-            <div className="h-[200px] bg-gray-100 dark:bg-gray-700 rounded-xl" />
+            <div className="h-[200px] bg-muted rounded-xl" />
           </div>
         ) : error ? (
           <div
-            className="p-4 rounded-xl bg-red-50 dark:bg-red-900/30
-            border border-red-100 dark:border-red-800
+            className="p-4 rounded-xl bg-destructive/10
+            border border-destructive/30
             flex items-center gap-3"
           >
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            <AlertCircle className="w-5 h-5 text-destructive" />
+            <p className="text-sm text-destructive">{error}</p>
           </div>
         ) : (
           gasPrice && (
@@ -254,8 +253,8 @@ export function GasCalculator({
                       hover:shadow-md group
                       ${
                         selectedSpeed === speed
-                          ? "border-gray-900 dark:border-white bg-gray-50 dark:bg-gray-800"
-                          : "border-gray-200 dark:border-gray-700"
+                          ? "border-foreground bg-muted"
+                          : "border-border"
                       }
                     `}
                   >
@@ -268,27 +267,27 @@ export function GasCalculator({
                           <Icon className="w-6 h-6" />
                         </div>
                         <div className="text-left">
-                          <div className="font-medium text-gray-900 dark:text-white">
+                          <div className="font-medium text-foreground">
                             {config.label}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-muted-foreground">
                             {config.description}
                           </div>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xl font-bold text-gray-900 dark:text-white">
+                        <div className="text-xl font-bold text-foreground">
                           {formatGwei(gasPrice[speed])}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-muted-foreground">
                           Gwei • {config.time}
                         </div>
                       </div>
                     </div>
                     {estimate && (
                       <div
-                        className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700
-                        text-sm text-gray-500 dark:text-gray-400 text-right"
+                        className="mt-3 pt-3 border-t border-border
+                        text-sm text-muted-foreground text-right"
                       >
                         Estimated cost: {estimate.estimatedCost[speed]} ETH
                       </div>
@@ -297,12 +296,12 @@ export function GasCalculator({
                 );
               })}
 
-              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="mt-6 pt-6 border-t border-border">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-muted-foreground">
                     Base Fee: {formatGwei(gasPrice.baseFee)} Gwei
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-muted-foreground">
                     Block #{gasPrice.lastBlock}
                   </span>
                 </div>

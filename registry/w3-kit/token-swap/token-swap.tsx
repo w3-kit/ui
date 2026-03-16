@@ -24,7 +24,7 @@ const TokenIcon = ({
   if (!token?.logoURI || hasError) {
     return (
       <div
-        className={`${sizeClasses[size]} rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-medium overflow-hidden flex-shrink-0 animate-fadeIn`}
+        className={`${sizeClasses[size]} rounded-full bg-info-muted flex items-center justify-center text-primary font-medium overflow-hidden flex-shrink-0 animate-fadeIn`}
       >
         <span className="text-xs">
           {token?.symbol.substring(0, 2).toUpperCase() || "??"}
@@ -35,7 +35,7 @@ const TokenIcon = ({
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 relative`}
+      className={`${sizeClasses[size]} rounded-full overflow-hidden flex-shrink-0 bg-muted border border-border relative`}
     >
       <img
         src={token.logoURI}
@@ -48,8 +48,8 @@ const TokenIcon = ({
         style={{ width: "100%", height: "100%" }}
       />
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 animate-pulse">
-          <span className="text-xs text-gray-400 dark:text-gray-500">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted animate-pulse">
+          <span className="text-xs text-muted-foreground">
             {token.symbol.substring(0, 1)}
           </span>
         </div>
@@ -194,11 +194,11 @@ export function TokenSwapWidget({
       <div className="flex justify-between items-center">
         <label className="text-sm font-medium opacity-80">{label}</label>
         {token && showBalance && (
-          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <span>Balance: 0.00</span>
             {!isReadOnly && (
               <button
-                className="text-blue-500 dark:text-blue-400 font-medium hover:underline transition-colors"
+                className="text-primary font-medium hover:underline transition-colors"
                 onClick={() => onChange("1.0")}
               >
                 MAX
@@ -207,7 +207,7 @@ export function TokenSwapWidget({
           </div>
         )}
       </div>
-      <div className="flex flex-col space-y-2 p-3 sm:p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 transition-all duration-200 hover:shadow-md">
+      <div className="flex flex-col space-y-2 p-3 sm:p-4 rounded-xl bg-muted transition-all duration-200 hover:shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-1">
             {token && <TokenIcon token={token} size="md" />}
@@ -216,7 +216,7 @@ export function TokenSwapWidget({
               inputMode="decimal"
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              className="w-full bg-transparent outline-none text-lg sm:text-xl font-medium placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+              className="w-full bg-transparent outline-none text-lg sm:text-xl font-medium placeholder:text-muted-foreground transition-all"
               placeholder="0.0"
               readOnly={isReadOnly}
             />
@@ -224,7 +224,7 @@ export function TokenSwapWidget({
           <button
             onClick={onSelectToken}
             className={`flex items-center gap-2 py-1.5 px-2 sm:px-3 rounded-lg
-              ${token ? "bg-gray-100 dark:bg-gray-600" : "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300"}
+              ${token ? "bg-muted" : "bg-info-muted text-primary"}
               hover:bg-opacity-80 transition-all duration-200 hover:shadow-sm`}
           >
             {token ? (
@@ -253,7 +253,7 @@ export function TokenSwapWidget({
         </div>
 
         {selectorActive && (
-          <div className="mt-2 bg-white dark:bg-gray-600 rounded-lg p-2 shadow-md animate-slideDown">
+          <div className="mt-2 bg-card rounded-lg p-2 shadow-md animate-slideDown">
             <div className="grid grid-cols-2 gap-2">
               {tokens
                 .filter(
@@ -271,8 +271,8 @@ export function TokenSwapWidget({
                     }
                     className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
                       token?.symbol === t.symbol
-                        ? "bg-blue-100 dark:bg-blue-900/50"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-500"
+                        ? "bg-info-muted/50"
+                        : "hover:bg-accent"
                     }`}
                   >
                     <TokenIcon token={t} size="sm" />
@@ -296,7 +296,7 @@ export function TokenSwapWidget({
   return (
     <div
       className={`
-        bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+        bg-card text-foreground
         rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 w-full max-w-md mx-auto transition-colors duration-200
         animate-fadeIn
         ${className}
@@ -307,7 +307,7 @@ export function TokenSwapWidget({
           <h2 className="text-lg font-medium">Swap Tokens</h2>
           <button
             onClick={() => setShowSlippageSettings(!showSlippageSettings)}
-            className="text-xs flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            className="text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -348,7 +348,7 @@ export function TokenSwapWidget({
           <button
             onClick={switchTokens}
             className={`p-1.5 sm:p-2 rounded-full
-              bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600
+              bg-muted hover:bg-accent
               transition-all duration-300 shadow-sm hover:shadow
               ${animateSwitch ? "animate-spin" : "hover:rotate-180"}`}
             disabled={!fromToken || !toToken || animateSwitch}
@@ -370,7 +370,7 @@ export function TokenSwapWidget({
         />
 
         {fromToken && toToken && (
-          <div className="text-xs text-gray-500 dark:text-gray-400 flex justify-between animate-fadeIn">
+          <div className="text-xs text-muted-foreground flex justify-between animate-fadeIn">
             <span>Exchange Rate:</span>
             <div className="flex items-center gap-1">
               <span>{getExchangeRateDisplay()}</span>
@@ -379,7 +379,7 @@ export function TokenSwapWidget({
         )}
 
         <div
-          className={`space-y-2 rounded-xl text-sm bg-gray-50 dark:bg-gray-700/50 transition-height overflow-hidden
+          className={`space-y-2 rounded-xl text-sm bg-muted transition-height overflow-hidden
             ${showSlippageSettings ? "max-h-40 opacity-100 p-3 sm:p-4" : "max-h-0 opacity-0 p-0"}`}
         >
           <label className="block font-medium opacity-80 mb-2">
@@ -394,8 +394,8 @@ export function TokenSwapWidget({
                   px-2 sm:px-3 py-1 rounded-lg text-sm transition-all duration-200
                   ${
                     slippage === value
-                      ? "bg-blue-500 text-white shadow-sm"
-                      : "bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted hover:bg-accent"
                   }
                 `}
               >
@@ -407,12 +407,12 @@ export function TokenSwapWidget({
                 type="number"
                 value={slippage}
                 onChange={(e) => setSlippage(Number(e.target.value))}
-                className="w-16 sm:w-20 px-2 py-1 rounded-lg text-center text-sm bg-white dark:bg-gray-600 transition-all"
+                className="w-16 sm:w-20 px-2 py-1 rounded-lg text-center text-sm bg-card transition-all"
                 step="0.1"
                 min="0.1"
                 max="20"
               />
-              <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                 %
               </span>
             </div>
@@ -423,19 +423,19 @@ export function TokenSwapWidget({
           onClick={handleSwap}
           disabled={!fromToken || !toToken || !fromAmount || loading}
           className={`
-            w-full py-3 sm:py-4 px-4 rounded-xl font-medium text-white text-sm sm:text-base
+            w-full py-3 sm:py-4 px-4 rounded-xl font-medium text-primary-foreground text-sm sm:text-base
             transition-all duration-300
             ${
               !fromToken || !toToken || !fromAmount || loading
-                ? "bg-gray-400 cursor-not-allowed opacity-50"
-                : "bg-blue-500 hover:bg-blue-600 active:scale-[0.98] hover:shadow-lg"
+                ? "bg-muted cursor-not-allowed opacity-50"
+                : "bg-primary hover:bg-primary-hover active:scale-[0.98] hover:shadow-lg"
             }
           `}
         >
           {loading ? (
             <div className="flex items-center justify-center gap-2">
               <svg
-                className="animate-spin h-5 w-5 text-white"
+                className="animate-spin h-5 w-5 text-primary-foreground"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

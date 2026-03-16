@@ -74,7 +74,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   const renderPriceChange = (change: number) => {
     const isPositive = change >= 0;
     return (
-      <div className={`flex items-center text-xs font-medium ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+      <div className={`flex items-center text-xs font-medium ${isPositive ? 'text-success' : 'text-destructive'}`}>
         {isPositive ? (
           <TrendingUp className="w-3 h-3 mr-1" />
         ) : (
@@ -157,7 +157,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
           {/* Token rank badge (if available) */}
           {token.rank && (
             <div className="absolute top-3 right-3 bg-secondary text-xs font-medium px-1.5 py-0.5 rounded-md flex items-center">
-              <Zap className="w-3 h-3 mr-1 text-yellow-500" />
+              <Zap className="w-3 h-3 mr-1 text-warning" />
               #{token.rank}
             </div>
           )}
@@ -174,11 +174,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               </div>
               {showPriceChange && token.priceChange24h !== undefined && (
                 <div className="absolute -bottom-1 -right-1">
-                  <div className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm ${token.priceChange24h >= 0 ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
+                  <div className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm ${token.priceChange24h >= 0 ? 'bg-success-muted' : 'bg-destructive/10'}`}>
                     {token.priceChange24h >= 0 ? (
-                      <TrendingUp className={`w-3 h-3 text-green-500`} />
+                      <TrendingUp className={`w-3 h-3 text-success`} />
                     ) : (
-                      <TrendingDown className={`w-3 h-3 text-red-500`} />
+                      <TrendingDown className={`w-3 h-3 text-destructive`} />
                     )}
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     onClick={handleFavoriteToggle}
                     variant="ghost"
                     size="icon"
-                    className={`h-7 w-7 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20' : 'text-muted-foreground'}`}
+                    className={`h-7 w-7 ${isFavorite ? 'text-warning hover:text-warning/80 bg-warning-muted' : 'text-muted-foreground'}`}
                     title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                   >
                     {isFavorite ? <Star className="w-3.5 h-3.5" /> : <StarOff className="w-3.5 h-3.5" />}
@@ -243,7 +243,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                               </>
                             ) : (
                               <>
-                                <Star className="w-3.5 h-3.5 mr-2 text-yellow-500" />
+                                <Star className="w-3.5 h-3.5 mr-2 text-warning" />
                                 Add to favorites
                               </>
                             )}
@@ -259,11 +259,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                           <Button
                             onClick={copyTokenInfo}
                             variant="ghost"
-                            className={`w-full justify-start text-xs h-8 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                            className={`w-full justify-start text-xs h-8 px-3 ${copySuccess ? 'text-success' : ''}`}
                           >
                             {copySuccess ? (
                               <>
-                                <Check className="w-3.5 h-3.5 mr-2 text-green-500" />
+                                <Check className="w-3.5 h-3.5 mr-2 text-success" />
                                 Copied!
                               </>
                             ) : (
@@ -311,8 +311,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               <p className="text-xs text-muted-foreground flex items-center">
                 {token.symbol}
                 {token.verified && (
-                  <span className="ml-1 inline-flex items-center justify-center w-3.5 h-3.5 bg-blue-500 rounded-full">
-                    <Check className="w-2 h-2 text-white" />
+                  <span className="ml-1 inline-flex items-center justify-center w-3.5 h-3.5 bg-primary rounded-full">
+                    <Check className="w-2 h-2 text-primary-foreground" />
                   </span>
                 )}
               </p>
@@ -332,13 +332,13 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                 <div className="mt-2 w-full">
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs text-muted-foreground">24h Change</span>
-                    <span className={`text-xs font-medium ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    <span className={`text-xs font-medium ${token.priceChange24h >= 0 ? 'text-success' : 'text-destructive'}`}>
                       {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
                     </span>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-1.5">
                     <div
-                      className={`h-1.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}
+                      className={`h-1.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-success' : 'bg-destructive'}`}
                       style={{ width: `${Math.min(Math.abs(token.priceChange24h * 2), 100)}%` }}
                     ></div>
                   </div>
@@ -481,11 +481,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             />
             {showPriceChange && token.priceChange24h !== undefined && (
               <div className="absolute -bottom-1 -right-1">
-                <div className={`flex items-center justify-center w-3.5 h-3.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}>
+                <div className={`flex items-center justify-center w-3.5 h-3.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-success' : 'bg-destructive'}`}>
                   {token.priceChange24h >= 0 ? (
-                    <TrendingUp className="w-2 h-2 text-white" />
+                    <TrendingUp className="w-2 h-2 text-success-foreground" />
                   ) : (
-                    <TrendingDown className="w-2 h-2 text-white" />
+                    <TrendingDown className="w-2 h-2 text-destructive-foreground" />
                   )}
                 </div>
               </div>
@@ -495,8 +495,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             <div className="flex items-center">
               <span className="font-medium text-foreground text-sm">{token.symbol}</span>
               {token.verified && (
-                <span className="ml-1 inline-flex items-center justify-center w-3 h-3 bg-blue-500 rounded-full">
-                  <span className="text-white text-[8px]">✓</span>
+                <span className="ml-1 inline-flex items-center justify-center w-3 h-3 bg-primary rounded-full">
+                  <span className="text-primary-foreground text-[8px]">✓</span>
                 </span>
               )}
               {token.rank && (
@@ -510,7 +510,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                 </p>
               )}
               {showPriceChange && token.priceChange24h !== undefined && (
-                <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-success' : 'text-destructive'}`}>
                   {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
                 </span>
               )}
@@ -535,7 +535,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               onClick={handleFavoriteToggle}
               variant="ghost"
               size="icon"
-              className={`h-6 w-6 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-muted-foreground'}`}
+              className={`h-6 w-6 ${isFavorite ? 'text-warning hover:text-warning/80' : 'text-muted-foreground'}`}
             >
               {isFavorite ? <Star className="w-3.5 h-3.5" /> : <StarOff className="w-3.5 h-3.5" />}
             </Button>
@@ -583,7 +583,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                         </>
                       ) : (
                         <>
-                          <Star className="w-3.5 h-3.5 mr-2 text-yellow-500" />
+                          <Star className="w-3.5 h-3.5 mr-2 text-warning" />
                           Add to favorites
                         </>
                       )}
@@ -599,11 +599,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     <Button
                       onClick={copyTokenInfo}
                       variant="ghost"
-                      className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                      className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-success' : ''}`}
                     >
                       {copySuccess ? (
                         <>
-                          <Check className="w-3.5 h-3.5 mr-2 text-green-500" />
+                          <Check className="w-3.5 h-3.5 mr-2 text-success" />
                           Copied!
                         </>
                       ) : (
@@ -673,11 +673,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   />
                   {showPriceChange && token.priceChange24h !== undefined && (
                     <div className="absolute -bottom-1 -right-1">
-                      <div className={`flex items-center justify-center w-4 h-4 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}>
+                      <div className={`flex items-center justify-center w-4 h-4 rounded-full ${token.priceChange24h >= 0 ? 'bg-success' : 'bg-destructive'}`}>
                         {token.priceChange24h >= 0 ? (
-                          <TrendingUp className="w-2.5 h-2.5 text-white" />
+                          <TrendingUp className="w-2.5 h-2.5 text-success-foreground" />
                         ) : (
-                          <TrendingDown className="w-2.5 h-2.5 text-white" />
+                          <TrendingDown className="w-2.5 h-2.5 text-destructive-foreground" />
                         )}
                       </div>
                     </div>
@@ -687,8 +687,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   <h3 className="text-base font-semibold text-foreground flex items-center">
                     {token.name}
                     {token.verified && (
-                      <span className="ml-1.5 inline-flex items-center justify-center w-3.5 h-3.5 bg-blue-500 rounded-full">
-                        <span className="text-white text-[8px]">✓</span>
+                      <span className="ml-1.5 inline-flex items-center justify-center w-3.5 h-3.5 bg-primary rounded-full">
+                        <span className="text-primary-foreground text-[8px]">✓</span>
                       </span>
                     )}
                   </h3>
@@ -737,7 +737,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                               </>
                             ) : (
                               <>
-                                <Star className="w-3.5 h-3.5 mr-2 text-yellow-500" />
+                                <Star className="w-3.5 h-3.5 mr-2 text-warning" />
                                 Add to favorites
                               </>
                             )}
@@ -753,11 +753,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                           <Button
                             onClick={copyTokenInfo}
                             variant="ghost"
-                            className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                            className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-success' : ''}`}
                           >
                             {copySuccess ? (
                               <>
-                                <Check className="w-3.5 h-3.5 mr-2 text-green-500" />
+                                <Check className="w-3.5 h-3.5 mr-2 text-success" />
                                 Copied!
                               </>
                             ) : (
@@ -835,7 +835,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                         )}
                       </div>
                     </div>
-                    <div className="sm:col-span-2 bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-lg">
+                    <div className="sm:col-span-2 bg-info-muted p-2.5 rounded-lg">
                       <p className="text-xs text-muted-foreground">Total Value</p>
                       <p className="text-base font-semibold text-foreground mt-1">
                         {token.price && token.balance
@@ -854,7 +854,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   onClick={handleFavoriteToggle}
                   variant="secondary"
                   size="icon"
-                  className={`h-8 w-8 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20' : ''}`}
+                  className={`h-8 w-8 ${isFavorite ? 'text-warning hover:text-warning/80 bg-warning-muted' : ''}`}
                   title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   {isFavorite ? <Star className="w-4 h-4" /> : <StarOff className="w-4 h-4" />}
@@ -953,10 +953,10 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             className="rounded-full"
           />
           {showPriceChange && token.priceChange24h !== undefined && token.priceChange24h < 0 && (
-            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-destructive rounded-full"></div>
           )}
           {showPriceChange && token.priceChange24h !== undefined && token.priceChange24h >= 0 && (
-            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-success rounded-full"></div>
           )}
         </div>
         <span className="text-xs font-medium text-foreground">{token.symbol}</span>
@@ -966,7 +966,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
           </span>
         )}
         {showPriceChange && token.priceChange24h !== undefined && (
-          <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+          <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-success' : 'text-destructive'}`}>
             {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(1)}%
           </span>
         )}
@@ -1010,7 +1010,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                       </>
                     ) : (
                       <>
-                        <Star className="w-3.5 h-3.5 mr-2 text-yellow-500" />
+                        <Star className="w-3.5 h-3.5 mr-2 text-warning" />
                         Add to favorites
                       </>
                     )}
@@ -1026,11 +1026,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   <Button
                     onClick={copyTokenInfo}
                     variant="ghost"
-                    className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                    className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-success' : ''}`}
                   >
                     {copySuccess ? (
                       <>
-                        <Check className="w-3.5 h-3.5 mr-2 text-green-500" />
+                        <Check className="w-3.5 h-3.5 mr-2 text-success" />
                         Copied!
                       </>
                     ) : (

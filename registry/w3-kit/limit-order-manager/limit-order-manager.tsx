@@ -100,15 +100,15 @@ export function LimitOrderManager({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}
+      className={`bg-card rounded-lg shadow-lg p-4 ${className}`}
     >
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-lg font-semibold text-foreground">
           Limit Orders
         </h2>
         <button
           onClick={() => setShowCreateOrder(!showCreateOrder)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-colors"
         >
           Create Order
         </button>
@@ -122,14 +122,14 @@ export function LimitOrderManager({
             : "opacity-0 max-h-0 overflow-hidden"
         }`}
       >
-        <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div className="p-4 bg-muted rounded-lg">
           <div className="flex space-x-2 mb-4">
             <button
               onClick={() => setOrderType("limit")}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 orderType === "limit"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-foreground"
               }`}
             >
               Limit Order
@@ -138,8 +138,8 @@ export function LimitOrderManager({
               onClick={() => setOrderType("stop-loss")}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 orderType === "stop-loss"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-foreground"
               }`}
             >
               Stop Loss
@@ -148,76 +148,76 @@ export function LimitOrderManager({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Amount
               </label>
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                className={`w-full px-3 py-2 border rounded-lg bg-card text-foreground transition-colors duration-200 ${
                   errors.amount
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                    ? "border-destructive"
+                    : "border-border"
                 }`}
                 placeholder="0.0"
               />
               {errors.amount && (
-                <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
+                <p className="mt-1 text-sm text-destructive">{errors.amount}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Price
               </label>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                className={`w-full px-3 py-2 border rounded-lg bg-card text-foreground transition-colors duration-200 ${
                   errors.price
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                    ? "border-destructive"
+                    : "border-border"
                 }`}
                 placeholder="0.0"
               />
               {errors.price && (
-                <p className="mt-1 text-sm text-red-500">{errors.price}</p>
+                <p className="mt-1 text-sm text-destructive">{errors.price}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Expiry (days)
               </label>
               <input
                 type="number"
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                className={`w-full px-3 py-2 border rounded-lg bg-card text-foreground transition-colors duration-200 ${
                   errors.expiry
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                    ? "border-destructive"
+                    : "border-border"
                 }`}
                 placeholder="Optional"
               />
               {errors.expiry && (
-                <p className="mt-1 text-sm text-red-500">{errors.expiry}</p>
+                <p className="mt-1 text-sm text-destructive">{errors.expiry}</p>
               )}
             </div>
 
             <button
               onClick={handleCreateOrder}
               disabled={isCreating || showSuccess}
-              className={`w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center relative ${
+              className={`w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-colors flex items-center justify-center relative ${
                 isCreating || showSuccess ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >
               {isCreating ? (
                 <>
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-foreground"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -255,7 +255,7 @@ export function LimitOrderManager({
         {orders.map((order) => (
           <div
             key={order.id}
-            className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg group"
+            className="flex items-center justify-between p-4 bg-muted rounded-lg group"
           >
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -267,16 +267,16 @@ export function LimitOrderManager({
                   className="rounded-full"
                 />
                 {order.type === "stop-loss" ? (
-                  <TrendingDown className="absolute -top-1 -right-1 w-4 h-4 text-red-500" />
+                  <TrendingDown className="absolute -top-1 -right-1 w-4 h-4 text-destructive" />
                 ) : (
-                  <TrendingUp className="absolute -top-1 -right-1 w-4 h-4 text-green-500" />
+                  <TrendingUp className="absolute -top-1 -right-1 w-4 h-4 text-success" />
                 )}
               </div>
               <div>
-                <div className="font-medium text-gray-900 dark:text-white">
+                <div className="font-medium text-foreground">
                   {order.amount} {order.token.symbol}
                 </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   {order.type === "limit" ? "Limit" : "Stop Loss"} @ $
                   {order.price}
                 </div>
@@ -292,14 +292,14 @@ export function LimitOrderManager({
               {order.status === "active" ? (
                 <button
                   onClick={() => handleCancelClick(order.id)}
-                  className="text-red-500 hover:text-red-600 transition-colors"
+                  className="text-destructive hover:text-destructive/80 transition-colors"
                 >
                   Cancel
                 </button>
               ) : (
                 <button
                   onClick={() => handleDeleteOrder(order.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
                   title="Delete order"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -312,25 +312,25 @@ export function LimitOrderManager({
 
       {/* Cancel Confirmation Modal */}
       {showCancelModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="fixed inset-0 bg-overlay/50 flex items-center justify-center z-50">
+          <div className="bg-card rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
               Confirm Cancellation
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Are you sure you want to cancel this order? This action cannot be
               undone.
             </p>
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setShowCancelModal(false)}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+                className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
                 No, Keep Order
               </button>
               <button
                 onClick={handleConfirmCancel}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive-hover transition-colors"
               >
                 Yes, Cancel Order
               </button>

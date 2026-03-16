@@ -15,7 +15,7 @@ const SuccessCheckmark: React.FC = () => (
     <div className="relative w-6 h-6">
       <div className="animate-success-circle absolute inset-0 rounded-full border-2 border-white" />
       <svg
-        className="w-6 h-6 text-white"
+        className="w-6 h-6 text-primary-foreground"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -82,8 +82,7 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
       {airdrops.map((airdrop) => (
         <div
           key={airdrop.id}
-          className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200
-            dark:border-gray-700 p-5 cursor-pointer transition-all duration-200 ease-out
+          className="group bg-card rounded-xl shadow-sm border border-border p-5 cursor-pointer transition-all duration-200 ease-out
             hover:shadow-md"
           onClick={() =>
             setExpandedId(expandedId === airdrop.id ? null : airdrop.id)
@@ -97,18 +96,18 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
                   alt={airdrop.tokenSymbol}
                   width={32}
                   height={32}
-                  className="rounded-full bg-white dark:bg-gray-700"
+                  className="rounded-full bg-card"
                   style={{ width: 32, height: 32 }}
                 />
               )}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
+                <h3 className="text-lg font-semibold text-foreground flex items-center space-x-2">
                   <span>{airdrop.tokenName}</span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-muted-foreground">
                     ({airdrop.tokenSymbol})
                   </span>
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Amount: {airdrop.amount} {airdrop.tokenSymbol}
                 </p>
               </div>
@@ -116,12 +115,12 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
             <div className="flex items-center space-x-3">
               <StatusBadge status={getAirdropStatus(airdrop)} />
               <button
-                className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform duration-200
+                className={`p-2 rounded-full hover:bg-accent
+                  focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200
                   ${expandedId === airdrop.id ? "rotate-180" : ""}`}
               >
                 <svg
-                  className="w-5 h-5 text-gray-500"
+                  className="w-5 h-5 text-muted-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -141,36 +140,36 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
             className={`transition-all duration-300 ease-out overflow-hidden
               ${expandedId === airdrop.id ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border">
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Start Time
                 </p>
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-foreground">
                   {formatDate(airdrop.startTime)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   End Time
                 </p>
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-foreground">
                   {formatDate(airdrop.endTime)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Token Address
                 </p>
-                <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
+                <p className="font-medium text-foreground font-mono text-sm truncate">
                   {airdrop.tokenAddress}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Merkle Root
                 </p>
-                <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
+                <p className="font-medium text-foreground font-mono text-sm truncate">
                   {airdrop.merkleRoot}
                 </p>
               </div>
@@ -181,11 +180,10 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
                 onClick={(e) => handleClaim(e, airdrop.id)}
                 disabled={claimingId === airdrop.id}
                 className="w-full mt-4 inline-flex justify-center items-center px-4 py-2.5
-                  border border-transparent text-sm font-medium rounded-lg text-white
-                  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2
-                  focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50
+                  border border-transparent text-sm font-medium rounded-lg text-primary-foreground
+                  bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2
+                  focus:ring-offset-2 focus:ring-ring disabled:opacity-50
                   disabled:cursor-not-allowed transition-all duration-200 ease-out
-                  dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-gray-800
                   active:translate-y-0.5"
               >
                 {showSuccess === airdrop.id ? (
@@ -193,7 +191,7 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
                 ) : claimingId === airdrop.id ? (
                   <>
                     <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-foreground"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"

@@ -138,17 +138,17 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
     if (pool.isStaked) {
       return (
         <div
-          className={`absolute -top-1 -right-1 ${bgSize} bg-green-500 rounded-full flex items-center justify-center`}
+          className={`absolute -top-1 -right-1 ${bgSize} bg-success rounded-full flex items-center justify-center`}
         >
-          <Check className={`${iconSize} text-white`} />
+          <Check className={`${iconSize} text-success-foreground`} />
         </div>
       );
     } else if (pool.lockPeriod > 0) {
       return (
         <div
-          className={`absolute -top-1 -right-1 ${bgSize} bg-amber-500 rounded-full flex items-center justify-center`}
+          className={`absolute -top-1 -right-1 ${bgSize} bg-warning rounded-full flex items-center justify-center`}
         >
-          <Clock className={`${iconSize} text-white`} />
+          <Clock className={`${iconSize} text-warning-foreground`} />
         </div>
       );
     }
@@ -386,7 +386,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                   }}
                   className={`w-full mt-4 ${
                     pool.isStaked
-                      ? "bg-amber-500 hover:bg-amber-600"
+                      ? "bg-warning hover:bg-warning/80"
                       : ""
                   }`}
                   variant={pool.isStaked ? "default" : "default"}
@@ -424,11 +424,11 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
         <CardContent>
           {success && (
             <div
-              className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800
+              className="mb-4 p-3 bg-success-muted border border-success/30
             rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
             >
-              <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-green-700 dark:text-green-400">
+              <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-success">
                 {success}
               </p>
             </div>
@@ -472,11 +472,11 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
 
         {success && (
           <div
-            className="mt-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800
+            className="mt-4 p-3 bg-success-muted border border-success/30
             rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
           >
-            <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-green-700 dark:text-green-400">
+            <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-success">
               {success}
             </p>
           </div>
@@ -566,7 +566,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
               className={`w-full ${
                 isStaking
                   ? ""
-                  : "bg-amber-500 hover:bg-amber-600"
+                  : "bg-warning hover:bg-warning/80"
               }`}
               variant={isStaking ? "default" : "default"}
             >
