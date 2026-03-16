@@ -256,7 +256,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                       >
                         {formatAddress(tx.hash)}
                         {copiedField === `hash-${tx.hash}` ? (
-                          <Check className="h-3 w-3 text-green-500" />
+                          <Check className="h-3 w-3 text-success" />
                         ) : (
                           <Copy className="h-3 w-3 opacity-50" />
                         )}
@@ -277,7 +277,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                       >
                         {formatAddress(tx.from)}
                         {copiedField === `from-${tx.hash}` && (
-                          <Check className="h-3 w-3 text-green-500" />
+                          <Check className="h-3 w-3 text-success" />
                         )}
                       </button>
                     </td>
@@ -291,7 +291,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                       >
                         {formatAddress(tx.to)}
                         {copiedField === `to-${tx.hash}` && (
-                          <Check className="h-3 w-3 text-green-500" />
+                          <Check className="h-3 w-3 text-success" />
                         )}
                       </button>
                     </td>

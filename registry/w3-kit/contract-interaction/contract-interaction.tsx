@@ -31,8 +31,8 @@ const ErrorMessage = ({ error }: { error: ErrorState }) => (
     ${error.type === 'error'
       ? 'bg-destructive/10 text-destructive border border-destructive/20'
       : error.type === 'warning'
-      ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20'
-      : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+      ? 'bg-warning/10 text-warning border border-warning/20'
+      : 'bg-primary/10 text-primary border border-primary/20'
     }
   `}>
     <div className="flex items-center space-x-2">
@@ -260,8 +260,7 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
               `}
             >
               <div className="w-full">
-                <div className="font-medium group-hover:text-blue-600
-                  dark:group-hover:text-blue-400 transition-colors duration-200">
+                <div className="font-medium group-hover:text-primary transition-colors duration-200">
                   {fn.name}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1
@@ -382,10 +381,10 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-2">
                         {result.status === 'success' ? (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <CheckCircle className="w-4 h-4 text-success" />
                         ) : result.status === 'pending' ? (
                           <div className="w-4 h-4">
-                            <Code className="w-4 h-4 text-yellow-500 animate-spin" />
+                            <Code className="w-4 h-4 text-warning animate-spin" />
                           </div>
                         ) : (
                           <XCircle className="w-4 h-4 text-destructive" />
@@ -441,8 +440,8 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                         <div key="status">
                           <div className="text-xs text-muted-foreground">Status</div>
                           <div className={`font-medium ${
-                            result.status === 'success' ? 'text-green-500' :
-                            result.status === 'pending' ? 'text-yellow-500' :
+                            result.status === 'success' ? 'text-success' :
+                            result.status === 'pending' ? 'text-warning' :
                             'text-destructive'
                           }`}>
                             {result.status.charAt(0).toUpperCase() + result.status.slice(1)}

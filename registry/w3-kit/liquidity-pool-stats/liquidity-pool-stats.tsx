@@ -19,14 +19,14 @@ import {
 function Skeleton({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded ${className}`}
+      className={`animate-pulse bg-muted rounded ${className}`}
     />
   );
 }
 
 function LoadingCard() {
   return (
-    <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-6 relative">
+    <div className="bg-muted rounded-lg p-6 relative">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Skeleton className="h-4 w-16" />
@@ -137,43 +137,43 @@ export function LiquidityPoolStats({
     icon?: React.ReactNode;
   }) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-6 relative group">
+      <div className="bg-muted rounded-lg p-6 relative group">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">
+            <span className="text-sm sm:text-base font-medium text-foreground">
               {title}
             </span>
             <div className="relative">
               <button
                 onMouseEnter={() => setShowTooltip(tooltipKey)}
                 onMouseLeave={() => setShowTooltip(null)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-all duration-200"
               >
                 <Info className="w-4 h-4" />
               </button>
               {showTooltip === tooltipKey && (
                 <div
                   className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-                    bg-gray-900 dark:bg-gray-700 text-white p-4 rounded-lg text-sm
+                    bg-popover text-popover-foreground p-4 rounded-lg text-sm
                     shadow-lg z-50 w-64 pointer-events-none"
                 >
                   <h4 className="font-medium mb-1">
                     {tooltipContent[tooltipKey].title}
                   </h4>
-                  <p className="text-gray-300 text-xs mb-3">
+                  <p className="text-muted-foreground text-xs mb-3">
                     {tooltipContent[tooltipKey].description}
                   </p>
-                  <div className="grid grid-cols-2 gap-3 border-t border-gray-600 pt-2">
+                  <div className="grid grid-cols-2 gap-3 border-t border-border pt-2">
                     {tooltipContent[tooltipKey].stats.map((stat, i) => (
                       <div key={i} className="space-y-1">
-                        <p className="text-xs text-gray-400">{stat.label}</p>
+                        <p className="text-xs text-muted-foreground">{stat.label}</p>
                         <p className="text-sm font-medium">{stat.value}</p>
                       </div>
                     ))}
                   </div>
                   <div
                     className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
-                    border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                    border-8 border-transparent border-t-popover"
                   />
                 </div>
               )}
@@ -182,17 +182,17 @@ export function LiquidityPoolStats({
           {icon}
         </div>
         <div className="transition-all duration-300 ease-out">
-          <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-2">
+          <p className="text-2xl sm:text-3xl font-bold text-foreground mt-2">
             {value}
           </p>
           {change !== undefined && (
             <div className="flex items-center mt-2">
               <ChangeIndicator value={change} />
-              <span className="ml-2 text-sm text-gray-500">24h change</span>
+              <span className="ml-2 text-sm text-muted-foreground">24h change</span>
             </div>
           )}
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-2">{subtitle}</p>
+            <p className="text-sm text-muted-foreground mt-2">{subtitle}</p>
           )}
         </div>
       </div>
@@ -204,8 +204,8 @@ export function LiquidityPoolStats({
     return (
       <div
         className={`
-        bg-white dark:bg-gray-800 rounded-lg border border-gray-200
-        dark:border-gray-700 shadow-sm p-4 ${className}
+        bg-card rounded-lg border border-border
+        shadow-sm p-4 ${className}
       `}
       >
         <div className="flex items-center justify-between mb-4">
@@ -239,11 +239,11 @@ export function LiquidityPoolStats({
     return (
       <div
         className={`
-        bg-white dark:bg-gray-800 rounded-lg border border-gray-200
-        dark:border-gray-700 shadow-sm ${className}
+        bg-card rounded-lg border border-border
+        shadow-sm ${className}
       `}
       >
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Skeleton className="w-10 h-10 rounded-full" />
@@ -269,8 +269,8 @@ export function LiquidityPoolStats({
     return (
       <div
         className={`
-          bg-white dark:bg-gray-800 rounded-lg border border-gray-200
-          dark:border-gray-700 shadow-sm hover:shadow-md
+          bg-card rounded-lg border border-border
+          shadow-sm hover:shadow-md
           transition-all duration-300 ease-out ${className}
         `}
       >
@@ -288,19 +288,19 @@ export function LiquidityPoolStats({
                 />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-base font-semibold text-foreground">
                   {poolData.token.symbol}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   {poolData.fee / 10000}% Fee Tier
                 </p>
               </div>
             </div>
             <button
               onClick={() => onTokenClick?.(poolData.token.symbol)}
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700
-                dark:hover:text-blue-300 p-2 rounded-full hover:bg-gray-100
-                dark:hover:bg-gray-700 transition-all duration-200
+              className="text-primary hover:text-primary/80
+                p-2 rounded-full hover:bg-accent
+                transition-all duration-200
                 hover:scale-110 active:scale-95"
             >
               <TrendingUp className="w-5 h-5" />
@@ -312,39 +312,39 @@ export function LiquidityPoolStats({
             {/* TVL */}
             <div className="relative group">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   TVL
                 </span>
                 <div className="relative">
                   <button
                     onMouseEnter={() => setShowTooltip("tvl")}
                     onMouseLeave={() => setShowTooltip(null)}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className="text-muted-foreground hover:text-foreground transition-all duration-200"
                   >
                     <Info className="w-3 h-3" />
                   </button>
                   {showTooltip === "tvl" && (
                     <div
                       className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-                      bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
+                      bg-popover text-popover-foreground p-3 rounded-lg text-sm
                       shadow-lg z-50 w-56 pointer-events-none"
                     >
                       <h4 className="font-medium mb-1">
                         {tooltipContent.tvl.title}
                       </h4>
-                      <p className="text-gray-300 text-xs">
+                      <p className="text-muted-foreground text-xs">
                         {tooltipContent.tvl.description}
                       </p>
                       <div
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
-                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                        border-8 border-transparent border-t-popover"
                       />
                     </div>
                   )}
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-base font-medium text-gray-900 dark:text-white">
+                <p className="text-base font-medium text-foreground">
                   {formatCurrency(poolData.tvl)}
                 </p>
                 <ChangeIndicator value={poolData.tvlChange24h} />
@@ -354,42 +354,42 @@ export function LiquidityPoolStats({
             {/* APR */}
             <div className="relative group">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   APR
                 </span>
                 <div className="relative">
                   <button
                     onMouseEnter={() => setShowTooltip("apr")}
                     onMouseLeave={() => setShowTooltip(null)}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className="text-muted-foreground hover:text-foreground transition-all duration-200"
                   >
                     <Info className="w-3 h-3" />
                   </button>
                   {showTooltip === "apr" && (
                     <div
                       className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-                      bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
+                      bg-popover text-popover-foreground p-3 rounded-lg text-sm
                       shadow-lg z-50 w-56 pointer-events-none"
                     >
                       <h4 className="font-medium mb-1">
                         {tooltipContent.apr.title}
                       </h4>
-                      <p className="text-gray-300 text-xs">
+                      <p className="text-muted-foreground text-xs">
                         {tooltipContent.apr.description}
                       </p>
                       <div
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
-                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                        border-8 border-transparent border-t-popover"
                       />
                     </div>
                   )}
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-base font-medium text-gray-900 dark:text-white">
+                <p className="text-base font-medium text-foreground">
                   {formatPercentage(poolData.apr)}
                 </p>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   {formatCurrency(poolData.feesEarned24h)} earned
                 </span>
               </div>
@@ -403,14 +403,14 @@ export function LiquidityPoolStats({
   return (
     <div
       className={`
-      bg-white dark:bg-gray-800 rounded-lg border border-gray-200
-      dark:border-gray-700 shadow-sm hover:shadow-md
+      bg-card rounded-lg border border-border
+      shadow-sm hover:shadow-md
       transition-all duration-300 ease-out
       h-full ${className}
     `}
     >
       {/* Pool Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="relative w-10 h-10 flex-shrink-0 group">
@@ -423,19 +423,19 @@ export function LiquidityPoolStats({
               />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors">
+              <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-all duration-200">
                 {poolData.token.symbol}
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 {poolData.fee / 10000}% Fee Tier
               </p>
             </div>
           </div>
           <button
             onClick={() => onTokenClick?.(`${poolData.token.symbol}`)}
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-700
-              dark:hover:text-blue-300 p-2 rounded-full hover:bg-gray-100
-              dark:hover:bg-gray-700 transition-all duration-200
+            className="text-primary hover:text-primary/80
+              p-2 rounded-full hover:bg-accent
+              transition-all duration-200
               hover:scale-110 active:scale-95"
           >
             <TrendingUp className="w-5 h-5" />
@@ -450,7 +450,7 @@ export function LiquidityPoolStats({
           value={formatCurrency(poolData.tvl)}
           change={poolData.tvlChange24h}
           tooltipKey="tvl"
-          icon={<Activity className="w-5 h-5 text-blue-500" />}
+          icon={<Activity className="w-5 h-5 text-primary" />}
         />
 
         <StatCard
@@ -458,7 +458,7 @@ export function LiquidityPoolStats({
           value={formatCurrency(poolData.volume24h)}
           change={poolData.volumeChange24h}
           tooltipKey="volume"
-          icon={<Activity className="w-5 h-5 text-green-500" />}
+          icon={<Activity className="w-5 h-5 text-success" />}
         />
 
         <StatCard
