@@ -318,11 +318,11 @@ export function BridgeWidget({
             ${!isValid
               ? 'opacity-50 cursor-not-allowed'
               : isConfirming
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                ? 'bg-warning hover:bg-warning/80 text-warning-foreground'
                 : isProcessing
                   ? 'cursor-wait'
                   : isComplete
-                    ? 'bg-green-500 hover:bg-green-600 text-white'
+                    ? 'bg-success hover:bg-success-hover text-success-foreground'
                     : 'active:scale-[0.98]'
             }`}
         >
