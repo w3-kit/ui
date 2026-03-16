@@ -115,7 +115,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
 
   if (variant === 'compact') {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 sm:p-4 w-full ${className}`}>
+      <div className={`bg-card rounded-lg shadow-sm p-3 sm:p-4 w-full ${className}`}>
         <div className="relative" ref={inputRef}>
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
@@ -125,23 +125,23 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                 onChange={handleInputChange}
                 onFocus={() => setShowSuggestions(recentSearches.length > 0 && input.length > 0)}
                 placeholder="ENS name or address"
-                className="w-full px-3 py-2 pl-9 text-sm border border-gray-200 dark:border-gray-700 rounded-lg
-                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                  placeholder-gray-500 dark:placeholder-gray-400
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+                className="w-full px-3 py-2 pl-9 text-sm border border-border rounded-lg
+                  bg-card text-foreground
+                  placeholder-muted-foreground
+                  focus:outline-none focus:ring-2 focus:ring-ring
                   transition-all duration-200"
               />
-              <Search className="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400 dark:text-gray-500" />
+              <Search className="absolute left-2.5 top-2.5 w-4 h-4 text-muted-foreground" />
             </div>
             <button
               onClick={() => handleResolve()}
               disabled={!input || isLoading}
-              className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600
+              className={`px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover
                 disabled:opacity-50 disabled:cursor-not-allowed ${buttonAnimation}
                 flex items-center justify-center gap-2 text-sm min-w-[100px]`}
             >
               {isLoading ? (
-                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                <div className="animate-spin w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full" />
               ) : (
                 <>
                   <Search className="w-4 h-4" />
@@ -154,8 +154,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
           {/* Recent Searches Dropdown */}
           {showSuggestions && recentSearches.length > 0 && (
             <div
-              className={`suggestions-dropdown absolute z-10 w-full mt-1 bg-white dark:bg-gray-800
-                border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg ${slideInAnimation}`}
+              className={`suggestions-dropdown absolute z-10 w-full mt-1 bg-card
+                border border-border rounded-lg shadow-lg ${slideInAnimation}`}
             >
               {recentSearches.map((search) => (
                 <button
@@ -165,8 +165,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     setShowSuggestions(false);
                     handleResolve(search.query);
                   }}
-                  className="w-full px-3 py-1.5 text-left hover:bg-gray-50 dark:hover:bg-gray-700
-                    transition-colors duration-150 first:rounded-t-lg last:rounded-b-lg
+                  className="w-full px-3 py-1.5 text-left hover:bg-accent
+                    transition-all duration-200 first:rounded-t-lg last:rounded-b-lg
                     flex items-center space-x-2 text-sm"
                 >
                   {search.result.avatar && (
@@ -178,7 +178,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                       className="w-5 h-5 rounded-full"
                     />
                   )}
-                  <span className="text-gray-900 dark:text-white">
+                  <span className="text-foreground">
                     {search.query}
                   </span>
                 </button>
@@ -188,14 +188,14 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         </div>
 
         {error && (
-          <div className="mt-2 text-sm text-red-500 dark:text-red-400 flex items-center gap-1.5">
+          <div className="mt-2 text-sm text-destructive flex items-center gap-1.5">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {result && (
-          <div className={`mt-3 p-2 bg-gray-50 dark:bg-gray-700/30 rounded-lg ${slideInAnimation}`}>
+          <div className={`mt-3 p-2 bg-muted rounded-lg ${slideInAnimation}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {result.avatar && (
@@ -204,37 +204,37 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     alt="Avatar"
                     width={32}
                     height={32}
-                    className="w-8 h-8 rounded-full ring-2 ring-white dark:ring-gray-700"
+                    className="w-8 h-8 rounded-full ring-2 ring-background"
                   />
                 )}
-                <div className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2 flex-wrap">
+                <div className="text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
                   {result.ensName && (
                     <button
                       onClick={() => handleCopy(result.ensName!, 'ens')}
-                      className="font-medium text-gray-900 dark:text-white hover:text-blue-500
-                        dark:hover:text-blue-400 transition-colors flex items-center gap-1"
+                      className="font-medium text-foreground hover:text-primary
+                        transition-all duration-200 flex items-center gap-1"
                     >
                       {result.ensName}
                       {copied === 'ens' ? (
-                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <CheckCircle className="w-4 h-4 text-success" />
                       ) : (
                         <Copy className="w-4 h-4 opacity-0 group-hover:opacity-100" />
                       )}
                     </button>
                   )}
                   {result.ensName && result.address && (
-                    <ArrowRight className="w-4 h-4 text-gray-400" />
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   )}
                   {result.address && (
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleCopy(result.address!, 'address')}
-                        className="font-medium text-gray-900 dark:text-white font-mono hover:text-blue-500
-                          dark:hover:text-blue-400 transition-colors flex items-center gap-1"
+                        className="font-medium text-foreground font-mono hover:text-primary
+                          transition-all duration-200 flex items-center gap-1"
                       >
                         {truncateAddress(result.address)}
                         {copied === 'address' ? (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <CheckCircle className="w-4 h-4 text-success" />
                         ) : (
                           <Copy className="w-4 h-4 opacity-0 group-hover:opacity-100" />
                         )}
@@ -243,8 +243,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                         href={getEtherscanUrl(result.address!, 'address')}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400
-                          dark:hover:text-blue-300 transition-colors"
+                        className="text-primary hover:text-primary/80
+                          transition-all duration-200"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
@@ -260,8 +260,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 w-full ${className}`}>
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">
+    <div className={`bg-card rounded-lg shadow-lg p-4 sm:p-6 w-full ${className}`}>
+      <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4">
         ENS Resolver
       </h2>
 
@@ -274,19 +274,19 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
             onFocus={() => setShowSuggestions(recentSearches.length > 0 && input.length > 0)}
             placeholder="Enter ENS name or Ethereum address"
             className="w-full px-4 py-3 pl-11 text-base
-              border border-gray-200 dark:border-gray-700 rounded-lg
-              bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-              placeholder-gray-500 dark:placeholder-gray-400
-              focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+              border border-border rounded-lg
+              bg-card text-foreground
+              placeholder-muted-foreground
+              focus:outline-none focus:ring-2 focus:ring-ring
               transition-all duration-200"
           />
-          <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-400 dark:text-gray-500" />
+          <Search className="absolute left-3 top-3.5 w-5 h-5 text-muted-foreground" />
 
           {/* Recent Searches Dropdown */}
           {showSuggestions && recentSearches.length > 0 && (
             <div
-              className={`suggestions-dropdown absolute z-10 w-full mt-1 bg-white dark:bg-gray-800
-                border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg ${slideInAnimation}`}
+              className={`suggestions-dropdown absolute z-10 w-full mt-1 bg-card
+                border border-border rounded-lg shadow-lg ${slideInAnimation}`}
             >
               {recentSearches.map((search) => (
                 <button
@@ -296,8 +296,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     setShowSuggestions(false);
                     handleResolve(search.query);
                   }}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700
-                    transition-colors duration-150 first:rounded-t-lg last:rounded-b-lg
+                  className="w-full px-4 py-2 text-left hover:bg-accent
+                    transition-all duration-200 first:rounded-t-lg last:rounded-b-lg
                     flex items-center space-x-2"
                 >
                   {search.result.avatar && (
@@ -309,7 +309,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                       className="w-6 h-6 rounded-full"
                     />
                   )}
-                  <span className="text-sm text-gray-900 dark:text-white">
+                  <span className="text-sm text-foreground">
                     {search.query}
                   </span>
                 </button>
@@ -321,12 +321,12 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         <button
           onClick={() => handleResolve()}
           disabled={!input || isLoading}
-          className={`w-full px-4 py-3 bg-blue-500 text-white rounded-lg
-            hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed
+          className={`w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg
+            hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed
             ${buttonAnimation} flex items-center justify-center space-x-2 text-base`}
         >
           {isLoading ? (
-            <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+            <div className="animate-spin w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
           ) : (
             <>
               <Search className="w-5 h-5" />
@@ -336,7 +336,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         </button>
 
         {error && (
-          <div className={`p-4 bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400
+          <div className={`p-4 bg-destructive/10 text-destructive
             rounded-lg text-sm flex items-center space-x-2 ${slideInAnimation}`}
           >
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -345,7 +345,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         )}
 
         {result && (
-          <div className={`p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg space-y-4 ${slideInAnimation}`}>
+          <div className={`p-4 bg-muted rounded-lg space-y-4 ${slideInAnimation}`}>
             {result.avatar && (
               <div className="flex justify-center">
                 <img
@@ -353,18 +353,18 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                   alt="ENS Avatar"
                   width={64}
                   height={64}
-                  className="w-16 h-16 rounded-full ring-4 ring-white dark:ring-gray-700"
+                  className="w-16 h-16 rounded-full ring-4 ring-background"
                 />
               </div>
             )}
 
             <div className="space-y-3">
               {result.ensName && (
-                <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
+                <div className="flex items-center justify-between p-3 bg-card
                   rounded-lg group hover:shadow-md transition-all duration-200">
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">ENS Name</div>
-                    <div className="font-medium text-gray-900 dark:text-white">
+                    <div className="text-sm text-muted-foreground">ENS Name</div>
+                    <div className="font-medium text-foreground">
                       {result.ensName}
                     </div>
                   </div>
@@ -373,28 +373,27 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     {copied === 'ens' ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     ) : (
-                      <Copy className="w-5 h-5 text-gray-400 hover:text-gray-600
-                        dark:text-gray-500 dark:hover:text-gray-300" />
+                      <Copy className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                     )}
                   </button>
                 </div>
               )}
 
               {result.address && (
-                <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
+                <div className="flex items-center justify-between p-3 bg-card
                   rounded-lg group hover:shadow-md transition-all duration-200">
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Address</div>
-                    <div className="font-medium text-gray-900 dark:text-white font-mono flex items-center gap-2">
+                    <div className="text-sm text-muted-foreground">Address</div>
+                    <div className="font-medium text-foreground font-mono flex items-center gap-2">
                       {truncateAddress(result.address)}
                       <a
                         href={getEtherscanUrl(result.address!, 'address')}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400
-                          dark:hover:text-blue-300 transition-colors"
+                        className="text-primary hover:text-primary/80
+                          transition-all duration-200"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
@@ -405,10 +404,9 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     {copied === 'address' ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     ) : (
-                      <Copy className="w-5 h-5 text-gray-400 hover:text-gray-600
-                        dark:text-gray-500 dark:hover:text-gray-300" />
+                      <Copy className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                     )}
                   </button>
                 </div>

@@ -49,18 +49,18 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 ${className}`}>
+    <div className={`bg-card rounded-xl shadow-lg p-6 ${className}`}>
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">DeFi Positions</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your DeFi investments</p>
+          <h2 className="text-xl font-semibold text-foreground">DeFi Positions</h2>
+          <p className="text-sm text-muted-foreground mt-1">Manage your DeFi investments</p>
         </div>
-        <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 px-4 py-2 rounded-lg">
-          <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+        <div className="flex items-center space-x-3 bg-muted px-4 py-2 rounded-lg">
+          <Wallet className="w-5 h-5 text-muted-foreground" />
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Total Value</span>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+            <span className="text-sm text-muted-foreground">Total Value</span>
+            <div className="text-lg font-semibold text-foreground">
               ${calculateTotalValue(positions).toFixed(2)}
             </div>
           </div>
@@ -72,13 +72,13 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
         {positions.map((position) => (
           <div
             key={position.id}
-            className={`group p-4 bg-gray-50 dark:bg-gray-700 rounded-xl ${cardAnimation}`}
+            className={`group p-4 bg-muted rounded-xl ${cardAnimation}`}
           >
             {/* Position Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 p-2 shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-card p-2 shadow-sm">
                     <img
                       src={position.protocol.logoURI}
                       alt={position.protocol.name}
@@ -88,22 +88,22 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                     />
                   </div>
                   {position.protocol.type === "lending" ? (
-                    <TrendingUp className="absolute -top-1 -right-1 w-4 h-4 text-green-500 bg-white dark:bg-gray-800 rounded-full p-0.5" />
+                    <TrendingUp className="absolute -top-1 -right-1 w-4 h-4 text-success bg-card rounded-full p-0.5" />
                   ) : position.protocol.type === "borrowing" ? (
-                    <TrendingDown className="absolute -top-1 -right-1 w-4 h-4 text-red-500 bg-white dark:bg-gray-800 rounded-full p-0.5" />
+                    <TrendingDown className="absolute -top-1 -right-1 w-4 h-4 text-destructive bg-card rounded-full p-0.5" />
                   ) : null}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-white">
+                  <div className="font-medium text-foreground">
                     {position.amount} {position.token.symbol}
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     {position.protocol.name} • {position.protocol.type}
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-medium text-gray-900 dark:text-white">
+                <div className="font-medium text-foreground">
                   ${position.value.toFixed(2)}
                 </div>
                 <div className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}>
@@ -115,15 +115,15 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 
             {/* Position Stats */}
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">APY</div>
-                <div className="font-medium text-gray-900 dark:text-white flex items-center space-x-1">
+              <div className="bg-card p-3 rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">APY</div>
+                <div className="font-medium text-foreground flex items-center space-x-1">
                   <Activity className="w-4 h-4" />
                   <span>{position.apy > 0 ? "+" : ""}{position.apy.toFixed(2)}%</span>
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Risk Level</div>
+              <div className="bg-card p-3 rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">Risk Level</div>
                 <div className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}>
                   <AlertTriangle className="w-4 h-4" />
                   <span>{position.risk.charAt(0).toUpperCase() + position.risk.slice(1)}</span>
@@ -134,7 +134,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
             {/* Rewards Section */}
             {position.rewards.length > 0 && (
               <div className="mb-4">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 flex items-center space-x-1">
+                <div className="text-sm text-muted-foreground mb-2 flex items-center space-x-1">
                   <Coins className="w-4 h-4" />
                   <span>Rewards</span>
                 </div>
@@ -142,12 +142,12 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                   {position.rewards.map((reward, index) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-1 bg-white dark:bg-gray-800 px-3 py-1.5 rounded-lg shadow-sm"
+                      className="flex items-center space-x-1 bg-card px-3 py-1.5 rounded-lg shadow-sm"
                     >
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      <span className="text-sm font-medium text-foreground">
                         {reward.amount} {reward.token}
                       </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-muted-foreground">
                         (${reward.value.toFixed(2)})
                       </span>
                     </div>
@@ -164,7 +164,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                   setAdjustAction("deposit");
                   setShowAdjustModal(true);
                 }}
-                className={`flex-1 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${buttonAnimation} flex items-center justify-center space-x-1 min-w-[120px]`}
+                className={`flex-1 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover ${buttonAnimation} flex items-center justify-center space-x-1 min-w-[120px]`}
               >
                 <ArrowUpRight className="w-4 h-4" />
                 <span>Deposit</span>
@@ -175,7 +175,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                   setAdjustAction("withdraw");
                   setShowAdjustModal(true);
                 }}
-                className={`flex-1 px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 ${buttonAnimation} flex items-center justify-center space-x-1 min-w-[120px]`}
+                className={`flex-1 px-4 py-2 text-sm bg-muted text-foreground rounded-lg hover:bg-accent ${buttonAnimation} flex items-center justify-center space-x-1 min-w-[120px]`}
               >
                 <ArrowDownRight className="w-4 h-4" />
                 <span>Withdraw</span>
@@ -187,15 +187,15 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 
       {/* Adjust Position Modal */}
       {showAdjustModal && selectedPosition && (
-        <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${modalAnimation}`}>
-          <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 ${modalContentAnimation}`}>
+        <div className={`fixed inset-0 bg-overlay/50 flex items-center justify-center z-50 ${modalAnimation}`}>
+          <div className={`bg-card rounded-xl p-6 max-w-md w-full mx-4 ${modalContentAnimation}`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-foreground">
                 {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)} {selectedPosition.token.symbol}
               </h3>
               <button
                 onClick={() => setShowAdjustModal(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="text-muted-foreground hover:text-foreground transition-all duration-200"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -203,7 +203,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Amount
                 </label>
                 <div className="relative">
@@ -211,7 +211,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                     type="number"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-border rounded-lg bg-card focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                     placeholder="0.0"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -229,18 +229,18 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   onClick={() => setShowAdjustModal(false)}
-                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                  className="px-4 py-2 text-muted-foreground hover:text-foreground transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAdjustPosition}
                   disabled={isProcessing || !amount}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {isProcessing ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                       <span>Processing...</span>
                     </>
                   ) : (

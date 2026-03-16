@@ -14,6 +14,7 @@ import {
   formatPercent,
   getChainName,
   getExplorerUrl,
+  getCssVar,
 } from './utils';
 
 // Register Chart.js components
@@ -111,7 +112,7 @@ const AssetItem: React.FC<{
               {formatCurrency(asset.value)}
             </div>
             <div className={`text-sm font-medium flex items-center justify-end space-x-1 ${
-              asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
+              asset.change24h >= 0 ? 'text-success' : 'text-destructive'
             }`}>
               {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
               <span>{formatPercent(asset.change24h)}</span>
@@ -170,7 +171,7 @@ const AssetItem: React.FC<{
                 <div className="bg-card rounded-lg p-4">
                   <div className="text-sm text-muted-foreground">24h Change</div>
                   <div className={`font-medium flex items-center ${
-                    asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
+                    asset.change24h >= 0 ? 'text-success' : 'text-destructive'
                   }`}>
                     {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3 mr-1" /> : <ArrowDown className="w-3 h-3 mr-1" />}
                     {asset.change24h.toFixed(2)}%
@@ -273,7 +274,8 @@ const PortfolioDistributionChart: React.FC<{
         backgroundColor: assets.map((a, i) =>
           i === activeIndex ? a.color : `${a.color}80`
         ),
-        borderColor: '#ffffff',
+        // For Chart.js runtime colors, use getComputedStyle to read CSS vars
+        borderColor: getCssVar('--background', '#ffffff'),
         borderWidth: assets.map((_, i) =>
           i === activeIndex ? 2 : 1
         ),
@@ -362,7 +364,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Portfolio</CardTitle>
             <span className={`text-sm font-medium ${
-              totalChange24h >= 0 ? 'text-green-500' : 'text-red-500'
+              totalChange24h >= 0 ? 'text-success' : 'text-destructive'
             }`}>
               {formatPercent(totalChange24h)}
             </span>
@@ -409,7 +411,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                       {formatCurrency(asset.value)}
                     </div>
                     <div className={`text-sm font-medium flex items-center justify-end ${
-                      asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
+                      asset.change24h >= 0 ? 'text-success' : 'text-destructive'
                     }`}>
                       {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
                       <span>{formatPercent(asset.change24h)}</span>
@@ -514,7 +516,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
               {formatCurrency(totalValue)}
             </div>
             <div className={`flex items-center text-sm font-medium mb-4 ${
-              totalChange24h >= 0 ? 'text-green-500' : 'text-red-500'
+              totalChange24h >= 0 ? 'text-success' : 'text-destructive'
             }`}>
               {totalChange24h >= 0 ? <ArrowUp className="w-4 h-4 mr-1" /> : <ArrowDown className="w-4 h-4 mr-1" />}
               {formatPercent(totalChange24h)}

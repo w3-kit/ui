@@ -1,3 +1,10 @@
+// For Chart.js runtime colors, use getComputedStyle to read CSS vars
+export const getCssVar = (varName: string, fallback: string): string => {
+  if (typeof window === 'undefined') return fallback;
+  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return value || fallback;
+};
+
 // Animation constants
 export const cardAnimation = "transition-all duration-300 ease-in-out";
 export const itemAnimation = "animate-in fade-in-50 duration-300";

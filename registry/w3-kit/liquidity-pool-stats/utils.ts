@@ -23,7 +23,7 @@ export function formatPercentage(value: number): string {
 }
 
 export function getChangeColor(value: number): string {
-  if (value > 0) return "text-green-600 dark:text-green-400";
-  if (value < 0) return "text-red-600 dark:text-red-400";
-  return "text-gray-600 dark:text-gray-400";
+  if (value > 0) return "text-success";
+  if (value < 0) return "text-destructive";
+  return "text-muted-foreground";
 }
