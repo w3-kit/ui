@@ -37,7 +37,7 @@ const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, 
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="flex items-center space-x-3 text-red-500">
+          <DialogTitle className="flex items-center space-x-3 text-destructive">
             <AlertCircle className="w-6 h-6" />
             <span>Delete Address</span>
           </DialogTitle>
@@ -64,7 +64,7 @@ const EditConfirmationModal: React.FC<EditModalProps> = ({ isOpen, onClose, onCo
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="flex items-center space-x-3 text-blue-500">
+          <DialogTitle className="flex items-center space-x-3 text-primary">
             <Edit2 className="w-6 h-6" />
             <span>Edit Address</span>
           </DialogTitle>
@@ -382,8 +382,8 @@ export const AddressBook: React.FC<AddressBookProps> = ({
                   />
                   <button
                     onClick={() => setNewEntry(prev => ({ ...prev, avatar: '' }))}
-                    className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
-                      hover:bg-red-600 transition-colors"
+                    className="absolute -top-1 -right-1 p-0.5 bg-destructive text-primary-foreground rounded-full
+                      hover:bg-destructive-hover transition-all duration-200"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -448,19 +448,19 @@ export const AddressBook: React.FC<AddressBookProps> = ({
             {filteredEntries.slice(0, 5).map((entry, index) => (
               <div
                 key={entry.id}
-                className={`flex flex-col bg-white dark:bg-gray-800 rounded-lg transition-all ${listItemAnimation}`}
+                className={`flex flex-col bg-card rounded-lg transition-all ${listItemAnimation}`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div
-                  className="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50
-                    dark:hover:bg-gray-700/50 rounded-lg transition-all group"
+                  className="flex items-center justify-between p-2 cursor-pointer hover:bg-accent
+                    rounded-lg transition-all group"
                   onClick={() => toggleExpand(entry.id)}
                 >
                   <div className="flex items-center space-x-3 min-w-0">
                     {renderAvatar(entry.avatar, entry.name, 'sm')}
                     <div className="min-w-0">
-                      <p className="font-medium text-gray-900 dark:text-white truncate">{entry.name}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                      <p className="font-medium text-foreground truncate">{entry.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">
                         {entry.ensName || entry.address}
                       </p>
                     </div>
@@ -617,8 +617,8 @@ export const AddressBook: React.FC<AddressBookProps> = ({
                   />
                   <button
                     onClick={() => setNewEntry(prev => ({ ...prev, avatar: '' }))}
-                    className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
-                      hover:bg-red-600 transition-colors"
+                    className="absolute -top-1 -right-1 p-0.5 bg-destructive text-primary-foreground rounded-full
+                      hover:bg-destructive-hover transition-all duration-200"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>

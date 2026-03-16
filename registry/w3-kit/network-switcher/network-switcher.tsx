@@ -46,10 +46,10 @@ export function NetworkSwitcher({
         <div
           className={`w-2 h-2 rounded-full ${
             networkStatus === "connected"
-              ? "bg-green-500"
+              ? "bg-success"
               : networkStatus === "connecting"
-              ? "bg-yellow-500"
-              : "bg-red-500"
+              ? "bg-warning"
+              : "bg-destructive"
           }`}
         />
         <span className="text-sm text-muted-foreground">
@@ -66,7 +66,7 @@ export function NetworkSwitcher({
   return (
     <div
       className={`bg-card rounded-lg border shadow-sm w-full max-w-3xl mx-auto transition-all
-      duration-300 ease-in-out transform hover:shadow-lg ${className}`}
+      duration-300 ease-in-out transform hover:shadow-sm ${className}`}
     >
       {/* Header Section */}
       <div className="p-4 sm:p-6 border-b">
@@ -274,13 +274,13 @@ export function NetworkSwitcher({
               </span>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <div className="w-2 h-2 rounded-full bg-success" />
                   <span className="text-sm text-foreground">
                     RPC
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <div className="w-2 h-2 rounded-full bg-success" />
                   <span className="text-sm text-foreground">
                     WebSocket
                   </span>
