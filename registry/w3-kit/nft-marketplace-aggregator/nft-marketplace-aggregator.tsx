@@ -148,13 +148,13 @@ export function ProtocolRiskScanner({
   const getRiskIcon = (level: RiskLevel) => {
     switch (level) {
       case RiskLevel.LOW:
-        return <CheckCircle className="w-5 h-5 text-green-400" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case RiskLevel.MEDIUM:
-        return <AlertTriangle className="w-5 h-5 text-yellow-400" />;
+        return <AlertTriangle className="w-5 h-5 text-warning" />;
       case RiskLevel.HIGH:
-        return <AlertTriangle className="w-5 h-5 text-orange-400" />;
+        return <AlertTriangle className="w-5 h-5 text-warning" />;
       case RiskLevel.CRITICAL:
-        return <XCircle className="w-5 h-5 text-red-400" />;
+        return <XCircle className="w-5 h-5 text-destructive" />;
     }
   };
 
@@ -162,8 +162,8 @@ export function ProtocolRiskScanner({
     <Card className={`border-border ${className}`}>
       <CardContent className="p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-purple-500/20 rounded-lg">
-            <Shield className="w-6 h-6 text-purple-400" />
+          <div className="p-2 bg-info/20 rounded-lg">
+            <Shield className="w-6 h-6 text-info" />
           </div>
           <div>
             <h2 className="text-xl font-bold">Protocol Risk Scanner</h2>
@@ -247,10 +247,10 @@ export function ProtocolRiskScanner({
                             <div
                               className={`h-2 rounded-full ${
                                 metric.score >= 80
-                                  ? "bg-green-400"
+                                  ? "bg-success"
                                   : metric.score >= 60
-                                    ? "bg-yellow-400"
-                                    : "bg-red-400"
+                                    ? "bg-warning"
+                                    : "bg-destructive"
                               }`}
                               style={{
                                 width: `${(metric.score / metric.maxScore) * 100}%`,
@@ -486,8 +486,8 @@ export function NFTMarketplaceAggregator({
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
-              <Sparkles className="w-6 h-6 text-purple-400" />
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Sparkles className="w-6 h-6 text-primary" />
             </div>
             <div>
               <h2 className="text-xl font-bold">
@@ -503,7 +503,7 @@ export function NFTMarketplaceAggregator({
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="icon"
               onClick={() => setViewMode("grid")}
-              className={viewMode === "grid" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""}
+              className={viewMode === "grid" ? "bg-primary/20 text-primary hover:bg-primary/30" : ""}
             >
               <Grid className="w-5 h-5" />
             </Button>
@@ -511,7 +511,7 @@ export function NFTMarketplaceAggregator({
               variant={viewMode === "list" ? "default" : "ghost"}
               size="icon"
               onClick={() => setViewMode("list")}
-              className={viewMode === "list" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""}
+              className={viewMode === "list" ? "bg-primary/20 text-primary hover:bg-primary/30" : ""}
             >
               <List className="w-5 h-5" />
             </Button>
@@ -526,7 +526,7 @@ export function NFTMarketplaceAggregator({
               placeholder="Search NFTs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full pl-10 pr-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200"
             />
           </div>
           <div className="relative">
@@ -534,7 +534,7 @@ export function NFTMarketplaceAggregator({
             <select
               value={selectedMarketplace}
               onChange={(e) => setSelectedMarketplace(e.target.value)}
-              className="pl-9 pr-8 py-2 bg-background border border-input rounded-lg text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-ring"
+              className="pl-9 pr-8 py-2 bg-background border border-input rounded-lg text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200"
             >
               {marketplaces.map((m) => (
                 <option key={m} value={m}>
@@ -548,7 +548,7 @@ export function NFTMarketplaceAggregator({
             onChange={(e) =>
               setSortBy(e.target.value as "price" | "rarity" | "recent")
             }
-            className="px-4 py-2 bg-background border border-input rounded-lg text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-ring"
+            className="px-4 py-2 bg-background border border-input rounded-lg text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200"
           >
             <option value="price">Price: Low to High</option>
             <option value="rarity">Rarity: Rare First</option>
@@ -567,21 +567,21 @@ export function NFTMarketplaceAggregator({
             <Card
               key={listing.id}
               onClick={() => setSelectedNFT(listing)}
-              className={`border-border/50 overflow-hidden hover:bg-accent transition-all cursor-pointer group ${
+              className={`border-border/50 overflow-hidden hover:bg-accent transition-all duration-200 cursor-pointer group ${
                 viewMode === "list" ? "flex items-center" : ""
               }`}
             >
               <div
-                className={`relative ${viewMode === "list" ? "w-16 h-16 flex-shrink-0" : "aspect-square"}`}
+                className={`relative overflow-hidden ${viewMode === "list" ? "w-16 h-16 flex-shrink-0" : "aspect-square"}`}
               >
                 <img
                   src={listing.image}
                   alt={listing.name}
-                  className={`object-cover ${viewMode === "list" ? "w-16 h-16 rounded-lg" : "w-full h-full"}`}
+                  className={`object-cover group-hover:scale-105 transition-transform duration-300 ${viewMode === "list" ? "w-16 h-16 rounded-lg" : "w-full h-full"}`}
                 />
                 {listing.verified && (
-                  <div className="absolute top-2 left-2 p-1 bg-blue-500 rounded-full">
-                    <CheckCircle className="w-3 h-3 text-white" />
+                  <div className="absolute top-2 left-2 p-1 bg-primary rounded-full">
+                    <CheckCircle className="w-3 h-3 text-primary-foreground" />
                   </div>
                 )}
                 <Button
@@ -591,10 +591,10 @@ export function NFTMarketplaceAggregator({
                     e.stopPropagation();
                     toggleFavorite(listing.id);
                   }}
-                  className={`absolute top-2 right-2 h-7 w-7 rounded-full transition-colors ${
+                  className={`absolute top-2 right-2 h-7 w-7 rounded-full transition-all duration-200 ${
                     favorites.has(listing.id)
-                      ? "bg-red-500 text-white hover:bg-red-600"
-                      : "bg-black/50 text-muted-foreground opacity-0 group-hover:opacity-100"
+                      ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      : "bg-overlay/50 text-muted-foreground opacity-0 group-hover:opacity-100"
                   }`}
                 >
                   <Heart
@@ -603,7 +603,7 @@ export function NFTMarketplaceAggregator({
                   />
                 </Button>
                 {listing.endTime && (
-                  <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 bg-black/70 rounded-full text-xs text-white">
+                  <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 bg-overlay/70 rounded-full text-xs text-overlay-foreground">
                     <Clock className="w-3 h-3" />
                     {formatDate(listing.endTime)}
                   </div>
@@ -637,15 +637,15 @@ export function NFTMarketplaceAggregator({
                   <div className="text-right">
                     <div className="flex items-center gap-1 text-xs">
                       {listing.price < listing.lastSale ? (
-                        <TrendingUp className="w-3 h-3 text-green-400" />
+                        <TrendingUp className="w-3 h-3 text-success" />
                       ) : (
-                        <TrendingUp className="w-3 h-3 text-red-400 rotate-180" />
+                        <TrendingUp className="w-3 h-3 text-destructive rotate-180" />
                       )}
                       <span
                         className={
                           listing.price < listing.lastSale
-                            ? "text-green-400"
-                            : "text-red-400"
+                            ? "text-success"
+                            : "text-destructive"
                         }
                       >
                         {(
@@ -669,7 +669,7 @@ export function NFTMarketplaceAggregator({
           <Button
             onClick={loadMore}
             disabled={isLoading}
-            className="w-full mt-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-opacity"
+            className="w-full mt-6 bg-primary hover:bg-primary/90 transition-opacity"
           >
             {isLoading ? "Loading..." : "Load More NFTs"}
           </Button>
@@ -677,19 +677,19 @@ export function NFTMarketplaceAggregator({
       </CardContent>
 
       {selectedNFT && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-overlay/80 flex items-center justify-center z-50 p-4">
           <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <img
                 src={selectedNFT.image}
                 alt={selectedNFT.name}
-                className="w-full aspect-square object-cover"
+                className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setSelectedNFT(null)}
-                className="absolute top-4 right-4 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+                className="absolute top-4 right-4 bg-overlay/50 rounded-full text-overlay-foreground hover:bg-overlay/70 transition-all duration-200"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -733,7 +733,7 @@ export function NFTMarketplaceAggregator({
                       {formatPrice(selectedNFT.lastSale, selectedNFT.currency)}
                     </p>
                     <p
-                      className={`text-sm ${selectedNFT.price < selectedNFT.lastSale ? "text-green-400" : "text-red-400"}`}
+                      className={`text-sm ${selectedNFT.price < selectedNFT.lastSale ? "text-success" : "text-destructive"}`}
                     >
                       {selectedNFT.price < selectedNFT.lastSale ? "▼" : "▲"}{" "}
                       {Math.abs(
@@ -756,7 +756,7 @@ export function NFTMarketplaceAggregator({
                       className="border-border text-center"
                     >
                       <CardContent className="p-3">
-                        <p className="text-xs text-purple-400 uppercase">
+                        <p className="text-xs text-primary uppercase">
                           {trait.trait}
                         </p>
                         <p className="text-sm font-semibold">
@@ -774,7 +774,7 @@ export function NFTMarketplaceAggregator({
               <div className="flex gap-3">
                 <Button
                   onClick={() => handleBuy(selectedNFT)}
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-opacity"
+                  className="flex-1 bg-primary hover:bg-primary/90 transition-opacity"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Buy Now
