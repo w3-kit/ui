@@ -235,33 +235,32 @@ export function MultisigWallet({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700
-      shadow-sm transition-all duration-300 hover:shadow-lg ${className}`}
+      className={`bg-card rounded-lg border border-border
+      shadow-sm transition-all duration-300 hover:shadow-sm ${className}`}
     >
       {/* Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-foreground">
               Multi-Signature Wallet
             </h2>
             <div className="flex items-center mt-2 space-x-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-muted-foreground">
                 Address:
               </span>
               <div className="group relative">
                 <code
                   onClick={() => handleCopyAddress(walletAddress)}
-                  className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-900
-                    dark:text-white cursor-pointer transition-colors duration-200 hover:bg-gray-200
-                    dark:hover:bg-gray-600"
+                  className="text-sm bg-muted px-2 py-1 rounded text-foreground
+                    cursor-pointer transition-colors duration-200 hover:bg-accent"
                 >
                   {formatAddress(walletAddress)}
                 </code>
                 <span
                   className="invisible group-hover:visible absolute -top-8 left-1/2 transform
-                  -translate-x-1/2 px-2 py-1 text-xs bg-gray-900 dark:bg-gray-100 text-white
-                  dark:text-gray-900 rounded shadow-lg whitespace-nowrap transition-all duration-200"
+                  -translate-x-1/2 px-2 py-1 text-xs bg-foreground text-background
+                  rounded shadow-sm whitespace-nowrap transition-all duration-200"
                 >
                   {copiedAddress === walletAddress ? "Copied!" : "Click to copy"}
                 </span>
@@ -269,10 +268,10 @@ export function MultisigWallet({
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-muted-foreground">
               Required Approvals
             </div>
-            <div className="text-2xl font-semibold text-gray-900 dark:text-white">
+            <div className="text-2xl font-semibold text-foreground">
               {requiredApprovals}/{signers.length}
             </div>
           </div>
@@ -280,12 +279,12 @@ export function MultisigWallet({
       </div>
 
       {/* Signers */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+      <div className="px-6 py-4 border-b border-border bg-muted/50">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+          <h3 className="text-sm font-medium text-foreground">
             Signers
           </h3>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-muted-foreground">
             {signers.length} signer{signers.length !== 1 ? "s" : ""}
           </span>
         </div>
@@ -293,34 +292,34 @@ export function MultisigWallet({
           {signers.map((signer) => (
             <div
               key={signer.address}
-              className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg
-                border border-gray-200 dark:border-gray-700 transition-all duration-200
-                hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 group"
+              className="flex items-center space-x-3 bg-card p-3 rounded-lg
+                border border-border transition-all duration-200
+                hover:shadow-md hover:border-border group"
             >
               <div
-                className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center
+                className="w-8 h-8 bg-muted rounded-full flex items-center
                 justify-center transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
               >
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-sm font-medium text-foreground">
                   {signer.name?.[0] || "S"}
                 </span>
               </div>
               <div className="min-w-0 flex-1">
                 {signer.name && (
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  <p className="text-sm font-medium text-foreground truncate">
                     {signer.name}
                   </p>
                 )}
                 <div className="flex items-center gap-2">
                   <code
-                    className="text-xs text-gray-500 dark:text-gray-400 truncate
-                    group-hover:text-blue-500 transition-colors cursor-pointer"
+                    className="text-xs text-muted-foreground truncate
+                    group-hover:text-primary transition-colors cursor-pointer"
                     onClick={() => handleCopyAddress(signer.address)}
                   >
                     {formatAddress(signer.address)}
                   </code>
                   {copiedAddress === signer.address && (
-                    <span className="text-xs text-green-500">Copied!</span>
+                    <span className="text-xs text-success">Copied!</span>
                   )}
                 </div>
               </div>
@@ -332,7 +331,7 @@ export function MultisigWallet({
       {/* Transactions */}
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+          <div className="flex space-x-1 bg-muted rounded-lg p-1">
             {(["pending", "executed", "all"] as const).map((tab) => (
               <button
                 key={tab}
@@ -340,8 +339,8 @@ export function MultisigWallet({
                 className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200
                   ${
                     activeTab === tab
-                      ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-sm"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      ? "bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground hover:bg-accent"
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -350,8 +349,8 @@ export function MultisigWallet({
           </div>
           <button
             onClick={() => setIsProposing(true)}
-            className="inline-flex items-center px-3 py-1.5 bg-gray-900 dark:bg-gray-100
-              text-white dark:text-gray-900 rounded hover:bg-gray-800 dark:hover:bg-gray-200
+            className="inline-flex items-center px-3 py-1.5 bg-foreground
+              text-background rounded hover:bg-foreground/90
               transition-all duration-200 text-sm hover:shadow-md active:scale-95"
           >
             <svg
@@ -373,8 +372,7 @@ export function MultisigWallet({
 
         <div
           className="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin
-          scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700
-          scrollbar-track-transparent"
+          scrollbar-thumb-muted scrollbar-track-transparent"
         >
           {filteredTransactions.map((tx, index) => (
             <TransactionCard
@@ -395,7 +393,7 @@ export function MultisigWallet({
             />
           ))}
           {filteredTransactions.length === 0 && (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <div className="text-center py-8 text-muted-foreground">
               {activeTab === "pending"
                 ? "No pending transactions"
                 : activeTab === "executed"
@@ -409,24 +407,24 @@ export function MultisigWallet({
       {/* Modal */}
       {isProposing && (
         <div
-          className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center
+          className="fixed inset-0 bg-overlay/50 backdrop-blur-sm flex items-center
             justify-center z-50"
           onClick={() => setIsProposing(false)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md mx-4 shadow-2xl"
+            className="bg-card rounded-lg w-full max-w-md mx-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h3 className="text-lg font-semibold text-foreground">
                 New Transaction
               </h3>
               <button
                 onClick={() => setIsProposing(false)}
-                className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="rounded-full p-1.5 hover:bg-accent transition-all duration-200"
               >
                 <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                  className="w-4 h-4 text-muted-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -443,7 +441,7 @@ export function MultisigWallet({
 
             <div className="p-6 space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
+                <label className="text-sm font-medium text-foreground">
                   Description
                 </label>
                 <input
@@ -456,25 +454,26 @@ export function MultisigWallet({
                       description: undefined,
                     }));
                   }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
+                  className={`w-full px-3 py-2 text-sm border rounded-md bg-card
+                    text-foreground
+                    focus:outline-none focus:ring-1 focus:ring-ring
+                    transition-all duration-200
                     ${
                       formErrors.description
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
+                        ? "border-destructive"
+                        : "border-border"
                     }`}
                   placeholder="Enter transaction description"
                 />
                 {formErrors.description && (
-                  <p className="text-xs text-red-500 mt-1">
+                  <p className="text-xs text-destructive mt-1">
                     {formErrors.description}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
+                <label className="text-sm font-medium text-foreground">
                   To Address
                 </label>
                 <input
@@ -484,23 +483,24 @@ export function MultisigWallet({
                     setNewTx({ ...newTx, to: e.target.value });
                     setFormErrors((prev) => ({ ...prev, to: undefined }));
                   }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
+                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-card
+                    text-foreground
+                    focus:outline-none focus:ring-1 focus:ring-ring
+                    transition-all duration-200
                     ${
                       formErrors.to
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
+                        ? "border-destructive"
+                        : "border-border"
                     }`}
                   placeholder="0x..."
                 />
                 {formErrors.to && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.to}</p>
+                  <p className="text-xs text-destructive mt-1">{formErrors.to}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
+                <label className="text-sm font-medium text-foreground">
                   Value (ETH)
                 </label>
                 <input
@@ -510,25 +510,26 @@ export function MultisigWallet({
                     setNewTx({ ...newTx, value: e.target.value });
                     setFormErrors((prev) => ({ ...prev, value: undefined }));
                   }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
+                  className={`w-full px-3 py-2 text-sm border rounded-md bg-card
+                    text-foreground
+                    focus:outline-none focus:ring-1 focus:ring-ring
+                    transition-all duration-200
                     ${
                       formErrors.value
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
+                        ? "border-destructive"
+                        : "border-border"
                     }`}
                   placeholder="0.0"
                   step="0.0001"
                   min="0"
                 />
                 {formErrors.value && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.value}</p>
+                  <p className="text-xs text-destructive mt-1">{formErrors.value}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
+                <label className="text-sm font-medium text-foreground">
                   Data (hex)
                 </label>
                 <input
@@ -538,34 +539,35 @@ export function MultisigWallet({
                     setNewTx({ ...newTx, data: e.target.value });
                     setFormErrors((prev) => ({ ...prev, data: undefined }));
                   }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
+                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-card
+                    text-foreground
+                    focus:outline-none focus:ring-1 focus:ring-ring
+                    transition-all duration-200
                     ${
                       formErrors.data
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
+                        ? "border-destructive"
+                        : "border-border"
                     }`}
                   placeholder="0x"
                 />
                 {formErrors.data && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.data}</p>
+                  <p className="text-xs text-destructive mt-1">{formErrors.data}</p>
                 )}
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex space-x-3">
+            <div className="p-6 border-t border-border bg-muted/50 flex space-x-3">
               <button
                 onClick={handlePropose}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white
-                  dark:text-gray-900 rounded-lg text-sm hover:bg-gray-800 dark:hover:bg-white
+                className="flex-1 px-4 py-2 bg-foreground text-background
+                  rounded-lg text-sm hover:bg-foreground/90
                   transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
                   transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <div
-                    className="w-5 h-5 border-2 border-white dark:border-gray-900
+                    className="w-5 h-5 border-2 border-background
                     border-t-transparent rounded-full animate-spin"
                   />
                 ) : (
@@ -575,9 +577,9 @@ export function MultisigWallet({
               <button
                 onClick={() => setIsProposing(false)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700
-                  rounded-lg text-sm text-gray-900 dark:text-white hover:bg-gray-50
-                  dark:hover:bg-gray-700 transition-all duration-200 transform
+                className="flex-1 px-4 py-2 border border-border
+                  rounded-lg text-sm text-foreground hover:bg-accent
+                  transition-all duration-200 transform
                   hover:scale-[1.02] active:scale-[0.98]"
               >
                 Cancel
@@ -623,8 +625,8 @@ function TransactionCard({
   return (
     <div
       ref={index === 0 ? lastTransactionRef : null}
-      className={`group border border-gray-200 dark:border-gray-700 rounded-lg
-        bg-white dark:bg-gray-800 overflow-hidden transition-all duration-300
+      className={`group border border-border rounded-lg
+        bg-card overflow-hidden transition-all duration-300
         hover:-translate-y-0.5 hover:shadow-md
         ${newTransactions.has(tx.id) ? "" : ""}`}
       onClick={() => setExpandedTx(expandedTx === tx.id ? null : tx.id)}
@@ -632,7 +634,7 @@ function TransactionCard({
       <div className="p-4 cursor-pointer">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-gray-900 dark:text-white flex items-center">
+            <h4 className="font-medium text-foreground flex items-center">
               <span className="truncate">{tx.description}</span>
               <svg
                 className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform duration-200
@@ -659,13 +661,13 @@ function TransactionCard({
                     e.stopPropagation();
                     handleCopyAddress(tx.to);
                   }}
-                  className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer
-                    hover:text-blue-500 transition-colors truncate block"
+                  className="text-sm text-muted-foreground cursor-pointer
+                    hover:text-primary transition-colors truncate block"
                 >
                   To: {formatAddress(tx.to)}
                 </code>
               </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-muted-foreground">
                 Value: {Number(tx.value).toLocaleString()} ETH
               </span>
             </div>
@@ -675,10 +677,10 @@ function TransactionCard({
               className={`px-2 py-1 text-xs rounded-full whitespace-nowrap
               ${
                 tx.status === "executed"
-                  ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                  ? "bg-success/10 text-success"
                   : tx.status === "rejected"
-                  ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  ? "bg-destructive/10 text-destructive"
+                  : "bg-muted text-foreground"
               }`}
             >
               {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
@@ -688,11 +690,11 @@ function TransactionCard({
 
         {/* Progress Bar */}
         <div
-          className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 mb-3
+          className="w-full bg-muted rounded-full h-1.5 mb-3
           overflow-hidden"
         >
           <div
-            className="bg-gray-900 dark:bg-gray-100 h-1.5 rounded-full transition-all
+            className="bg-foreground h-1.5 rounded-full transition-all
               duration-700 ease-out"
             style={{
               width: `${(tx.approvals / tx.requiredApprovals) * 100}%`,
@@ -702,7 +704,7 @@ function TransactionCard({
 
         <div
           className="flex flex-col sm:flex-row sm:items-center justify-between
-          text-sm text-gray-500 dark:text-gray-400 gap-2"
+          text-sm text-muted-foreground gap-2"
         >
           <div className="flex items-center gap-2">
             <div className="flex -space-x-2">
@@ -711,8 +713,8 @@ function TransactionCard({
                 .map((signer) => (
                   <div
                     key={signer.address}
-                    className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700
-                      flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
+                    className="w-6 h-6 rounded-full bg-muted
+                      flex items-center justify-center ring-2 ring-card"
                     title={signer.name || formatAddress(signer.address)}
                   >
                     <span className="text-xs font-medium">
@@ -743,18 +745,18 @@ function TransactionCard({
                       ?.hasApproved ||
                     (tx.status as string) !== "pending"
                   }
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-1.5 rounded-full hover:bg-accent
+                    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Approve"
                 >
                   {isApproving === tx.id ? (
                     <div
-                      className="w-4 h-4 border-2 border-green-500
+                      className="w-4 h-4 border-2 border-success
                       border-t-transparent rounded-full animate-spin"
                     />
                   ) : (
                     <svg
-                      className="w-4 h-4 text-green-500"
+                      className="w-4 h-4 text-success"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -778,18 +780,18 @@ function TransactionCard({
                     isRejecting === tx.id ||
                     tx.status !== "pending"
                   }
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-1.5 rounded-full hover:bg-accent
+                    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Reject"
                 >
                   {isRejecting === tx.id ? (
                     <div
-                      className="w-4 h-4 border-2 border-red-500
+                      className="w-4 h-4 border-2 border-destructive
                       border-t-transparent rounded-full animate-spin"
                     />
                   ) : (
                     <svg
-                      className="w-4 h-4 text-red-500"
+                      className="w-4 h-4 text-destructive"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -814,8 +816,8 @@ function TransactionCard({
           ${expandedTx === tx.id ? "max-h-96" : "max-h-0"}`}
       >
         <div className="px-4 pb-4">
-          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-            <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+          <div className="mt-4 pt-4 border-t border-border">
+            <h5 className="text-sm font-medium text-foreground mb-2">
               Approvals
             </h5>
             <div className="space-y-2">
@@ -830,13 +832,13 @@ function TransactionCard({
                       transition-colors duration-200
                       ${
                         signer.hasApproved
-                          ? "bg-green-100 dark:bg-green-900/30"
-                          : "bg-gray-100 dark:bg-gray-700"
+                          ? "bg-success/10"
+                          : "bg-muted"
                       }`}
                     >
                       {signer.hasApproved && (
                         <svg
-                          className="w-3 h-3 text-green-700 dark:text-green-400"
+                          className="w-3 h-3 text-success"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -854,10 +856,10 @@ function TransactionCard({
                       className={`text-sm transition-colors duration-200
                       ${
                         tx.status === "rejected"
-                          ? "text-red-700 dark:text-red-400"
+                          ? "text-destructive"
                           : signer.hasApproved
-                          ? "text-green-700 dark:text-green-400"
-                          : "text-gray-500 dark:text-gray-400"
+                          ? "text-success"
+                          : "text-muted-foreground"
                       }`}
                     >
                       {tx.status === "rejected"
@@ -885,8 +887,8 @@ function TransactionCard({
                   ?.hasApproved ||
                 !["pending"].includes(tx.status)
               }
-              className="flex-1 px-3 py-1.5 bg-gray-900 dark:bg-gray-100 text-white
-                dark:text-gray-900 rounded text-sm hover:bg-gray-800 dark:hover:bg-gray-200
+              className="flex-1 px-3 py-1.5 bg-foreground text-background
+                rounded text-sm hover:bg-foreground/90
                 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isApproving === tx.id ? "Approving..." : "Approve"}
@@ -901,9 +903,9 @@ function TransactionCard({
                 isRejecting === tx.id ||
                 tx.status !== "pending"
               }
-              className="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700
-                rounded text-sm text-gray-900 dark:text-white hover:bg-gray-50
-                dark:hover:bg-gray-700 transition-all duration-200"
+              className="flex-1 px-3 py-1.5 border border-border
+                rounded text-sm text-foreground hover:bg-accent
+                transition-all duration-200"
             >
               {isRejecting === tx.id ? "Rejecting..." : "Reject"}
             </button>

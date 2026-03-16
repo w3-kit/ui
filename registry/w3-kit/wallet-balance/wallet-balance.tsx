@@ -164,8 +164,8 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         <div
                           className={cn(
                             "absolute -bottom-1 -right-1 w-3 h-3 rounded-full",
-                            token.priceChange24h > 0 && "bg-green-500",
-                            token.priceChange24h < 0 && "bg-red-500",
+                            token.priceChange24h > 0 && "bg-success",
+                            token.priceChange24h < 0 && "bg-destructive",
                             token.priceChange24h === 0 && "bg-muted-foreground"
                           )}
                         />
@@ -305,8 +305,8 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                           <div
                             className={cn(
                               "absolute -bottom-1 -right-1 w-4 h-4 rounded-full",
-                              token.priceChange24h > 0 && "bg-green-500",
-                              token.priceChange24h < 0 && "bg-red-500",
+                              token.priceChange24h > 0 && "bg-success",
+                              token.priceChange24h < 0 && "bg-destructive",
                               token.priceChange24h === 0 && "bg-muted-foreground"
                             )}
                           />
@@ -385,7 +385,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         <Button
                           variant="secondary"
                           size="sm"
-                          className="bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/50 dark:text-green-300 dark:hover:bg-green-800/70"
+                          className="bg-success/10 text-success hover:bg-success/20 transition-all duration-200"
                           onClick={(e) => {
                             e.stopPropagation();
                             alert(`Swap ${token.symbol} functionality would go here`);

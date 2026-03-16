@@ -236,7 +236,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
         )}
       </button>
       {error && (
-        <p className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</p>
+        <p className="mt-2 text-sm text-destructive">{error}</p>
       )}
     </div>
   );

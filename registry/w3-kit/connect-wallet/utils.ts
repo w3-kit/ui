@@ -3,28 +3,28 @@ import { ButtonVariant, WalletType, WalletConnectConfig } from './types';
 // Variant styles for button appearance
 export const variantStyles: Record<ButtonVariant, string> = {
   ghost: `
-    bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800
-    text-gray-900 dark:text-gray-100
-    border-2 border-gray-200 dark:border-gray-700
-    hover:border-gray-300 dark:hover:border-gray-600
+    bg-transparent hover:bg-accent
+    text-foreground
+    border-2 border-border
+    hover:border-border
     shadow-sm hover:shadow
     transition-all duration-200
   `,
   light: `
-    bg-white dark:bg-gray-800
-    hover:bg-gray-50 dark:hover:bg-gray-700
-    text-gray-900 dark:text-gray-100
-    border border-gray-200 dark:border-gray-700
-    hover:border-gray-300 dark:hover:border-gray-600
+    bg-card
+    hover:bg-accent
+    text-foreground
+    border border-border
+    hover:border-border
     shadow-sm hover:shadow
     transition-all duration-200
   `,
   dark: `
-    bg-gray-900 dark:bg-gray-100
-    hover:bg-gray-800 dark:hover:bg-white
-    text-white dark:text-gray-900
+    bg-foreground
+    hover:bg-foreground/90
+    text-background
     border border-transparent
-    shadow-md hover:shadow-lg
+    shadow-md hover:shadow-sm
     transition-all duration-200
   `,
 };
