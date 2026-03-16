@@ -3,30 +3,30 @@ import { RiskLevel } from "./types";
 export function getRiskColor(level: RiskLevel): string {
   switch (level) {
     case RiskLevel.LOW:
-      return "text-green-400";
+      return "text-success";
     case RiskLevel.MEDIUM:
-      return "text-yellow-400";
+      return "text-warning";
     case RiskLevel.HIGH:
-      return "text-orange-400";
+      return "text-warning";
     case RiskLevel.CRITICAL:
-      return "text-red-400";
+      return "text-destructive";
     default:
-      return "text-gray-400";
+      return "text-muted-foreground";
   }
 }
 
 export function getRiskBgColor(level: RiskLevel): string {
   switch (level) {
     case RiskLevel.LOW:
-      return "bg-green-400/20";
+      return "bg-success/20";
     case RiskLevel.MEDIUM:
-      return "bg-yellow-400/20";
+      return "bg-warning/20";
     case RiskLevel.HIGH:
-      return "bg-orange-400/20";
+      return "bg-warning/20";
     case RiskLevel.CRITICAL:
-      return "bg-red-400/20";
+      return "bg-destructive/20";
     default:
-      return "bg-gray-400/20";
+      return "bg-muted";
   }
 }
 
