@@ -10,7 +10,7 @@ export interface Transaction {
   to: string;
   value: string;
   data: string;
-  status: 'pending' | 'executed' | 'rejected';
+  status: "pending" | "executed" | "rejected";
   approvals: number;
   requiredApprovals: number;
   proposer: string;
@@ -23,8 +23,8 @@ export interface MultisigWalletProps {
   signers: Signer[];
   transactions: Transaction[];
   requiredApprovals: number;
-  onPropose?: (tx: Omit<Transaction, 'id' | 'status' | 'timestamp'>) => void;
+  onPropose?: (tx: Omit<Transaction, "id" | "status" | "timestamp">) => void;
   onApprove?: (txId: string) => void;
   onReject?: (txId: string) => void;
   className?: string;
-} 
+}

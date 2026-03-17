@@ -1,15 +1,5 @@
-export interface Token {
-  symbol: string;
-  logoURI: string;
-  liquidity: number;
-  price: number;
-  marketCap: number;
-  totalSupply: number;
-  circulatingSupply: number;
-}
-
 export interface PoolData {
-  token: Token;
+  token: { symbol: string; logoURI: string; price: number; marketCap: number };
   fee: number;
   tvl: number;
   tvlChange24h: number;
@@ -24,7 +14,4 @@ export interface PoolData {
 export interface LiquidityPoolStatsProps {
   poolData: PoolData;
   className?: string;
-  onTokenClick?: (symbol: string) => void;
-  variant?: 'default' | 'compact';
-  isLoading?: boolean;
-} 
+}

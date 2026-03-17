@@ -1,6 +1,5 @@
-export function formatAddress(address: string): string {
-  if (!address) return "";
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+export function getStatusVariant(status: "active" | "executed" | "cancelled"): "success" | "default" | "error" {
+  return status === "active" ? "success" : status === "executed" ? "default" : "error";
 }
 
 export function formatTimestamp(timestamp: number): string {
