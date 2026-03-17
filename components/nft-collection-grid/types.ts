@@ -16,6 +16,7 @@ export interface NFT {
 
 export interface NFTCollectionGridProps {
   nfts: NFT[];
+  collectionName?: string;
   onNFTClick?: (nft: NFT) => void;
   className?: string;
 }

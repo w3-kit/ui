@@ -9,4 +9,5 @@ export interface GasCalculatorProps {
   className?: string;
   onGasSelect?: (gas: number, price: number) => void;
   chainId?: number;
+  ethPrice?: number;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowUpDown, Loader2, ChevronDown } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { TokenIcon } from "../ui/token-icon";
@@ -9,6 +9,31 @@ import { Token, TokenSwapWidgetProps } from "./types";
 import { defaultTokens, getMockExchangeRate } from "./utils";
 
 export type { Token, TokenSwapWidgetProps };
+
+function TokenSelectorButton({
+  token,
+  onClick,
+}: {
+  token?: Token;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-white transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+    >
+      {token ? (
+        <>
+          <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="sm" />
+          {token.symbol}
+        </>
+      ) : (
+        <span className="text-gray-400 dark:text-gray-500">Select</span>
+      )}
+      <ChevronDown className="h-3 w-3 text-gray-400" />
+    </button>
+  );
+}
 
 export function TokenSwapWidget({
   onSwap,
@@ -21,6 +46,7 @@ export function TokenSwapWidget({
   const [toAmount, setToAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectorOpen, setSelectorOpen] = useState<"from" | "to" | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (fromToken && toToken && fromAmount) {
@@ -31,13 +57,25 @@ export function TokenSwapWidget({
     }
   }, [fromToken, toToken, fromAmount]);
 
-  const handleSwitch = () => {
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!selectorOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setSelectorOpen(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [selectorOpen]);
+
+  const handleSwitch = useCallback(() => {
     setFromToken(toToken);
     setToToken(fromToken);
     setFromAmount(toAmount);
-  };
+  }, [fromToken, toToken, toAmount]);
 
-  const handleSwap = async () => {
+  const handleSwap = useCallback(async () => {
     if (!fromToken || !toToken || !fromAmount) return;
     setLoading(true);
     try {
@@ -45,110 +83,135 @@ export function TokenSwapWidget({
     } finally {
       setLoading(false);
     }
-  };
+  }, [fromToken, toToken, fromAmount, onSwap]);
 
-  const selectToken = (token: Token) => {
-    if (selectorOpen === "from") {
-      if (token.symbol === toToken?.symbol) setToToken(fromToken);
-      setFromToken(token);
-    } else {
-      if (token.symbol === fromToken?.symbol) setFromToken(toToken);
-      setToToken(token);
-    }
-    setSelectorOpen(null);
-  };
-
-  const TokenSelector = ({ token, side }: { token?: Token; side: "from" | "to" }) => (
-    <button
-      onClick={() => setSelectorOpen(selectorOpen === side ? null : side)}
-      className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-white transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900"
-    >
-      {token ? (
-        <>
-          <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="sm" />
-          {token.symbol}
-        </>
-      ) : (
-        "Select"
-      )}
-      <ChevronDown className="h-3 w-3 text-gray-400" />
-    </button>
+  const selectToken = useCallback(
+    (token: Token) => {
+      if (selectorOpen === "from") {
+        if (token.symbol === toToken?.symbol) setToToken(fromToken);
+        setFromToken(token);
+      } else {
+        if (token.symbol === fromToken?.symbol) setFromToken(toToken);
+        setToToken(token);
+      }
+      setSelectorOpen(null);
+    },
+    [selectorOpen, fromToken, toToken]
   );
 
+  const fromUsd = fromToken?.price && fromAmount ? (parseFloat(fromAmount) * fromToken.price).toFixed(2) : null;
+  const toUsd = toToken?.price && toAmount ? (parseFloat(toAmount) * toToken.price).toFixed(2) : null;
+
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4", className)}>
-      <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Swap</h3>
-
-      {/* From */}
-      <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-gray-500 dark:text-gray-400">From</span>
-          <TokenSelector token={fromToken} side="from" />
-        </div>
-        <input
-          type="number"
-          placeholder="0.00"
-          value={fromAmount}
-          onChange={(e) => setFromAmount(e.target.value)}
-          className="w-full bg-transparent text-xl font-medium text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none tabular-nums"
-        />
+    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
+          Swap
+        </p>
       </div>
 
-      {/* Switch */}
-      <div className="flex justify-center -my-2 relative z-10">
-        <button
-          onClick={handleSwitch}
-          className="w-8 h-8 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors duration-150"
+      <div className="p-4">
+        {/* From */}
+        <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500">From</span>
+            <TokenSelectorButton
+              token={fromToken}
+              onClick={() => setSelectorOpen(selectorOpen === "from" ? null : "from")}
+            />
+          </div>
+          <input
+            type="number"
+            placeholder="0.00"
+            value={fromAmount}
+            onChange={(e) => setFromAmount(e.target.value)}
+            className="w-full bg-transparent text-xl font-medium text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none focus-visible:outline-none tabular-nums [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+          {fromUsd && (
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1 tabular-nums">≈ ${fromUsd}</p>
+          )}
+        </div>
+
+        {/* Switch */}
+        <div className="flex justify-center -my-2 relative z-10">
+          <button
+            onClick={handleSwitch}
+            aria-label="Switch tokens"
+            className="w-8 h-8 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* To */}
+        <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500">To</span>
+            <TokenSelectorButton
+              token={toToken}
+              onClick={() => setSelectorOpen(selectorOpen === "to" ? null : "to")}
+            />
+          </div>
+          <p className="text-xl font-medium text-gray-900 dark:text-white tabular-nums">
+            {toAmount || "0.00"}
+          </p>
+          {toUsd && (
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1 tabular-nums">≈ ${toUsd}</p>
+          )}
+        </div>
+
+        {/* Rate */}
+        {fromToken && toToken && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center tabular-nums">
+            1 {fromToken.symbol} = {getMockExchangeRate(fromToken.symbol, toToken.symbol).toFixed(4)} {toToken.symbol}
+          </p>
+        )}
+
+        {/* Token selector dropdown */}
+        {selectorOpen && (
+          <div ref={dropdownRef} className="mt-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+            {tokens.map((token) => {
+              const isSelected = token.symbol === fromToken?.symbol || token.symbol === toToken?.symbol;
+              return (
+                <button
+                  key={token.symbol}
+                  onClick={() => selectToken(token)}
+                  className={cn(
+                    "flex items-center gap-3 w-full px-3 py-2.5 text-left transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
+                    isSelected && "bg-gray-50 dark:bg-gray-900"
+                  )}
+                >
+                  <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="sm" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{token.symbol}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{token.name}</p>
+                  </div>
+                  {isSelected && (
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500">Selected</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Swap button */}
+        <Button
+          onClick={handleSwap}
+          disabled={!fromToken || !toToken || !fromAmount || loading}
+          className="w-full mt-4"
         >
-          <ArrowUpDown className="h-4 w-4" />
-        </button>
+          {loading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Swapping…
+            </>
+          ) : (
+            "Swap"
+          )}
+        </Button>
       </div>
-
-      {/* To */}
-      <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-gray-500 dark:text-gray-400">To</span>
-          <TokenSelector token={toToken} side="to" />
-        </div>
-        <p className="text-xl font-medium text-gray-900 dark:text-white tabular-nums">
-          {toAmount || "0.00"}
-        </p>
-      </div>
-
-      {/* Rate */}
-      {fromToken && toToken && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
-          1 {fromToken.symbol} = {getMockExchangeRate(fromToken.symbol, toToken.symbol).toFixed(4)} {toToken.symbol}
-        </p>
-      )}
-
-      {/* Token selector dropdown */}
-      {selectorOpen && (
-        <div className="mt-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden">
-          {tokens.map((token) => (
-            <button
-              key={token.symbol}
-              onClick={() => selectToken(token)}
-              className="flex items-center gap-3 w-full px-3 py-2.5 text-left transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900"
-            >
-              <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="sm" />
-              <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{token.symbol}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{token.name}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Swap button */}
-      <Button
-        onClick={handleSwap}
-        disabled={!fromToken || !toToken || !fromAmount || loading}
-        className="w-full mt-4"
-      >
-        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Swap"}
-      </Button>
     </div>
   );
 }

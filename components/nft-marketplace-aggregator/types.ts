@@ -13,5 +13,6 @@ export interface NFTListing {
 export interface NFTMarketplaceAggregatorProps {
   initialListings?: NFTListing[];
   onBuy?: (listing: NFTListing) => void;
+  loadingListingId?: string;
   className?: string;
 }

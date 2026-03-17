@@ -2,6 +2,7 @@ export interface SubscriptionPlan {
   id: string;
   name: string;
   price: string;
+  priceUsd?: string;
   token: { symbol: string; logoURI: string; decimals: number };
   interval: "daily" | "weekly" | "monthly" | "yearly";
   features: string[];
@@ -13,5 +14,6 @@ export interface SubscriptionPlan {
 export interface SubscriptionPaymentsProps {
   plans: SubscriptionPlan[];
   onSubscribe?: (planId: string) => void;
+  loadingPlanId?: string;
   className?: string;
 }

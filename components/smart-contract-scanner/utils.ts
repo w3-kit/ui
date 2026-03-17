@@ -13,7 +13,3 @@ export function getMockChecks(): SecurityCheck[] {
     { id: "5", name: "External Calls", status: "danger", description: "Unvalidated external contract calls found" },
   ];
 }
-
-export function getStatusVariant(status: "safe" | "warning" | "danger"): "success" | "warning" | "error" {
-  return status === "safe" ? "success" : status === "warning" ? "warning" : "error";
-}

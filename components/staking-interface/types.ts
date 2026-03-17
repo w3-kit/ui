@@ -12,5 +12,6 @@ export interface StakingInterfaceProps {
   pools: StakingPool[];
   onStake?: (poolId: string, amount: string) => void;
   onUnstake?: (poolId: string, amount: string) => void;
+  loadingPoolId?: string;
   className?: string;
 }
