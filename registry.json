@@ -7,31 +7,91 @@
       "name": "price-ticker",
       "type": "registry:component",
       "title": "Price Ticker",
-      "description": "Real-time cryptocurrency price ticker with auto-refresh and detailed market stats",
-      "dependencies": [],
+      "description": "Real-time cryptocurrency price ticker with auto-refresh and detailed market stats.",
+      "dependencies": ["lucide-react"],
       "files": [
         {
           "path": "registry/w3-kit/price-ticker/price-ticker.tsx",
-          "type": "registry:component",
-          "target": "components/w3-kit/price-ticker.tsx"
+          "type": "registry:component"
         },
         {
           "path": "registry/w3-kit/price-ticker/types.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/price-ticker-types.ts"
+          "type": "registry:component"
         },
         {
           "path": "registry/w3-kit/price-ticker/utils.ts",
-          "type": "registry:component",
-          "target": "components/w3-kit/price-ticker-utils.ts"
+          "type": "registry:component"
         }
       ]
     },
     {
-      "name": "@w3-kit/token-vesting",
+      "name": "token-card",
+      "type": "registry:component",
+      "title": "Token Card",
+      "description": "Display card for cryptocurrency tokens with price, balance, and market data.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-card/token-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-card/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-card/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "token-list",
+      "type": "registry:component",
+      "title": "Token List",
+      "description": "Sortable and filterable list of cryptocurrency tokens with search functionality.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-list/token-list.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-list/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-list/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "token-swap",
+      "type": "registry:component",
+      "title": "Token Swap",
+      "description": "Token swap interface with price quotes, slippage settings, and transaction confirmation.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-swap/token-swap.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-swap/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-swap/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "token-vesting",
       "type": "registry:component",
       "title": "Token Vesting",
-      "description": "A component for managing and tracking token vesting schedules with detailed progress visualization.",
+      "description": "Token vesting schedule manager with progress visualization and claim functionality.",
       "dependencies": ["lucide-react"],
       "files": [
         {
@@ -44,6 +104,460 @@
         },
         {
           "path": "registry/w3-kit/token-vesting/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "token-airdrop",
+      "type": "registry:component",
+      "title": "Token Airdrop",
+      "description": "Airdrop distribution interface for bulk token transfers with eligibility checks.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-airdrop/token-airdrop.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-airdrop/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-airdrop/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "wallet-balance",
+      "type": "registry:component",
+      "title": "Wallet Balance",
+      "description": "Display wallet balances across multiple tokens and networks with portfolio summary.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/wallet-balance/wallet-balance.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/wallet-balance/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/wallet-balance/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "connect-wallet",
+      "type": "registry:component",
+      "title": "Connect Wallet",
+      "description": "Wallet connection button and modal with support for MetaMask, WalletConnect, and more.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/connect-wallet/connect-wallet.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/connect-wallet/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/connect-wallet/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "network-switcher",
+      "type": "registry:component",
+      "title": "Network Switcher",
+      "description": "Blockchain network selector dropdown for switching between chains.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/network-switcher/network-switcher.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "address-book",
+      "type": "registry:component",
+      "title": "Address Book",
+      "description": "Contact manager for storing and organizing blockchain wallet addresses.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/address-book/address-book.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/address-book/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/address-book/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "transaction-history",
+      "type": "registry:component",
+      "title": "Transaction History",
+      "description": "Filterable transaction log with status tracking, timestamps, and block explorer links.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/transaction-history/transaction-history.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/transaction-history/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/transaction-history/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "nft-card",
+      "type": "registry:component",
+      "title": "NFT Card",
+      "description": "NFT display card with image preview, metadata, collection info, and pricing.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/nft-card/nft-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-card/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-card/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "nft-collection-grid",
+      "type": "registry:component",
+      "title": "NFT Collection Grid",
+      "description": "Responsive grid layout for browsing NFT collections with filtering and sorting.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/nft-collection-grid/nft-collection-grid.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-collection-grid/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-collection-grid/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "nft-marketplace-aggregator",
+      "type": "registry:component",
+      "title": "NFT Marketplace Aggregator",
+      "description": "Aggregate NFT listings across marketplaces with best price comparison.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/nft-marketplace-aggregator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/nft-marketplace-aggregator/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "contract-interaction",
+      "type": "registry:component",
+      "title": "Contract Interaction",
+      "description": "Smart contract function caller with ABI parsing, input validation, and result display.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/contract-interaction/contract-interaction.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/contract-interaction/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/contract-interaction/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "staking-interface",
+      "type": "registry:component",
+      "title": "Staking Interface",
+      "description": "Token staking dashboard with APY display, rewards tracking, and stake/unstake actions.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/staking-interface/staking-interface.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/staking-interface/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/staking-interface/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "liquidity-pool-stats",
+      "type": "registry:component",
+      "title": "Liquidity Pool Stats",
+      "description": "DeFi liquidity pool statistics with TVL, volume, fees, and APR metrics.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/liquidity-pool-stats/liquidity-pool-stats.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/liquidity-pool-stats/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/liquidity-pool-stats/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "defi-position-manager",
+      "type": "registry:component",
+      "title": "DeFi Position Manager",
+      "description": "Manage DeFi positions across protocols with health factor monitoring and rebalancing.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/defi-position-manager/defi-position-manager.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/defi-position-manager/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/defi-position-manager/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flash-loan-executor",
+      "type": "registry:component",
+      "title": "Flash Loan Executor",
+      "description": "Flash loan configuration and execution interface with protocol selection and profit estimation.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/flash-loan-executor/flash-loan-executor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/flash-loan-executor/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/flash-loan-executor/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "limit-order-manager",
+      "type": "registry:component",
+      "title": "Limit Order Manager",
+      "description": "Create and manage limit orders for token trading with price alerts and order book display.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/limit-order-manager/limit-order-manager.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/limit-order-manager/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/limit-order-manager/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "bridge",
+      "type": "registry:component",
+      "title": "Bridge",
+      "description": "Cross-chain token bridge interface with route comparison and transfer tracking.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/bridge/bridge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/bridge/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/bridge/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gas-calculator",
+      "type": "registry:component",
+      "title": "Gas Calculator",
+      "description": "Ethereum gas fee estimator with speed presets and cost breakdown in USD.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/gas-calculator/gas-calculator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/gas-calculator/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/gas-calculator/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "smart-contract-scanner",
+      "type": "registry:component",
+      "title": "Smart Contract Scanner",
+      "description": "Smart contract security analyzer with vulnerability detection and risk scoring.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/smart-contract-scanner.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/smart-contract-scanner/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "asset-portfolio",
+      "type": "registry:component",
+      "title": "Asset Portfolio",
+      "description": "Multi-chain portfolio dashboard with asset allocation charts and performance tracking.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/asset-portfolio/asset-portfolio.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/asset-portfolio/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/asset-portfolio/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "multisig-wallet",
+      "type": "registry:component",
+      "title": "Multisig Wallet",
+      "description": "Multi-signature wallet interface with signer management and transaction approval flows.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/multisig-wallet/multisig-wallet.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/multisig-wallet/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/multisig-wallet/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ens-resolver",
+      "type": "registry:component",
+      "title": "ENS Resolver",
+      "description": "Ethereum Name Service lookup and resolution with reverse resolution and record display.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/ens-resolver/ens-resolver.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/ens-resolver/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/ens-resolver/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "subscription-payments",
+      "type": "registry:component",
+      "title": "Subscription Payments",
+      "description": "Recurring crypto payment management with plan selection and billing history.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/subscription-payments/subscription-payments.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/subscription-payments/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/subscription-payments/utils.ts",
           "type": "registry:component"
         }
       ]
