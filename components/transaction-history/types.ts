@@ -1,4 +1,5 @@
-export type TransactionStatus = 'pending' | 'success' | 'failed';
+export type TransactionStatus = "pending" | "success" | "failed";
+export type TransactionType = "send" | "receive" | "contract" | "approve" | "swap";
 
 export interface Transaction {
   hash: string;
@@ -7,15 +8,14 @@ export interface Transaction {
   value: string;
   timestamp: number;
   status: TransactionStatus;
-  gasUsed?: string;
-  gasPrice?: string;
+  type: TransactionType;
   nonce: number;
   blockNumber?: number;
+  tokenSymbol?: string;
 }
 
 export interface TransactionHistoryProps {
   transactions: Transaction[];
   onTransactionClick?: (transaction: Transaction) => void;
   className?: string;
-  itemsPerPage?: number;
-} 
+}

@@ -10,7 +10,7 @@ export interface Network {
 
 export interface NetworkSwitcherProps {
   networks: Network[];
-  testNetworks: Network[];
+  testNetworks?: Network[];
   onSwitch: (chainId: number) => void;
   className?: string;
 }

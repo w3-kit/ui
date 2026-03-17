@@ -1,286 +1,101 @@
-import React, { useState } from "react";
-import { TrendingUp, TrendingDown, AlertTriangle, ArrowUpRight, ArrowDownRight, ChevronRight, Wallet, Activity, Shield, Coins } from "lucide-react";
-import Image from "next/image";
+"use client";
 
-export interface PositionData {
-  id: string;
-  protocol: {
-    name: string;
-    logoURI: string;
-    type: "lending" | "borrowing" | "farming";
-  };
-  token: {
-    symbol: string;
-    logoURI: string;
-    price: number;
-  };
-  amount: string;
-  value: number;
-  healthFactor: number;
-  apy: number;
-  rewards: {
-    token: string;
-    amount: string;
-    value: number;
-  }[];
-  risk: "low" | "medium" | "high";
-  lastUpdate: number;
+import React from "react";
+import { Layers } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { TokenIcon } from "../ui/token-icon";
+import { Badge } from "../ui/badge";
+import { PositionData, DeFiPositionManagerProps } from "./types";
+import { formatCurrency, getRiskVariant, formatTimeAgo, capitalize } from "./utils";
+
+export type { PositionData, DeFiPositionManagerProps };
+
+function HealthIndicator({ value }: { value: number }) {
+  const color = value >= 2 ? "text-green-600 dark:text-green-400" : value >= 1.5 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400";
+  return (
+    <span className={cn("text-[11px] font-medium tabular-nums", color)}>
+      HF {value.toFixed(2)}
+    </span>
+  );
 }
 
-interface DeFiPositionManagerProps {
-  positions: PositionData[];
-  onAdjustPosition?: (positionId: string, action: "deposit" | "withdraw" | "borrow" | "repay") => void;
-  className?: string;
-}
+export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({ positions, className }) => {
+  const totalValue = positions.reduce((sum, p) => sum + p.value, 0);
 
-export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
-  positions,
-  onAdjustPosition,
-  className = "",
-}) => {
-  const [selectedPosition, setSelectedPosition] = useState<PositionData | null>(null);
-  const [showAdjustModal, setShowAdjustModal] = useState(false);
-  const [adjustAction, setAdjustAction] = useState<"deposit" | "withdraw" | "borrow" | "repay">("deposit");
-  const [amount, setAmount] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const getHealthFactorColor = (healthFactor: number) => {
-    if (healthFactor >= 2) return "text-green-500 dark:text-green-400";
-    if (healthFactor >= 1.5) return "text-yellow-500 dark:text-yellow-400";
-    return "text-red-500 dark:text-red-400";
-  };
-
-  const getRiskColor = (risk: PositionData["risk"]) => {
-    switch (risk) {
-      case "low":
-        return "text-green-500 dark:text-green-400";
-      case "medium":
-        return "text-yellow-500 dark:text-yellow-400";
-      case "high":
-        return "text-red-500 dark:text-red-400";
-    }
-  };
-
-  const handleAdjustPosition = async () => {
-    if (!selectedPosition || !amount) return;
-    
-    setIsProcessing(true);
-    try {
-      await onAdjustPosition?.(selectedPosition.id, adjustAction);
-      setShowAdjustModal(false);
-      setAmount("");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  // Empty state
+  if (!positions || positions.length === 0) {
+    return (
+      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+          <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
+            DeFi Positions
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+          <Layers className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
+          <p className="text-sm font-medium text-gray-900 dark:text-white">No positions</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Your DeFi positions will appear here</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 ${className}`}>
-      {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">DeFi Positions</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your DeFi investments</p>
-        </div>
-        <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 px-4 py-2 rounded-lg">
-          <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Total Value</span>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-              ${positions.reduce((sum, pos) => sum + pos.value, 0).toFixed(2)}
-            </div>
-          </div>
+    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
+          DeFi Positions
+        </p>
+        <div className="text-right">
+          <p className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">{formatCurrency(totalValue)}</p>
         </div>
       </div>
 
-      {/* Positions Grid */}
-      <div className="grid grid-cols-1 gap-4">
-        {positions.map((position) => (
-          <div
-            key={position.id}
-            className="group p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
-          >
-            {/* Position Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 p-2 shadow-sm">
-                    <Image
-                      src={position.protocol.logoURI}
-                      alt={position.protocol.name}
-                      width={32}
-                      height={32}
-                      className="rounded-lg"
-                    />
+      {/* Positions */}
+      <div className="divide-y divide-gray-100 dark:divide-gray-800">
+        {positions.map((pos) => (
+          <div key={pos.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-150">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 min-w-0">
+                <TokenIcon symbol={pos.token.symbol} logoURI={pos.token.logoURI} size="md" />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white tabular-nums">
+                      {pos.amount} {pos.token.symbol}
+                    </p>
+                    <Badge variant={getRiskVariant(pos.risk)}>{capitalize(pos.risk)}</Badge>
                   </div>
-                  {position.protocol.type === "lending" ? (
-                    <TrendingUp className="absolute -top-1 -right-1 w-4 h-4 text-green-500 bg-white dark:bg-gray-800 rounded-full p-0.5" />
-                  ) : position.protocol.type === "borrowing" ? (
-                    <TrendingDown className="absolute -top-1 -right-1 w-4 h-4 text-red-500 bg-white dark:bg-gray-800 rounded-full p-0.5" />
-                  ) : null}
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-white">
-                    {position.amount} {position.token.symbol}
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {position.protocol.name} • {position.protocol.type}
-                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {pos.protocol.name} · {capitalize(pos.protocol.type)}
+                  </p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-medium text-gray-900 dark:text-white">
-                  ${position.value.toFixed(2)}
-                </div>
-                <div className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}>
-                  <Shield className="w-3 h-3" />
-                  <span>Health: {position.healthFactor.toFixed(2)}</span>
-                </div>
+              <div className="text-right flex-shrink-0 ml-3">
+                <p className="text-sm font-medium text-gray-900 dark:text-white tabular-nums">{formatCurrency(pos.value)}</p>
+                <p className={cn("text-xs tabular-nums", pos.apy >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")}>
+                  {pos.apy >= 0 ? "+" : ""}{pos.apy}% APY
+                </p>
               </div>
             </div>
 
-            {/* Position Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">APY</div>
-                <div className="font-medium text-gray-900 dark:text-white flex items-center space-x-1">
-                  <Activity className="w-4 h-4" />
-                  <span>{position.apy > 0 ? "+" : ""}{position.apy.toFixed(2)}%</span>
-                </div>
-              </div>
-              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Risk Level</div>
-                <div className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}>
-                  <AlertTriangle className="w-4 h-4" />
-                  <span>{position.risk.charAt(0).toUpperCase() + position.risk.slice(1)}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Rewards Section */}
-            {position.rewards.length > 0 && (
-              <div className="mb-4">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 flex items-center space-x-1">
-                  <Coins className="w-4 h-4" />
-                  <span>Rewards</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {position.rewards.map((reward, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-1 bg-white dark:bg-gray-800 px-3 py-1.5 rounded-lg shadow-sm"
-                    >
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {reward.amount} {reward.token}
-                      </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        (${reward.value.toFixed(2)})
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              <button
-                onClick={() => {
-                  setSelectedPosition(position);
-                  setAdjustAction("deposit");
-                  setShowAdjustModal(true);
-                }}
-                className="flex-1 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-1 min-w-[120px]"
-              >
-                <ArrowUpRight className="w-4 h-4" />
-                <span>Deposit</span>
-              </button>
-              <button
-                onClick={() => {
-                  setSelectedPosition(position);
-                  setAdjustAction("withdraw");
-                  setShowAdjustModal(true);
-                }}
-                className="flex-1 px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center space-x-1 min-w-[120px]"
-              >
-                <ArrowDownRight className="w-4 h-4" />
-                <span>Withdraw</span>
-              </button>
+            {/* Health factor + rewards + last updated */}
+            <div className="mt-2 flex items-center gap-3 flex-wrap">
+              <HealthIndicator value={pos.healthFactor} />
+              {pos.rewards.length > 0 && pos.rewards.map((r, i) => (
+                <span key={i} className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-2 py-0.5 rounded-full tabular-nums">
+                  +{r.amount} {r.token} <span className="text-gray-400 dark:text-gray-500">({formatCurrency(r.value)})</span>
+                </span>
+              ))}
+              <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-auto">
+                {formatTimeAgo(pos.lastUpdate)}
+              </span>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Adjust Position Modal */}
-      {showAdjustModal && selectedPosition && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 animate-slideIn">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)} {selectedPosition.token.symbol}
-              </h3>
-              <button
-                onClick={() => setShowAdjustModal(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Amount
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="0.0"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Image
-                      src={selectedPosition.token.logoURI}
-                      alt={selectedPosition.token.symbol}
-                      width={24}
-                      height={24}
-                      className="rounded-full"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end space-x-3 pt-4">
-                <button
-                  onClick={() => setShowAdjustModal(false)}
-                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAdjustPosition}
-                  disabled={isProcessing || !amount}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Processing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Confirm</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
-}; 
+};
+
+export default DeFiPositionManager;
