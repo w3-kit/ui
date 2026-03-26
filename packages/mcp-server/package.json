@@ -1,7 +1,7 @@
 {
-  "name": "w3-kit-mcp",
+  "name": "@w3-kit/mcp",
   "version": "0.1.0",
-  "description": "MCP server for the w3-kit Web3 component library",
+  "description": "MCP server for the w3-kit Web3 component library — exposes component metadata, design tokens, and guidelines to AI coding assistants",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -12,7 +12,8 @@
     "build:metadata": "tsx scripts/build-metadata.ts",
     "dev": "tsx src/index.ts --dev",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build:metadata && NODE_OPTIONS=--max-old-space-size=8192 npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
@@ -26,8 +27,17 @@
   },
   "files": [
     "dist",
-    "src/metadata"
+    "src/metadata/metadata.json",
+    "README.md"
   ],
-  "keywords": ["web3", "react", "components", "mcp", "ai"],
-  "license": "MIT"
+  "keywords": ["web3", "react", "components", "mcp", "ai", "model-context-protocol", "claude"],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnonimRosul/w3-kit"
+  },
+  "homepage": "https://w3-kit.com/docs/mcp"
 }
