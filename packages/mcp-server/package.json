@@ -1,0 +1,33 @@
+{
+  "name": "w3-kit-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the w3-kit Web3 component library",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "w3-kit-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:metadata": "tsx scripts/build-metadata.ts",
+    "dev": "tsx src/index.ts --dev",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^3.1.1"
+  },
+  "files": [
+    "dist",
+    "src/metadata"
+  ],
+  "keywords": ["web3", "react", "components", "mcp", "ai"],
+  "license": "MIT"
+}
