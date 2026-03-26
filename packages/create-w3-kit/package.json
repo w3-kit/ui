@@ -1,6 +1,6 @@
 {
   "name": "w3-kit",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "CLI tool to add Web3 components to your project",
   "main": "dist/index.js",
   "bin": {
@@ -30,8 +30,19 @@
     "web3",
     "react",
     "components",
-    "cli"
+    "cli",
+    "tailwind",
+    "shadcn",
+    "ethereum",
+    "nft",
+    "defi",
+    "mcp"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "W3-Kit Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnonimRosul/w3-kit"
+  },
+  "homepage": "https://w3-kit.com"
 } 
