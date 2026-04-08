@@ -46,17 +46,27 @@ export function ContractInteraction({
         : `Mock result for ${selectedFn.name}`;
       setResults((prev) => [{ fn: selectedFn.name, value: result, status: "success" }, ...prev]);
     } catch {
-      setResults((prev) => [{ fn: selectedFn.name, value: "Execution failed", status: "error" }, ...prev]);
+      setResults((prev) => [
+        { fn: selectedFn.name, value: "Execution failed", status: "error" },
+        ...prev,
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Contract Interaction</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+          Contract Interaction
+        </h3>
         <Input
           placeholder="Contract address (0x...)"
           value={address}
@@ -70,12 +80,15 @@ export function ContractInteraction({
         {(["view", "write"] as const).map((tab) => (
           <button
             key={tab}
-            onClick={() => { setActiveTab(tab); setSelectedFn(null); }}
+            onClick={() => {
+              setActiveTab(tab);
+              setSelectedFn(null);
+            }}
             className={cn(
               "flex items-center gap-1.5 px-4 py-2.5 text-xs font-medium transition-colors duration-150",
               activeTab === tab
                 ? "text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
-                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300",
             )}
           >
             {tab === "view" ? <Eye className="h-3.5 w-3.5" /> : <Edit3 className="h-3.5 w-3.5" />}
@@ -94,12 +107,16 @@ export function ContractInteraction({
               "flex items-center justify-between w-full px-3 py-2 rounded-lg text-left transition-colors duration-150",
               selectedFn?.name === fn.name
                 ? "bg-gray-100 dark:bg-gray-800"
-                : "hover:bg-gray-50 dark:hover:bg-gray-900"
+                : "hover:bg-gray-50 dark:hover:bg-gray-900",
             )}
           >
             <div>
-              <p className="text-sm font-medium font-mono text-gray-900 dark:text-white">{fn.name}</p>
-              {fn.description && <p className="text-xs text-gray-500 dark:text-gray-400">{fn.description}</p>}
+              <p className="text-sm font-medium font-mono text-gray-900 dark:text-white">
+                {fn.name}
+              </p>
+              {fn.description && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">{fn.description}</p>
+              )}
             </div>
             <span className="text-xs text-gray-400 dark:text-gray-500">
               {fn.inputs} {fn.inputs === 1 ? "input" : "inputs"}
@@ -129,7 +146,13 @@ export function ContractInteraction({
         {/* Execute */}
         {selectedFn && (
           <Button onClick={handleExecute} disabled={loading} size="sm" className="w-full mt-2">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Play className="h-3.5 w-3.5" /> Execute {selectedFn.name}</>}
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <Play className="h-3.5 w-3.5" /> Execute {selectedFn.name}
+              </>
+            )}
           </Button>
         )}
       </div>
@@ -143,7 +166,9 @@ export function ContractInteraction({
               <div key={i} className="flex items-center gap-2 px-4 py-2.5">
                 <StatusDot status={r.status === "success" ? "success" : "error"} />
                 <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{r.fn}</span>
-                <span className="text-xs text-gray-900 dark:text-white ml-auto truncate max-w-[200px]">{r.value}</span>
+                <span className="text-xs text-gray-900 dark:text-white ml-auto truncate max-w-[200px]">
+                  {r.value}
+                </span>
               </div>
             ))}
           </div>

@@ -29,7 +29,7 @@ function PlanCard({
         onSubscribe?.(plan.id);
       }
     },
-    [onSubscribe, plan.id]
+    [onSubscribe, plan.id],
   );
 
   return (
@@ -38,7 +38,7 @@ function PlanCard({
         "rounded-xl border bg-white dark:bg-gray-950 p-5 flex flex-col relative",
         plan.isPopular
           ? "border-gray-900 dark:border-white ring-1 ring-gray-900 dark:ring-white"
-          : "border-gray-200 dark:border-gray-800"
+          : "border-gray-200 dark:border-gray-800",
       )}
     >
       {/* Popular badge */}
@@ -85,7 +85,7 @@ function PlanCard({
                 "h-3.5 w-3.5 mt-0.5 flex-shrink-0",
                 plan.isPopular
                   ? "text-gray-900 dark:text-white"
-                  : "text-green-600 dark:text-green-400"
+                  : "text-green-600 dark:text-green-400",
               )}
             />
             <span>{feature}</span>
@@ -122,11 +122,18 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
   // Empty state
   if (!plans || plans.length === 0) {
     return (
-      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      <div
+        className={cn(
+          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+          className,
+        )}
+      >
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <CreditCard className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No plans available</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Subscription plans will appear here when configured</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Subscription plans will appear here when configured
+          </p>
         </div>
       </div>
     );
@@ -139,7 +146,7 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
           "grid gap-4",
           plans.length === 1 && "grid-cols-1 max-w-sm",
           plans.length === 2 && "grid-cols-1 sm:grid-cols-2",
-          plans.length >= 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          plans.length >= 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
         )}
       >
         {plans.map((plan) => (

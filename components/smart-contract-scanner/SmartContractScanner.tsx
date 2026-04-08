@@ -11,9 +11,27 @@ import { isValidAddress, getMockChecks } from "./utils";
 export type { SecurityCheck, SmartContractScannerProps };
 
 const statusConfig = {
-  safe: { icon: ShieldCheck, label: "Safe", color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-950", bar: "bg-green-500" },
-  warning: { icon: ShieldAlert, label: "Warning", color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950", bar: "bg-amber-500" },
-  danger: { icon: ShieldX, label: "Danger", color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-950", bar: "bg-red-500" },
+  safe: {
+    icon: ShieldCheck,
+    label: "Safe",
+    color: "text-green-600 dark:text-green-400",
+    bg: "bg-green-50 dark:bg-green-950",
+    bar: "bg-green-500",
+  },
+  warning: {
+    icon: ShieldAlert,
+    label: "Warning",
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-50 dark:bg-amber-950",
+    bar: "bg-amber-500",
+  },
+  danger: {
+    icon: ShieldX,
+    label: "Danger",
+    color: "text-red-600 dark:text-red-400",
+    bg: "bg-red-50 dark:bg-red-950",
+    bar: "bg-red-500",
+  },
 };
 
 export function SmartContractScanner({ className, onScan }: SmartContractScannerProps) {
@@ -40,13 +58,20 @@ export function SmartContractScanner({ className, onScan }: SmartContractScanner
     if (e.key === "Enter" && isValid && !loading) handleScan();
   };
 
-  const score = scanned ? Math.round((checks.filter((c) => c.status === "safe").length / checks.length) * 100) : 0;
+  const score = scanned
+    ? Math.round((checks.filter((c) => c.status === "safe").length / checks.length) * 100)
+    : 0;
   const safeCount = checks.filter((c) => c.status === "safe").length;
   const warnCount = checks.filter((c) => c.status === "warning").length;
   const dangerCount = checks.filter((c) => c.status === "danger").length;
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -61,12 +86,19 @@ export function SmartContractScanner({ className, onScan }: SmartContractScanner
             <Input
               placeholder="Contract address (0x...)"
               value={address}
-              onChange={(e) => { setAddress(e.target.value); setTouched(true); }}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                setTouched(true);
+              }}
               onKeyDown={handleKeyDown}
               className={cn("font-mono text-xs", showError && "border-red-300 dark:border-red-800")}
             />
             <Button onClick={handleScan} disabled={!isValid || loading} size="sm">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Search className="h-4 w-4" />
+              )}
             </Button>
           </div>
           {showError && (
@@ -101,15 +133,27 @@ export function SmartContractScanner({ className, onScan }: SmartContractScanner
                   Security Score
                 </p>
                 <div className="flex items-center gap-2 text-[11px]">
-                  {safeCount > 0 && <span className="text-green-600 dark:text-green-400">{safeCount} safe</span>}
-                  {warnCount > 0 && <span className="text-amber-600 dark:text-amber-400">{warnCount} warning</span>}
-                  {dangerCount > 0 && <span className="text-red-600 dark:text-red-400">{dangerCount} danger</span>}
+                  {safeCount > 0 && (
+                    <span className="text-green-600 dark:text-green-400">{safeCount} safe</span>
+                  )}
+                  {warnCount > 0 && (
+                    <span className="text-amber-600 dark:text-amber-400">{warnCount} warning</span>
+                  )}
+                  {dangerCount > 0 && (
+                    <span className="text-red-600 dark:text-red-400">{dangerCount} danger</span>
+                  )}
                 </div>
               </div>
-              <p className={cn(
-                "text-2xl font-semibold tabular-nums",
-                score >= 80 ? "text-green-600 dark:text-green-400" : score >= 50 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
-              )}>
+              <p
+                className={cn(
+                  "text-2xl font-semibold tabular-nums",
+                  score >= 80
+                    ? "text-green-600 dark:text-green-400"
+                    : score >= 50
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-red-600 dark:text-red-400",
+                )}
+              >
                 {score}/100
               </p>
               {/* Score bar */}
@@ -117,7 +161,7 @@ export function SmartContractScanner({ className, onScan }: SmartContractScanner
                 <div
                   className={cn(
                     "h-full rounded-full transition-all duration-500",
-                    score >= 80 ? "bg-green-500" : score >= 50 ? "bg-amber-500" : "bg-red-500"
+                    score >= 80 ? "bg-green-500" : score >= 50 ? "bg-amber-500" : "bg-red-500",
                   )}
                   style={{ width: `${score}%` }}
                 />
@@ -130,18 +174,35 @@ export function SmartContractScanner({ className, onScan }: SmartContractScanner
                 const config = statusConfig[check.status];
                 const Icon = config.icon;
                 return (
-                  <div key={check.id} className="flex items-start gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-150">
-                    <div className={cn("flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5", config.bg)}>
+                  <div
+                    key={check.id}
+                    className="flex items-start gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-150"
+                  >
+                    <div
+                      className={cn(
+                        "flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5",
+                        config.bg,
+                      )}
+                    >
                       <Icon className={cn("h-3.5 w-3.5", config.color)} />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{check.name}</p>
-                        <span className={cn("text-[10px] font-medium uppercase tracking-wider", config.color)}>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {check.name}
+                        </p>
+                        <span
+                          className={cn(
+                            "text-[10px] font-medium uppercase tracking-wider",
+                            config.color,
+                          )}
+                        >
                           {config.label}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{check.description}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        {check.description}
+                      </p>
                     </div>
                   </div>
                 );

@@ -1,17 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import {
-  MultisigWalletProps,
-  Transaction,
-  FormErrors,
-} from "./types";
-import {
-  formatAddress,
-  formatTimestamp,
-  isValidAddress,
-  isValidHexData,
-} from "./utils";
+import { MultisigWalletProps, Transaction, FormErrors } from "./types";
+import { formatAddress, formatTimestamp, isValidAddress, isValidHexData } from "./utils";
 
 export function MultisigWallet({
   walletAddress,
@@ -24,14 +15,10 @@ export function MultisigWallet({
   className = "",
 }: MultisigWalletProps) {
   const [isProposing, setIsProposing] = useState(false);
-  const [activeTab, setActiveTab] = useState<"pending" | "executed" | "all">(
-    "pending"
-  );
+  const [activeTab, setActiveTab] = useState<"pending" | "executed" | "all">("pending");
   const [expandedTx, setExpandedTx] = useState<string | null>(null);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
-  const [newTransactions, setNewTransactions] = useState<Set<string>>(
-    new Set()
-  );
+  const [newTransactions, setNewTransactions] = useState<Set<string>>(new Set());
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const lastTransactionRef = useRef<HTMLDivElement>(null);
   const [newTx, setNewTx] = useState({
@@ -53,9 +40,7 @@ export function MultisigWallet({
     if (transactions.length > 0) {
       const latestTx = transactions[0];
       if (latestTx && !newTransactions.has(latestTx.id)) {
-        setNewTransactions(
-          (prev) => new Set(Array.from(prev).concat(latestTx.id))
-        );
+        setNewTransactions((prev) => new Set(Array.from(prev).concat(latestTx.id)));
       }
     }
   }, [transactions, newTransactions]);
@@ -153,9 +138,7 @@ export function MultisigWallet({
       if (!tx) return;
 
       const currentSigner = signers[0]?.address;
-      const hasAlreadyApproved = tx.signers.find(
-        (s) => s.address === currentSigner
-      )?.hasApproved;
+      const hasAlreadyApproved = tx.signers.find((s) => s.address === currentSigner)?.hasApproved;
 
       if (hasAlreadyApproved) {
         return;
@@ -165,16 +148,14 @@ export function MultisigWallet({
         if (tx.id === txId) {
           const newApprovals = tx.approvals + 1;
           const newStatus =
-            newApprovals >= tx.requiredApprovals
-              ? ("executed" as const)
-              : ("pending" as const);
+            newApprovals >= tx.requiredApprovals ? ("executed" as const) : ("pending" as const);
 
           return {
             ...tx,
             approvals: newApprovals,
             status: newStatus,
             signers: tx.signers.map((s) =>
-              s.address === currentSigner ? { ...s, hasApproved: true } : s
+              s.address === currentSigner ? { ...s, hasApproved: true } : s,
             ),
           };
         }
@@ -246,9 +227,7 @@ export function MultisigWallet({
               Multi-Signature Wallet
             </h2>
             <div className="flex items-center mt-2 space-x-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                Address:
-              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">Address:</span>
               <div className="group relative">
                 <code
                   onClick={() => handleCopyAddress(walletAddress)}
@@ -269,9 +248,7 @@ export function MultisigWallet({
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              Required Approvals
-            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Required Approvals</div>
             <div className="text-2xl font-semibold text-gray-900 dark:text-white">
               {requiredApprovals}/{signers.length}
             </div>
@@ -282,9 +259,7 @@ export function MultisigWallet({
       {/* Signers */}
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-            Signers
-          </h3>
+          <h3 className="text-sm font-medium text-gray-900 dark:text-white">Signers</h3>
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {signers.length} signer{signers.length !== 1 ? "s" : ""}
           </span>
@@ -399,8 +374,8 @@ export function MultisigWallet({
               {activeTab === "pending"
                 ? "No pending transactions"
                 : activeTab === "executed"
-                ? "No executed transactions"
-                : "No transactions found"}
+                  ? "No executed transactions"
+                  : "No transactions found"}
             </div>
           )}
         </div>
@@ -467,9 +442,7 @@ export function MultisigWallet({
                   placeholder="Enter transaction description"
                 />
                 {formErrors.description && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.description}
-                  </p>
+                  <p className="text-xs text-red-500 mt-1">{formErrors.description}</p>
                 )}
               </div>
 
@@ -487,16 +460,10 @@ export function MultisigWallet({
                   className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
                     text-gray-900 dark:text-white
                     focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${
-                      formErrors.to
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
-                    }`}
+                    ${formErrors.to ? "border-red-500" : "border-gray-200 dark:border-gray-700"}`}
                   placeholder="0x..."
                 />
-                {formErrors.to && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.to}</p>
-                )}
+                {formErrors.to && <p className="text-xs text-red-500 mt-1">{formErrors.to}</p>}
               </div>
 
               <div className="space-y-2">
@@ -514,9 +481,7 @@ export function MultisigWallet({
                     text-gray-900 dark:text-white
                     focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
                     ${
-                      formErrors.value
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
+                      formErrors.value ? "border-red-500" : "border-gray-200 dark:border-gray-700"
                     }`}
                   placeholder="0.0"
                   step="0.0001"
@@ -541,16 +506,10 @@ export function MultisigWallet({
                   className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
                     text-gray-900 dark:text-white
                     focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${
-                      formErrors.data
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
-                    }`}
+                    ${formErrors.data ? "border-red-500" : "border-gray-200 dark:border-gray-700"}`}
                   placeholder="0x"
                 />
-                {formErrors.data && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.data}</p>
-                )}
+                {formErrors.data && <p className="text-xs text-red-500 mt-1">{formErrors.data}</p>}
               </div>
             </div>
 
@@ -677,8 +636,8 @@ function TransactionCard({
                 tx.status === "executed"
                   ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                   : tx.status === "rejected"
-                  ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
               }`}
             >
               {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
@@ -715,9 +674,7 @@ function TransactionCard({
                       flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
                     title={signer.name || formatAddress(signer.address)}
                   >
-                    <span className="text-xs font-medium">
-                      {signer.name?.[0] || "S"}
-                    </span>
+                    <span className="text-xs font-medium">{signer.name?.[0] || "S"}</span>
                   </div>
                 ))}
             </div>
@@ -726,9 +683,7 @@ function TransactionCard({
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-right">
-              Proposed {formatTimestamp(tx.timestamp)}
-            </span>
+            <span className="text-right">Proposed {formatTimestamp(tx.timestamp)}</span>
             {tx.status === "pending" && (
               <div className="flex gap-2">
                 <button
@@ -739,8 +694,7 @@ function TransactionCard({
                   disabled={
                     isApproving === tx.id ||
                     isRejecting === tx.id ||
-                    tx.signers.find((s) => s.address === signers[0]?.address)
-                      ?.hasApproved ||
+                    tx.signers.find((s) => s.address === signers[0]?.address)?.hasApproved ||
                     (tx.status as string) !== "pending"
                   }
                   className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
@@ -774,9 +728,7 @@ function TransactionCard({
                     handleReject(tx.id);
                   }}
                   disabled={
-                    isApproving === tx.id ||
-                    isRejecting === tx.id ||
-                    tx.status !== "pending"
+                    isApproving === tx.id || isRejecting === tx.id || tx.status !== "pending"
                   }
                   className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
                     transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -815,15 +767,10 @@ function TransactionCard({
       >
         <div className="px-4 pb-4">
           <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-            <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
-              Approvals
-            </h5>
+            <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">Approvals</h5>
             <div className="space-y-2">
               {tx.signers.map((signer) => (
-                <div
-                  key={signer.address}
-                  className="flex items-center justify-between text-sm"
-                >
+                <div key={signer.address} className="flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-2">
                     <div
                       className={`w-4 h-4 rounded-full flex items-center justify-center
@@ -856,15 +803,15 @@ function TransactionCard({
                         tx.status === "rejected"
                           ? "text-red-700 dark:text-red-400"
                           : signer.hasApproved
-                          ? "text-green-700 dark:text-green-400"
-                          : "text-gray-500 dark:text-gray-400"
+                            ? "text-green-700 dark:text-green-400"
+                            : "text-gray-500 dark:text-gray-400"
                       }`}
                     >
                       {tx.status === "rejected"
                         ? "Rejected"
                         : signer.hasApproved
-                        ? "Approved"
-                        : "Pending"}
+                          ? "Approved"
+                          : "Pending"}
                     </span>
                   </div>
                 </div>
@@ -881,8 +828,7 @@ function TransactionCard({
               disabled={
                 isApproving === tx.id ||
                 isRejecting === tx.id ||
-                tx.signers.find((s) => s.address === signers[0]?.address)
-                  ?.hasApproved ||
+                tx.signers.find((s) => s.address === signers[0]?.address)?.hasApproved ||
                 !["pending"].includes(tx.status)
               }
               className="flex-1 px-3 py-1.5 bg-gray-900 dark:bg-gray-100 text-white
@@ -896,11 +842,7 @@ function TransactionCard({
                 e.stopPropagation();
                 handleReject(tx.id);
               }}
-              disabled={
-                isApproving === tx.id ||
-                isRejecting === tx.id ||
-                tx.status !== "pending"
-              }
+              disabled={isApproving === tx.id || isRejecting === tx.id || tx.status !== "pending"}
               className="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700
                 rounded text-sm text-gray-900 dark:text-white hover:bg-gray-50
                 dark:hover:bg-gray-700 transition-all duration-200"

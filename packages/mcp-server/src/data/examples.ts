@@ -4,7 +4,7 @@ interface ComponentExample {
 }
 
 export const EXAMPLES: Record<string, ComponentExample> = {
-  'token-card': {
+  "token-card": {
     basic: `import { TokenCard } from '@/components/token-card';
 
 <TokenCard
@@ -41,7 +41,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   onFavoriteToggle={(token, isFavorite) => console.log(token.symbol, isFavorite)}
 />`,
   },
-  'price-ticker': {
+  "price-ticker": {
     basic: `import { PriceTicker } from '@/components/price-ticker';
 
 <PriceTicker symbol="ETH" />`,
@@ -54,7 +54,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   showMarketCap={true}
 />`,
   },
-  'wallet-balance': {
+  "wallet-balance": {
     basic: `import { WalletBalance } from '@/components/wallet-balance';
 
 <WalletBalance address="0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18" />`,
@@ -66,7 +66,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   networks={[1, 137, 42161]}
 />`,
   },
-  'gas-calculator': {
+  "gas-calculator": {
     basic: `import { GasCalculator } from '@/components/gas-calculator';
 
 <GasCalculator />`,
@@ -78,7 +78,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   onGasSelect={(gas, price) => console.log('Gas:', gas, 'Price:', price)}
 />`,
   },
-  'token-swap': {
+  "token-swap": {
     basic: `import { TokenSwap } from '@/components/token-swap';
 
 <TokenSwap />`,
@@ -91,7 +91,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   onSwapComplete={(tx) => console.log('Swap tx:', tx)}
 />`,
   },
-  'connect-wallet': {
+  "connect-wallet": {
     basic: `import { ConnectWallet } from '@/components/connect-wallet';
 
 <ConnectWallet />`,
@@ -103,7 +103,7 @@ export const EXAMPLES: Record<string, ComponentExample> = {
   supportedWallets={['metamask', 'walletconnect', 'coinbase']}
 />`,
   },
-  'staking-interface': {
+  "staking-interface": {
     basic: `import { StakingInterface } from '@/components/staking-interface';
 
 <StakingInterface

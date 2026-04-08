@@ -5,13 +5,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Token, TokenSwapWidgetProps } from "./types";
 import { animationStyles, defaultTokens, getMockExchangeRate } from "./utils";
 
-const TokenIcon = ({
-  token,
-  size = "md",
-}: {
-  token?: Token;
-  size?: "sm" | "md" | "lg";
-}) => {
+const TokenIcon = ({ token, size = "md" }: { token?: Token; size?: "sm" | "md" | "lg" }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -26,9 +20,7 @@ const TokenIcon = ({
       <div
         className={`${sizeClasses[size]} rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-medium overflow-hidden flex-shrink-0 animate-fadeIn`}
       >
-        <span className="text-xs">
-          {token?.symbol.substring(0, 2).toUpperCase() || "??"}
-        </span>
+        <span className="text-xs">{token?.symbol.substring(0, 2).toUpperCase() || "??"}</span>
       </div>
     );
   }
@@ -71,9 +63,7 @@ export function TokenSwapWidget({
   const [slippage, setSlippage] = useState<number>(defaultSlippage);
   const [loading, setLoading] = useState<boolean>(false);
   const [showSlippageSettings, setShowSlippageSettings] = useState(false);
-  const [activeSelector, setActiveSelector] = useState<"from" | "to" | null>(
-    null
-  );
+  const [activeSelector, setActiveSelector] = useState<"from" | "to" | null>(null);
   const [animateSwitch, setAnimateSwitch] = useState(false);
 
   useEffect(() => {
@@ -88,13 +78,8 @@ export function TokenSwapWidget({
 
   useEffect(() => {
     if (fromToken && toToken && fromAmount) {
-      const mockExchangeRate = getMockExchangeRate(
-        fromToken.symbol,
-        toToken.symbol
-      );
-      const calculatedAmount = (
-        parseFloat(fromAmount) * mockExchangeRate
-      ).toFixed(6);
+      const mockExchangeRate = getMockExchangeRate(fromToken.symbol, toToken.symbol);
+      const calculatedAmount = (parseFloat(fromAmount) * mockExchangeRate).toFixed(6);
       setToAmount(calculatedAmount);
     } else {
       setToAmount("");
@@ -131,13 +116,8 @@ export function TokenSwapWidget({
       setToToken(tempFromToken);
 
       if (tempFromAmount) {
-        const mockExchangeRate = getMockExchangeRate(
-          tempToToken.symbol,
-          tempFromToken.symbol
-        );
-        const newFromAmount = (
-          parseFloat(tempFromAmount) * mockExchangeRate
-        ).toFixed(6);
+        const mockExchangeRate = getMockExchangeRate(tempToToken.symbol, tempFromToken.symbol);
+        const newFromAmount = (parseFloat(tempFromAmount) * mockExchangeRate).toFixed(6);
         setFromAmount(newFromAmount);
       } else {
         setFromAmount("");
@@ -257,17 +237,13 @@ export function TokenSwapWidget({
             <div className="grid grid-cols-2 gap-2">
               {tokens
                 .filter(
-                  (t) =>
-                    t.symbol !==
-                    (label === "From" ? toToken?.symbol : fromToken?.symbol)
+                  (t) => t.symbol !== (label === "From" ? toToken?.symbol : fromToken?.symbol),
                 )
                 .map((t) => (
                   <button
                     key={t.symbol}
                     onClick={() =>
-                      label === "From"
-                        ? handleFromTokenSelect(t)
-                        : handleToTokenSelect(t)
+                      label === "From" ? handleFromTokenSelect(t) : handleToTokenSelect(t)
                     }
                     className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
                       token?.symbol === t.symbol
@@ -337,9 +313,7 @@ export function TokenSwapWidget({
           value={fromAmount}
           onChange={handleFromAmountChange}
           token={fromToken}
-          onSelectToken={() =>
-            setActiveSelector(activeSelector === "from" ? null : "from")
-          }
+          onSelectToken={() => setActiveSelector(activeSelector === "from" ? null : "from")}
           selectorActive={activeSelector === "from"}
           label="From"
         />
@@ -362,9 +336,7 @@ export function TokenSwapWidget({
           onChange={setToAmount}
           token={toToken}
           isReadOnly={true}
-          onSelectToken={() =>
-            setActiveSelector(activeSelector === "to" ? null : "to")
-          }
+          onSelectToken={() => setActiveSelector(activeSelector === "to" ? null : "to")}
           selectorActive={activeSelector === "to"}
           label="To"
         />
@@ -382,9 +354,7 @@ export function TokenSwapWidget({
           className={`space-y-2 rounded-xl text-sm bg-gray-50 dark:bg-gray-700/50 transition-height overflow-hidden
             ${showSlippageSettings ? "max-h-40 opacity-100 p-3 sm:p-4" : "max-h-0 opacity-0 p-0"}`}
         >
-          <label className="block font-medium opacity-80 mb-2">
-            Slippage Tolerance
-          </label>
+          <label className="block font-medium opacity-80 mb-2">Slippage Tolerance</label>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {[0.1, 0.5, 1.0].map((value) => (
               <button

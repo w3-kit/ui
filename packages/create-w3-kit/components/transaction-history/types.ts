@@ -1,4 +1,4 @@
-export type TransactionStatus = 'pending' | 'success' | 'failed';
+export type TransactionStatus = "pending" | "success" | "failed";
 
 export interface Transaction {
   hash: string;
@@ -18,4 +18,4 @@ export interface TransactionHistoryProps {
   onTransactionClick?: (transaction: Transaction) => void;
   className?: string;
   itemsPerPage?: number;
-} 
+}

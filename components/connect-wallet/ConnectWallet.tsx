@@ -12,16 +12,11 @@ export interface ConnectWalletButtonProps {
   className?: string;
 }
 
-export function ConnectWalletButton({
-  onConnect,
-  onError,
-  className,
-}: ConnectWalletButtonProps) {
+export function ConnectWalletButton({ onConnect, onError, className }: ConnectWalletButtonProps) {
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectedAddress, setConnectedAddress] = useState<string | null>(null);
 
-  const formatAddress = (addr: string) =>
-    `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
   const handleConnect = useCallback(async () => {
     if (isConnecting) return;
@@ -41,8 +36,7 @@ export function ConnectWalletButton({
         onConnect?.(accounts[0]);
       }
     } catch (err) {
-      const error =
-        err instanceof Error ? err : new Error("Failed to connect wallet");
+      const error = err instanceof Error ? err : new Error("Failed to connect wallet");
       onError?.(error);
     } finally {
       setIsConnecting(false);
@@ -55,11 +49,7 @@ export function ConnectWalletButton({
 
   if (connectedAddress) {
     return (
-      <Button
-        variant="outline"
-        onClick={handleDisconnect}
-        className={cn("gap-2", className)}
-      >
+      <Button variant="outline" onClick={handleDisconnect} className={cn("gap-2", className)}>
         <Wallet className="h-4 w-4" />
         <span className="font-mono text-xs">{formatAddress(connectedAddress)}</span>
       </Button>
@@ -67,16 +57,8 @@ export function ConnectWalletButton({
   }
 
   return (
-    <Button
-      onClick={handleConnect}
-      disabled={isConnecting}
-      className={cn("gap-2", className)}
-    >
-      {isConnecting ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Wallet className="h-4 w-4" />
-      )}
+    <Button onClick={handleConnect} disabled={isConnecting} className={cn("gap-2", className)}>
+      {isConnecting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className="h-4 w-4" />}
       {isConnecting ? "Connecting..." : "Connect Wallet"}
     </Button>
   );

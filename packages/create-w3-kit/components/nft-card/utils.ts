@@ -1,18 +1,18 @@
 export function formatAddress(address: string): string {
-  if (!address) return '';
+  if (!address) return "";
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
 export function getChainName(chainId: number): string {
   switch (chainId) {
     case 1:
-      return 'Ethereum';
+      return "Ethereum";
     case 137:
-      return 'Polygon';
+      return "Polygon";
     case 56:
-      return 'BSC';
+      return "BSC";
     default:
-      return 'Unknown Chain';
+      return "Unknown Chain";
   }
 }
 
@@ -25,6 +25,6 @@ export function getExplorerUrl(chainId: number, address: string): string {
     case 56:
       return `https://bscscan.com/address/${address}`;
     default:
-      return '#';
+      return "#";
   }
-} 
+}

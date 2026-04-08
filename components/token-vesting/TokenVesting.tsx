@@ -12,16 +12,29 @@ export type { VestingSchedule, TokenVestingProps };
 
 const statusVariant = { active: "success", completed: "default", pending: "warning" } as const;
 
-export const TokenVesting: React.FC<TokenVestingProps> = ({ vestingSchedules, onClaimTokens, className }) => {
+export const TokenVesting: React.FC<TokenVestingProps> = ({
+  vestingSchedules,
+  onClaimTokens,
+  className,
+}) => {
   const [claimingId, setClaimingId] = useState<string | null>(null);
 
   const handleClaim = async (id: string) => {
     setClaimingId(id);
-    try { await onClaimTokens(id); } finally { setClaimingId(null); }
+    try {
+      await onClaimTokens(id);
+    } finally {
+      setClaimingId(null);
+    }
   };
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <Clock className="h-4 w-4 text-gray-500" />
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Token Vesting</h3>
@@ -35,7 +48,9 @@ export const TokenVesting: React.FC<TokenVestingProps> = ({ vestingSchedules, on
             <div key={schedule.id} className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{schedule.tokenSymbol}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {schedule.tokenSymbol}
+                  </p>
                   <Badge variant={statusVariant[schedule.status]}>{schedule.status}</Badge>
                 </div>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -45,7 +60,10 @@ export const TokenVesting: React.FC<TokenVestingProps> = ({ vestingSchedules, on
 
               {/* Progress bar */}
               <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                <div className="h-full bg-gray-900 dark:bg-white rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+                <div
+                  className="h-full bg-gray-900 dark:bg-white rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
 
               <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
@@ -54,8 +72,17 @@ export const TokenVesting: React.FC<TokenVestingProps> = ({ vestingSchedules, on
               </div>
 
               {canClaim && (
-                <Button onClick={() => handleClaim(schedule.id)} disabled={claimingId === schedule.id} size="sm" className="w-full">
-                  {claimingId === schedule.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Claim Tokens"}
+                <Button
+                  onClick={() => handleClaim(schedule.id)}
+                  disabled={claimingId === schedule.id}
+                  size="sm"
+                  className="w-full"
+                >
+                  {claimingId === schedule.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Claim Tokens"
+                  )}
                 </Button>
               )}
             </div>

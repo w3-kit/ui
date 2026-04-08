@@ -19,14 +19,14 @@ Add to your `.mcp.json` (Claude Code, Cursor, etc.):
 
 ## Available Tools
 
-| Tool | Description |
-|------|-------------|
-| `list_components` | List all w3-kit components, filter by category |
-| `get_component` | Get props, types, source code for a component |
-| `get_design_tokens` | Get colors, spacing, typography from Tailwind config |
-| `get_design_guidelines` | Get design rules (spacing, dark mode, Vercel style) |
-| `generate_composition` | Generate a page composing multiple components |
-| `get_example` | Get basic or full usage examples |
+| Tool                    | Description                                          |
+| ----------------------- | ---------------------------------------------------- |
+| `list_components`       | List all w3-kit components, filter by category       |
+| `get_component`         | Get props, types, source code for a component        |
+| `get_design_tokens`     | Get colors, spacing, typography from Tailwind config |
+| `get_design_guidelines` | Get design rules (spacing, dark mode, Vercel style)  |
+| `generate_composition`  | Generate a page composing multiple components        |
+| `get_example`           | Get basic or full usage examples                     |
 
 ## Categories
 

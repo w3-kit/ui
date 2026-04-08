@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import {
@@ -11,9 +11,9 @@ import {
   Wallet,
   Activity,
   Shield,
-  Coins
+  Coins,
 } from "lucide-react";
-import { PositionData, AdjustAction, DeFiPositionManagerProps } from './types';
+import { PositionData, AdjustAction, DeFiPositionManagerProps } from "./types";
 import {
   getHealthFactorColor,
   getRiskColor,
@@ -22,7 +22,7 @@ import {
   buttonAnimation,
   modalAnimation,
   modalContentAnimation,
-} from './utils';
+} from "./utils";
 
 export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
   positions,
@@ -54,7 +54,9 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">DeFi Positions</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your DeFi investments</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Manage your DeFi investments
+          </p>
         </div>
         <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 px-4 py-2 rounded-lg">
           <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -106,7 +108,9 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                 <div className="font-medium text-gray-900 dark:text-white">
                   ${position.value.toFixed(2)}
                 </div>
-                <div className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}>
+                <div
+                  className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}
+                >
                   <Shield className="w-3 h-3" />
                   <span>Health: {position.healthFactor.toFixed(2)}</span>
                 </div>
@@ -119,12 +123,17 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">APY</div>
                 <div className="font-medium text-gray-900 dark:text-white flex items-center space-x-1">
                   <Activity className="w-4 h-4" />
-                  <span>{position.apy > 0 ? "+" : ""}{position.apy.toFixed(2)}%</span>
+                  <span>
+                    {position.apy > 0 ? "+" : ""}
+                    {position.apy.toFixed(2)}%
+                  </span>
                 </div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Risk Level</div>
-                <div className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}>
+                <div
+                  className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}
+                >
                   <AlertTriangle className="w-4 h-4" />
                   <span>{position.risk.charAt(0).toUpperCase() + position.risk.slice(1)}</span>
                 </div>
@@ -187,11 +196,16 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 
       {/* Adjust Position Modal */}
       {showAdjustModal && selectedPosition && (
-        <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${modalAnimation}`}>
-          <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 ${modalContentAnimation}`}>
+        <div
+          className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${modalAnimation}`}
+        >
+          <div
+            className={`bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 ${modalContentAnimation}`}
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)} {selectedPosition.token.symbol}
+                {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)}{" "}
+                {selectedPosition.token.symbol}
               </h3>
               <button
                 onClick={() => setShowAdjustModal(false)}

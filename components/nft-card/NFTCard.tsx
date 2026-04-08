@@ -19,7 +19,7 @@ export function NFTCard({ nft, onNFTClick, className }: NFTCardProps) {
         onNFTClick?.(nft);
       }
     },
-    [onNFTClick, nft]
+    [onNFTClick, nft],
   );
 
   return (
@@ -29,8 +29,9 @@ export function NFTCard({ nft, onNFTClick, className }: NFTCardProps) {
       onKeyDown={isClickable ? handleKeyDown : undefined}
       className={cn(
         "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden transition-colors duration-150",
-        isClickable && "cursor-pointer hover:border-gray-300 dark:hover:border-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2",
-        className
+        isClickable &&
+          "cursor-pointer hover:border-gray-300 dark:hover:border-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2",
+        className,
       )}
       onClick={() => onNFTClick?.(nft)}
     >
@@ -44,7 +45,7 @@ export function NFTCard({ nft, onNFTClick, className }: NFTCardProps) {
             onError={() => setImageError(true)}
             className={cn(
               "w-full h-full object-cover transition-opacity duration-150",
-              isImageLoaded ? "opacity-100" : "opacity-0"
+              isImageLoaded ? "opacity-100" : "opacity-0",
             )}
           />
         ) : (
@@ -59,9 +60,7 @@ export function NFTCard({ nft, onNFTClick, className }: NFTCardProps) {
 
       {/* Content */}
       <div className="px-4 pt-3 pb-4">
-        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-          {nft.name}
-        </p>
+        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{nft.name}</p>
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
           {nft.collection && <>{nft.collection} · </>}
           <span className="font-mono">#{nft.tokenId}</span>

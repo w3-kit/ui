@@ -30,7 +30,11 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-export function ENSResolver({ onResolve, className, resolver = defaultResolver }: ENSResolverProps) {
+export function ENSResolver({
+  onResolve,
+  className,
+  resolver = defaultResolver,
+}: ENSResolverProps) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ENSResult | null>(null);
@@ -38,7 +42,9 @@ export function ENSResolver({ onResolve, className, resolver = defaultResolver }
 
   const handleResolve = async () => {
     if (!query.trim()) return;
-    setLoading(true); setError(null); setResult(null);
+    setLoading(true);
+    setError(null);
+    setResult(null);
     try {
       const r = await resolver(query.trim());
       setResult(r);
@@ -51,7 +57,12 @@ export function ENSResolver({ onResolve, className, resolver = defaultResolver }
   };
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -70,7 +81,11 @@ export function ENSResolver({ onResolve, className, resolver = defaultResolver }
             className="font-mono text-xs"
           />
           <Button onClick={handleResolve} disabled={!query || loading} size="sm">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Search className="h-4 w-4" />
+            )}
           </Button>
         </div>
 
@@ -100,15 +115,23 @@ export function ENSResolver({ onResolve, className, resolver = defaultResolver }
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {result.avatar ? (
-                    <img src={result.avatar} alt="" className="w-8 h-8 rounded-full object-cover bg-gray-200 dark:bg-gray-700" />
+                    <img
+                      src={result.avatar}
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover bg-gray-200 dark:bg-gray-700"
+                    />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-medium text-gray-500 dark:text-gray-400">
                       {result.ensName.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div>
-                    <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">ENS Name</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{result.ensName}</p>
+                    <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
+                      ENS Name
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {result.ensName}
+                    </p>
                   </div>
                 </div>
                 <CopyButton text={result.ensName} />
@@ -119,8 +142,12 @@ export function ENSResolver({ onResolve, className, resolver = defaultResolver }
             {result.address && (
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">Address</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white font-mono">{truncateAddress(result.address)}</p>
+                  <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
+                    Address
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white font-mono">
+                    {truncateAddress(result.address)}
+                  </p>
                 </div>
                 <CopyButton text={result.address} />
               </div>

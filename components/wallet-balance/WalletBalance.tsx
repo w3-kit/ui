@@ -23,17 +23,24 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
         onTokenClick?.(token);
       }
     },
-    [onTokenClick]
+    [onTokenClick],
   );
 
   // Empty state
   if (!tokens || tokens.length === 0) {
     return (
-      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      <div
+        className={cn(
+          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+          className,
+        )}
+      >
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <Wallet className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No tokens found</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Connect a wallet to view your balances</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Connect a wallet to view your balances
+          </p>
         </div>
       </div>
     );
@@ -41,35 +48,49 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
 
   const totalValue = tokens.reduce(
     (sum, token) => sum + Number(token.balance) * (token.price || 0),
-    0
+    0,
   );
 
   // Compute weighted 24h change across all tokens
-  const totalChange24h = totalValue > 0
-    ? tokens.reduce((sum, token) => {
-        const value = Number(token.balance) * (token.price || 0);
-        const change = token.priceChange24h ?? 0;
-        return sum + (value / totalValue) * change;
-      }, 0)
-    : 0;
+  const totalChange24h =
+    totalValue > 0
+      ? tokens.reduce((sum, token) => {
+          const value = Number(token.balance) * (token.price || 0);
+          const change = token.priceChange24h ?? 0;
+          return sum + (value / totalValue) * change;
+        }, 0)
+      : 0;
 
   const hasAnyChange = tokens.some((t) => t.priceChange24h != null);
   const isPositive = totalChange24h >= 0;
 
   const sortedTokens = [...tokens].sort(
-    (a, b) =>
-      Number(b.balance) * (b.price || 0) - Number(a.balance) * (a.price || 0)
+    (a, b) => Number(b.balance) * (b.price || 0) - Number(a.balance) * (a.price || 0),
   );
 
   // Generate colors for allocation bar (deterministic per symbol)
   const tokenColors: Record<string, string> = {};
-  const palette = ["#627EEA", "#F7931A", "#2775CA", "#26A17B", "#00FFA3", "#E84142", "#8247E5", "#2B6CB0"];
+  const palette = [
+    "#627EEA",
+    "#F7931A",
+    "#2775CA",
+    "#26A17B",
+    "#00FFA3",
+    "#E84142",
+    "#8247E5",
+    "#2B6CB0",
+  ];
   sortedTokens.forEach((token, i) => {
     tokenColors[token.symbol] = palette[i % palette.length];
   });
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-4 py-4 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -83,10 +104,16 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
             <span
               className={cn(
                 "flex items-center gap-0.5 text-xs font-medium",
-                isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                isPositive
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400",
               )}
             >
-              {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+              {isPositive ? (
+                <TrendingUp className="h-3 w-3" />
+              ) : (
+                <TrendingDown className="h-3 w-3" />
+              )}
               {formatPercent(totalChange24h)}
               <span className="text-gray-400 dark:text-gray-500 font-normal ml-0.5">24h</span>
             </span>
@@ -106,7 +133,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                 }}
                 className={cn(
                   "h-full transition-opacity duration-150",
-                  hoveredSymbol && hoveredSymbol !== token.symbol && "opacity-30"
+                  hoveredSymbol && hoveredSymbol !== token.symbol && "opacity-30",
                 )}
                 onMouseEnter={() => setHoveredSymbol(token.symbol)}
                 onMouseLeave={() => setHoveredSymbol(null)}
@@ -134,8 +161,9 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
               onKeyDown={isClickable ? (e) => handleKeyDown(e, token) : undefined}
               className={cn(
                 "flex items-center justify-between px-4 py-3 transition-all duration-150",
-                isClickable && "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
-                isFaded && "opacity-50"
+                isClickable &&
+                  "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
+                isFaded && "opacity-50",
               )}
               onClick={() => onTokenClick?.(token)}
               onMouseEnter={() => setHoveredSymbol(token.symbol)}
@@ -148,7 +176,9 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                 />
                 <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="md" />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{token.symbol}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {token.symbol}
+                  </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                     {token.name} · {formatBalance(token.balance)} · {pct}%
                   </p>
@@ -163,10 +193,16 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   <p
                     className={cn(
                       "text-xs tabular-nums flex items-center justify-end gap-0.5",
-                      assetPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                      assetPositive
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400",
                     )}
                   >
-                    {assetPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {assetPositive ? (
+                      <TrendingUp className="h-3 w-3" />
+                    ) : (
+                      <TrendingDown className="h-3 w-3" />
+                    )}
                     {formatPercent(token.priceChange24h!)}
                   </p>
                 )}

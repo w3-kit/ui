@@ -10,7 +10,17 @@ import { formatCurrency, formatPercent } from "./utils";
 export type { Asset, AssetPortfolioProps };
 
 /** Inline SVG sparkline with gradient fill and end dot. */
-function Sparkline({ data, color, id, className }: { data: number[]; color: string; id: string; className?: string }) {
+function Sparkline({
+  data,
+  color,
+  id,
+  className,
+}: {
+  data: number[];
+  color: string;
+  id: string;
+  className?: string;
+}) {
   if (!data || data.length < 2) return null;
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -38,7 +48,13 @@ function Sparkline({ data, color, id, className }: { data: number[]; color: stri
         </linearGradient>
       </defs>
       <path d={areaPath} fill={`url(#${gradId})`} />
-      <path d={linePath} stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d={linePath}
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       <circle cx={last.x} cy={last.y} r="2" fill={color} />
     </svg>
   );
@@ -61,24 +77,36 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
         onAssetClick?.(asset);
       }
     },
-    [onAssetClick]
+    [onAssetClick],
   );
 
   // #7 — Empty state
   if (!assets || assets.length === 0) {
     return (
-      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      <div
+        className={cn(
+          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+          className,
+        )}
+      >
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <Inbox className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No assets yet</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Connect a wallet to view your portfolio</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Connect a wallet to view your portfolio
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Summary */}
       <div className="px-4 py-4 border-b border-gray-100 dark:border-gray-800">
         {/* #5 — Uppercase stat label */}
@@ -93,7 +121,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
           <span
             className={cn(
               "flex items-center gap-0.5 text-xs font-medium",
-              isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+              isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400",
             )}
           >
             {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
@@ -113,7 +141,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
               }}
               className={cn(
                 "h-full transition-opacity duration-150",
-                hoveredSymbol && hoveredSymbol !== asset.symbol && "opacity-30"
+                hoveredSymbol && hoveredSymbol !== asset.symbol && "opacity-30",
               )}
               onMouseEnter={() => setHoveredSymbol(asset.symbol)}
               onMouseLeave={() => setHoveredSymbol(null)}
@@ -140,9 +168,10 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
               onKeyDown={isClickable ? (e) => handleKeyDown(e, asset) : undefined}
               className={cn(
                 "flex items-center justify-between px-4 py-3 transition-colors duration-150",
-                isClickable && "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
+                isClickable &&
+                  "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
                 // #8 — Cross-link hover: dim non-hovered rows
-                isFaded && "opacity-50"
+                isFaded && "opacity-50",
               )}
               onClick={() => onAssetClick?.(asset)}
               onMouseEnter={() => setHoveredSymbol(asset.symbol)}
@@ -150,11 +179,16 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
             >
               <div className="flex items-center gap-3">
                 {/* #1 — Color dot linking bar to assets */}
-                <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: asset.color }} />
+                <div
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: asset.color }}
+                />
                 <TokenIcon symbol={asset.symbol} logoURI={asset.logoURI} size="md" />
                 <div>
                   {/* #2 — Show asset name */}
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{asset.symbol}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {asset.symbol}
+                  </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {asset.name} · {asset.balance} · {pct}%
                   </p>
@@ -177,7 +211,9 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                   <p
                     className={cn(
                       "text-xs tabular-nums",
-                      assetPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                      assetPositive
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400",
                     )}
                   >
                     {formatPercent(asset.change24h)}

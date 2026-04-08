@@ -4,17 +4,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VestingSchedule, TokenVestingProps } from "./types";
-import {
-  calculateProgress,
-  formatDate,
-  isClaimable,
-  statusConfig,
-  animationStyles,
-} from "./utils";
+import { calculateProgress, formatDate, isClaimable, statusConfig, animationStyles } from "./utils";
 
-const StatusBadge: React.FC<{ status: VestingSchedule["status"] }> = ({
-  status,
-}) => {
+const StatusBadge: React.FC<{ status: VestingSchedule["status"] }> = ({ status }) => {
   const config = statusConfig[status];
   return (
     <span
@@ -25,10 +17,7 @@ const StatusBadge: React.FC<{ status: VestingSchedule["status"] }> = ({
   );
 };
 
-export const TokenVesting: React.FC<TokenVestingProps> = ({
-  vestingSchedules,
-  onClaimTokens,
-}) => {
+export const TokenVesting: React.FC<TokenVestingProps> = ({ vestingSchedules, onClaimTokens }) => {
   const [claimingId, setClaimingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -66,17 +55,13 @@ export const TokenVesting: React.FC<TokenVestingProps> = ({
           key={schedule.id}
           className="group cursor-pointer transition-all duration-200 ease-out
             hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
-          onClick={() =>
-            setExpandedId(expandedId === schedule.id ? null : schedule.id)
-          }
+          onClick={() => setExpandedId(expandedId === schedule.id ? null : schedule.id)}
           style={{ animationDelay: `${index * 100}ms` }}
         >
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <CardTitle className="text-lg">
-                  {schedule.tokenSymbol} Vesting
-                </CardTitle>
+                <CardTitle className="text-lg">{schedule.tokenSymbol} Vesting</CardTitle>
                 <StatusBadge status={schedule.status} />
               </div>
               <Button
@@ -131,37 +116,27 @@ export const TokenVesting: React.FC<TokenVestingProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-secondary p-4 rounded-lg transition-colors duration-200 hover:bg-secondary/80">
-                  <span className="text-muted-foreground text-sm">
-                    Total Amount
-                  </span>
+                  <span className="text-muted-foreground text-sm">Total Amount</span>
                   <p className="font-medium text-foreground mt-1">
                     {schedule.totalAmount} {schedule.tokenSymbol}
                   </p>
                 </div>
                 <div className="bg-secondary p-4 rounded-lg transition-colors duration-200 hover:bg-secondary/80">
-                  <span className="text-muted-foreground text-sm">
-                    Vested Amount
-                  </span>
+                  <span className="text-muted-foreground text-sm">Vested Amount</span>
                   <p className="font-medium text-foreground mt-1">
                     {schedule.vestedAmount} {schedule.tokenSymbol}
                   </p>
                 </div>
                 <div className="bg-secondary p-4 rounded-lg transition-colors duration-200 hover:bg-secondary/80">
-                  <span className="text-muted-foreground text-sm">
-                    Cliff Date
-                  </span>
+                  <span className="text-muted-foreground text-sm">Cliff Date</span>
                   <p className="font-medium text-foreground mt-1">
                     {formatDate(schedule.cliffDate)}
                   </p>
                 </div>
                 <div className="bg-secondary p-4 rounded-lg transition-colors duration-200 hover:bg-secondary/80">
-                  <span className="text-muted-foreground text-sm">
-                    Last Claimed
-                  </span>
+                  <span className="text-muted-foreground text-sm">Last Claimed</span>
                   <p className="font-medium text-foreground mt-1">
-                    {schedule.lastClaimDate
-                      ? formatDate(schedule.lastClaimDate)
-                      : "Never"}
+                    {schedule.lastClaimDate ? formatDate(schedule.lastClaimDate) : "Never"}
                   </p>
                 </div>
               </div>

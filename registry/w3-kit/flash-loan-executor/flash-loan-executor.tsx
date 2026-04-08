@@ -1,15 +1,9 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import { ArrowUpDown, Loader2, Check, AlertCircle } from "lucide-react";
-import {
-  Protocol,
-  Token,
-  FlashLoanData,
-  FlashLoanExecutorProps,
-  FormErrors,
-} from './types';
-import { getRiskColor, buttonAnimation, selectionAnimation } from './utils';
+import { Protocol, Token, FlashLoanData, FlashLoanExecutorProps, FormErrors } from "./types";
+import { getRiskColor, buttonAnimation, selectionAnimation } from "./utils";
 
 export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
   protocols,
@@ -52,7 +46,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
     try {
       // Simulate flash loan execution if no handler provided
       if (!onExecute) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       const flashLoanData: Omit<FlashLoanData, "id" | "timestamp"> = {
@@ -108,9 +102,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               </button>
             ))}
           </div>
-          {errors.protocol && (
-            <p className="mt-1 text-sm text-red-500">{errors.protocol}</p>
-          )}
+          {errors.protocol && <p className="mt-1 text-sm text-red-500">{errors.protocol}</p>}
         </div>
 
         <div>
@@ -141,9 +133,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               </button>
             ))}
           </div>
-          {errors.token && (
-            <p className="mt-1 text-sm text-red-500">{errors.token}</p>
-          )}
+          {errors.token && <p className="mt-1 text-sm text-red-500">{errors.token}</p>}
         </div>
 
         <div>
@@ -172,9 +162,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               </div>
             )}
           </div>
-          {errors.amount && (
-            <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
-          )}
+          {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount}</p>}
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -194,7 +182,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
           onClick={handleExecute}
           disabled={isExecuting || showSuccess}
           className={`w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${buttonAnimation} flex items-center justify-center ${
-            (isExecuting || showSuccess) ? "opacity-75 cursor-not-allowed" : ""
+            isExecuting || showSuccess ? "opacity-75 cursor-not-allowed" : ""
           }`}
         >
           {isExecuting ? (

@@ -4,9 +4,9 @@ export const itemAnimation = "animate-in fade-in-50 duration-300";
 
 // Currency formatting
 export const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value);
@@ -14,22 +14,22 @@ export const formatCurrency = (value: number): string => {
 
 // Percentage formatting
 export const formatPercent = (value: number): string => {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+  return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
 };
 
 // Get chain name from chain ID
 export const getChainName = (chainId: number): string => {
   switch (chainId) {
     case 1:
-      return 'Ethereum Mainnet';
+      return "Ethereum Mainnet";
     case 137:
-      return 'Polygon';
+      return "Polygon";
     case 10:
-      return 'Optimism';
+      return "Optimism";
     case 42161:
-      return 'Arbitrum One';
+      return "Arbitrum One";
     case 8453:
-      return 'Base';
+      return "Base";
     default:
       return `Chain ID: ${chainId}`;
   }

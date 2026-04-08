@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, ArrowRight, Copy, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
-import { ENSResult, RecentSearch, ENSResolverProps } from './types';
+import React, { useState, useEffect, useRef } from "react";
+import { Search, ArrowRight, Copy, CheckCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { ENSResult, RecentSearch, ENSResolverProps } from "./types";
 import {
   getEtherscanUrl,
   truncateAddress,
   defaultResolver,
   slideInAnimation,
   buttonAnimation,
-} from './utils';
+} from "./utils";
 
 export const ENSResolver: React.FC<ENSResolverProps> = ({
   onResolve,
-  className = '',
-  variant = 'default',
+  className = "",
+  variant = "default",
   resolver = defaultResolver,
 }) => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ENSResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
-  const [copied, setCopied] = useState<'address' | 'ens' | null>(null);
+  const [copied, setCopied] = useState<"address" | "ens" | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const inputRef = useRef<HTMLDivElement>(null);
@@ -35,18 +35,18 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         return;
       }
 
-      if (target.closest('.suggestions-dropdown')) {
+      if (target.closest(".suggestions-dropdown")) {
         return;
       }
 
       setShowSuggestions(false);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleCopy = async (text: string, type: 'address' | 'ens') => {
+  const handleCopy = async (text: string, type: "address" | "ens") => {
     await navigator.clipboard.writeText(text);
     setCopied(type);
     setTimeout(() => setCopied(null), 2000);
@@ -69,18 +69,17 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         id: Date.now().toString(),
         query: searchInput,
         result: resolvedResult,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
-      setRecentSearches(prev => {
+      setRecentSearches((prev) => {
         const filtered = prev.filter(
-          search => search.query.toLowerCase() !== searchInput.toLowerCase()
+          (search) => search.query.toLowerCase() !== searchInput.toLowerCase(),
         );
         return [newSearch, ...filtered].slice(0, 5);
       });
-
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to resolve');
+      setError(err instanceof Error ? err.message : "Failed to resolve");
       setResult(null);
     } finally {
       setIsLoading(false);
@@ -88,7 +87,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
   };
 
   const resetState = () => {
-    setInput('');
+    setInput("");
     setResult(null);
     setError(null);
     setShowSuggestions(false);
@@ -103,17 +102,20 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
     const newValue = e.target.value;
     setInput(newValue);
 
-    const hasMatch = recentSearches.some(search =>
-      search.query.toLowerCase().includes(newValue.toLowerCase()) ||
-      newValue.toLowerCase().includes(search.query.toLowerCase())
+    const hasMatch = recentSearches.some(
+      (search) =>
+        search.query.toLowerCase().includes(newValue.toLowerCase()) ||
+        newValue.toLowerCase().includes(search.query.toLowerCase()),
     );
 
     setShowSuggestions(hasMatch && newValue.length > 0);
   };
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 sm:p-4 w-full ${className}`}>
+      <div
+        className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 sm:p-4 w-full ${className}`}
+      >
         <div className="relative" ref={inputRef}>
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
@@ -176,9 +178,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                       className="w-5 h-5 rounded-full"
                     />
                   )}
-                  <span className="text-gray-900 dark:text-white">
-                    {search.query}
-                  </span>
+                  <span className="text-gray-900 dark:text-white">{search.query}</span>
                 </button>
               ))}
             </div>
@@ -208,12 +208,12 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                 <div className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2 flex-wrap">
                   {result.ensName && (
                     <button
-                      onClick={() => handleCopy(result.ensName!, 'ens')}
+                      onClick={() => handleCopy(result.ensName!, "ens")}
                       className="font-medium text-gray-900 dark:text-white hover:text-blue-500
                         dark:hover:text-blue-400 transition-colors flex items-center gap-1"
                     >
                       {result.ensName}
-                      {copied === 'ens' ? (
+                      {copied === "ens" ? (
                         <CheckCircle className="w-4 h-4 text-green-500" />
                       ) : (
                         <Copy className="w-4 h-4 opacity-0 group-hover:opacity-100" />
@@ -226,19 +226,19 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                   {result.address && (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => handleCopy(result.address!, 'address')}
+                        onClick={() => handleCopy(result.address!, "address")}
                         className="font-medium text-gray-900 dark:text-white font-mono hover:text-blue-500
                           dark:hover:text-blue-400 transition-colors flex items-center gap-1"
                       >
                         {truncateAddress(result.address)}
-                        {copied === 'address' ? (
+                        {copied === "address" ? (
                           <CheckCircle className="w-4 h-4 text-green-500" />
                         ) : (
                           <Copy className="w-4 h-4 opacity-0 group-hover:opacity-100" />
                         )}
                       </button>
                       <a
-                        href={getEtherscanUrl(result.address!, 'address')}
+                        href={getEtherscanUrl(result.address!, "address")}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:text-blue-600 dark:text-blue-400
@@ -258,7 +258,9 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 w-full ${className}`}>
+    <div
+      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 w-full ${className}`}
+    >
       <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">
         ENS Resolver
       </h2>
@@ -307,9 +309,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                       className="w-6 h-6 rounded-full"
                     />
                   )}
-                  <span className="text-sm text-gray-900 dark:text-white">
-                    {search.query}
-                  </span>
+                  <span className="text-sm text-gray-900 dark:text-white">{search.query}</span>
                 </button>
               ))}
             </div>
@@ -334,7 +334,8 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         </button>
 
         {error && (
-          <div className={`p-4 bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400
+          <div
+            className={`p-4 bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400
             rounded-lg text-sm flex items-center space-x-2 ${slideInAnimation}`}
           >
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -343,7 +344,9 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
         )}
 
         {result && (
-          <div className={`p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg space-y-4 ${slideInAnimation}`}>
+          <div
+            className={`p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg space-y-4 ${slideInAnimation}`}
+          >
             {result.avatar && (
               <div className="flex justify-center">
                 <img
@@ -358,8 +361,10 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
 
             <div className="space-y-3">
               {result.ensName && (
-                <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
-                  rounded-lg group hover:shadow-md transition-all duration-200">
+                <div
+                  className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
+                  rounded-lg group hover:shadow-md transition-all duration-200"
+                >
                   <div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">ENS Name</div>
                     <div className="font-medium text-gray-900 dark:text-white">
@@ -367,28 +372,32 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     </div>
                   </div>
                   <button
-                    onClick={() => handleCopy(result.ensName!, 'ens')}
+                    onClick={() => handleCopy(result.ensName!, "ens")}
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    {copied === 'ens' ? (
+                    {copied === "ens" ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
                     ) : (
-                      <Copy className="w-5 h-5 text-gray-400 hover:text-gray-600
-                        dark:text-gray-500 dark:hover:text-gray-300" />
+                      <Copy
+                        className="w-5 h-5 text-gray-400 hover:text-gray-600
+                        dark:text-gray-500 dark:hover:text-gray-300"
+                      />
                     )}
                   </button>
                 </div>
               )}
 
               {result.address && (
-                <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
-                  rounded-lg group hover:shadow-md transition-all duration-200">
+                <div
+                  className="flex items-center justify-between p-3 bg-white dark:bg-gray-800
+                  rounded-lg group hover:shadow-md transition-all duration-200"
+                >
                   <div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">Address</div>
                     <div className="font-medium text-gray-900 dark:text-white font-mono flex items-center gap-2">
                       {truncateAddress(result.address)}
                       <a
-                        href={getEtherscanUrl(result.address!, 'address')}
+                        href={getEtherscanUrl(result.address!, "address")}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:text-blue-600 dark:text-blue-400
@@ -399,14 +408,16 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     </div>
                   </div>
                   <button
-                    onClick={() => handleCopy(result.address!, 'address')}
+                    onClick={() => handleCopy(result.address!, "address")}
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    {copied === 'address' ? (
+                    {copied === "address" ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
                     ) : (
-                      <Copy className="w-5 h-5 text-gray-400 hover:text-gray-600
-                        dark:text-gray-500 dark:hover:text-gray-300" />
+                      <Copy
+                        className="w-5 h-5 text-gray-400 hover:text-gray-600
+                        dark:text-gray-500 dark:hover:text-gray-300"
+                      />
                     )}
                   </button>
                 </div>

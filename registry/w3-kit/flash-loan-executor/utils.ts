@@ -1,4 +1,4 @@
-import { FlashLoanData } from './types';
+import { FlashLoanData } from "./types";
 
 // Get risk color based on risk level
 export const getRiskColor = (risk: FlashLoanData["risk"]): string => {

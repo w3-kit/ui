@@ -30,7 +30,15 @@
     "src/metadata/metadata.json",
     "README.md"
   ],
-  "keywords": ["web3", "react", "components", "mcp", "ai", "model-context-protocol", "claude"],
+  "keywords": [
+    "web3",
+    "react",
+    "components",
+    "mcp",
+    "ai",
+    "model-context-protocol",
+    "claude"
+  ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"

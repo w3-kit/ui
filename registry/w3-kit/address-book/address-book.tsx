@@ -1,10 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Search, Plus, Trash2, Edit2, Image as ImageIcon, AlertCircle, ChevronDown, ExternalLink, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from "react";
+import {
+  Search,
+  Plus,
+  Trash2,
+  Edit2,
+  Image as ImageIcon,
+  AlertCircle,
+  ChevronDown,
+  ExternalLink,
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -12,15 +22,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import {
   AddressEntry,
   NewEntry,
   AddressBookProps,
   DeleteModalProps,
   EditModalProps,
-} from './types';
+} from "./types";
 import {
   MAX_NAME_LENGTH,
   isValidEthereumAddress,
@@ -30,9 +40,14 @@ import {
   deleteIconAnimation,
   dropdownAnimation,
   searchBarAnimation,
-} from './utils';
+} from "./utils";
 
-const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onConfirm, name }) => {
+const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  name,
+}) => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-sm">
@@ -42,8 +57,9 @@ const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, 
             <span>Delete Address</span>
           </DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete <span className="font-medium text-foreground">{name}</span>?
-            This action cannot be undone.
+            Are you sure you want to delete{" "}
+            <span className="font-medium text-foreground">{name}</span>? This action cannot be
+            undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -76,9 +92,7 @@ const EditConfirmationModal: React.FC<EditModalProps> = ({ isOpen, onClose, onCo
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={onConfirm}>
-            Save Changes
-          </Button>
+          <Button onClick={onConfirm}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -88,24 +102,24 @@ const EditConfirmationModal: React.FC<EditModalProps> = ({ isOpen, onClose, onCo
 function useLoadingStates() {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({
     add: false,
-    edit: false
+    edit: false,
   });
   const [successStates, setSuccessStates] = useState<Record<string, boolean>>({
     add: false,
-    edit: false
+    edit: false,
   });
 
   const setLoading = (action: string, isLoading: boolean) => {
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
-      [action]: isLoading
+      [action]: isLoading,
     }));
   };
 
   const setSuccess = (action: string, isSuccess: boolean) => {
-    setSuccessStates(prev => ({
+    setSuccessStates((prev) => ({
       ...prev,
-      [action]: isSuccess
+      [action]: isSuccess,
     }));
   };
 
@@ -120,36 +134,37 @@ export const AddressBook: React.FC<AddressBookProps> = ({
   onAdd,
   onEdit,
   onDelete,
-  className = '',
-  variant = 'default'
+  className = "",
+  variant = "default",
 }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newEntry, setNewEntry] = useState<NewEntry>({
-    name: '',
-    address: '',
-    notes: '',
-    avatar: ''
+    name: "",
+    address: "",
+    notes: "",
+    avatar: "",
   });
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; id: string; name: string }>({
     isOpen: false,
-    id: '',
-    name: ''
+    id: "",
+    name: "",
   });
   const [editModal, setEditModal] = useState<{ isOpen: boolean; entry: NewEntry | null }>({
     isOpen: false,
-    entry: null
+    entry: null,
   });
-  const [addressError, setAddressError] = useState('');
+  const [addressError, setAddressError] = useState("");
   const [originalEntry, setOriginalEntry] = useState<NewEntry | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const { setLoading, isLoading, setSuccess, isSuccess } = useLoadingStates();
 
-  const filteredEntries = entries.filter(entry =>
-    entry.name.toLowerCase().includes(search.toLowerCase()) ||
-    entry.address.toLowerCase().includes(search.toLowerCase()) ||
-    entry.ensName?.toLowerCase().includes(search.toLowerCase())
+  const filteredEntries = entries.filter(
+    (entry) =>
+      entry.name.toLowerCase().includes(search.toLowerCase()) ||
+      entry.address.toLowerCase().includes(search.toLowerCase()) ||
+      entry.ensName?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const hasChanges = (): boolean => {
@@ -170,25 +185,25 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     }
 
     if (!isValidEthereumAddress(newEntry.address)) {
-      setAddressError('Please enter a valid Ethereum address or ENS name');
+      setAddressError("Please enter a valid Ethereum address or ENS name");
       return;
     }
 
-    const action = editingId ? 'edit' : 'add';
+    const action = editingId ? "edit" : "add";
     setLoading(action, true);
     try {
       if (editingId) {
         if (hasChanges()) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           setEditModal({ isOpen: true, entry: newEntry });
         } else {
           handleCancel();
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         await onAdd?.(newEntry);
         setSuccess(action, true);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         handleCancel();
       }
     } finally {
@@ -203,7 +218,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
 
   const confirmDelete = () => {
     onDelete?.(deleteModal.id);
-    setDeleteModal({ isOpen: false, id: '', name: '' });
+    setDeleteModal({ isOpen: false, id: "", name: "" });
   };
 
   const startEdit = (entry: AddressEntry) => {
@@ -212,15 +227,15 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     const newEntryData = {
       name: entry.name,
       address: entry.address,
-      notes: entry.notes || '',
-      avatar: entry.avatar || ''
+      notes: entry.notes || "",
+      avatar: entry.avatar || "",
     };
     setNewEntry(newEntryData);
     setOriginalEntry(newEntryData);
   };
 
   const handleCancel = () => {
-    setNewEntry({ name: '', address: '', notes: '', avatar: '' });
+    setNewEntry({ name: "", address: "", notes: "", avatar: "" });
     setIsAdding(false);
     setEditingId(null);
     setOriginalEntry(null);
@@ -231,7 +246,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setNewEntry(prev => ({ ...prev, avatar: reader.result as string }));
+        setNewEntry((prev) => ({ ...prev, avatar: reader.result as string }));
       };
       reader.readAsDataURL(file);
     }
@@ -241,7 +256,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     if (editingId && editModal.entry) {
       onEdit?.({
         id: editingId,
-        ...editModal.entry
+        ...editModal.entry,
       });
       handleCancel();
     }
@@ -253,9 +268,9 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     setNewEntry({ ...newEntry, address });
 
     if (address && !isValidEthereumAddress(address)) {
-      setAddressError('Please enter a valid Ethereum address or ENS name');
+      setAddressError("Please enter a valid Ethereum address or ENS name");
     } else {
-      setAddressError('');
+      setAddressError("");
     }
   };
 
@@ -271,9 +286,11 @@ export const AddressBook: React.FC<AddressBookProps> = ({
         placeholder="Name"
       />
       <div className="flex justify-end">
-        <span className={`text-xs ${
-          newEntry.name.length >= MAX_NAME_LENGTH ? 'text-destructive' : 'text-muted-foreground'
-        }`}>
+        <span
+          className={`text-xs ${
+            newEntry.name.length >= MAX_NAME_LENGTH ? "text-destructive" : "text-muted-foreground"
+          }`}
+        >
           {newEntry.name.length}/{MAX_NAME_LENGTH}
         </span>
       </div>
@@ -287,11 +304,9 @@ export const AddressBook: React.FC<AddressBookProps> = ({
         value={newEntry.address}
         onChange={handleAddressChange}
         placeholder="Address or ENS name"
-        className={addressError ? 'border-destructive' : ''}
+        className={addressError ? "border-destructive" : ""}
       />
-      {addressError && (
-        <p className="text-xs text-destructive">{addressError}</p>
-      )}
+      {addressError && <p className="text-xs text-destructive">{addressError}</p>}
     </div>
   );
 
@@ -299,9 +314,9 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const renderAvatar = (src: string | undefined, alt: string, size: 'sm' | 'md' = 'md') => {
-    const sizeClasses = size === 'sm' ? 'w-8 h-8' : 'w-10 h-10';
-    const sizePx = size === 'sm' ? 32 : 40;
+  const renderAvatar = (src: string | undefined, alt: string, size: "sm" | "md" = "md") => {
+    const sizeClasses = size === "sm" ? "w-8 h-8" : "w-10 h-10";
+    const sizePx = size === "sm" ? 32 : 40;
 
     if (src) {
       return (
@@ -317,7 +332,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
     return <div className={`${sizeClasses} rounded-full bg-muted`} />;
   };
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <>
         <Card className={`w-full ${className}`}>
@@ -330,7 +345,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
                 onClick={() => {
                   setIsAdding(true);
                   setEditingId(null);
-                  setNewEntry({ name: '', address: '', notes: '', avatar: '' });
+                  setNewEntry({ name: "", address: "", notes: "", avatar: "" });
                 }}
               >
                 <Plus className="w-5 h-5" />
@@ -338,207 +353,218 @@ export const AddressBook: React.FC<AddressBookProps> = ({
             </div>
           </CardHeader>
           <CardContent className="p-3 sm:p-4 pt-4">
+            <div
+              className={`relative ${searchBarAnimation}`}
+              style={{
+                maxHeight: isAdding ? "0" : "40px",
+                opacity: isAdding ? 0 : 1,
+                visibility: isAdding ? "hidden" : "visible",
+                marginBottom: isAdding ? "0" : "1rem",
+                overflow: "hidden",
+              }}
+            >
+              <Input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search addresses..."
+                className="pl-9"
+              />
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
+            </div>
 
-          <div
-            className={`relative ${searchBarAnimation}`}
-            style={{
-              maxHeight: isAdding ? '0' : '40px',
-              opacity: isAdding ? 0 : 1,
-              visibility: isAdding ? 'hidden' : 'visible',
-              marginBottom: isAdding ? '0' : '1rem',
-              overflow: 'hidden'
-            }}
-          >
-            <Input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search addresses..."
-              className="pl-9"
-            />
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
-          </div>
-
-          <div
-            className={`space-y-4 ${formAnimation}`}
-            style={{
-              maxHeight: isAdding ? '500px' : '0',
-              opacity: isAdding ? 1 : 0,
-              visibility: isAdding ? 'visible' : 'hidden',
-              marginBottom: isAdding ? '1rem' : '0',
-              overflow: 'hidden',
-              padding: isAdding ? '1rem' : '0'
-            }}
-          >
-            <div className="flex items-center space-x-3">
-              {newEntry.avatar ? (
-                <div className="relative">
-                  <img
-                    src={newEntry.avatar}
-                    alt="Avatar preview"
-                    width={48}
-                    height={48}
-                    className="rounded-full object-cover w-12 h-12"
-                  />
-                  <button
-                    onClick={() => setNewEntry(prev => ({ ...prev, avatar: '' }))}
-                    className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
+            <div
+              className={`space-y-4 ${formAnimation}`}
+              style={{
+                maxHeight: isAdding ? "500px" : "0",
+                opacity: isAdding ? 1 : 0,
+                visibility: isAdding ? "visible" : "hidden",
+                marginBottom: isAdding ? "1rem" : "0",
+                overflow: "hidden",
+                padding: isAdding ? "1rem" : "0",
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                {newEntry.avatar ? (
+                  <div className="relative">
+                    <img
+                      src={newEntry.avatar}
+                      alt="Avatar preview"
+                      width={48}
+                      height={48}
+                      className="rounded-full object-cover w-12 h-12"
+                    />
+                    <button
+                      onClick={() => setNewEntry((prev) => ({ ...prev, avatar: "" }))}
+                      className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
                       hover:bg-red-600 transition-colors"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
-              ) : (
-                <label className="cursor-pointer group">
-                  <div className="w-12 h-12 rounded-full bg-muted
-                    flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
                   </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </label>
-              )}
-              <div className="flex-1">
-                {renderNameInput()}
-              </div>
-            </div>
-
-            {renderAddressInput()}
-
-            <Textarea
-              value={newEntry.notes}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEntry({ ...newEntry, notes: e.target.value })}
-              placeholder="Notes (optional)"
-              rows={3}
-            />
-
-            <div className="flex justify-end space-x-2">
-              <Button variant="ghost" size="sm" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleSubmit}
-                disabled={!newEntry.name || !newEntry.address || isLoading('add') || isLoading('edit')}
-                className="min-w-[60px]"
-              >
-                {(isLoading('add') || isLoading('edit')) ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (isSuccess('add') || isSuccess('edit')) ? (
-                  <svg className="h-4 w-4 animate-in zoom-in duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
                 ) : (
-                  <span>{editingId ? 'Save' : 'Add'}</span>
-                )}
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            {filteredEntries.slice(0, 5).map((entry, index) => (
-              <div
-                key={entry.id}
-                className={`flex flex-col bg-white dark:bg-gray-800 rounded-lg transition-all ${listItemAnimation}`}
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div
-                  className="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50
-                    dark:hover:bg-gray-700/50 rounded-lg transition-all group"
-                  onClick={() => toggleExpand(entry.id)}
-                >
-                  <div className="flex items-center space-x-3 min-w-0">
-                    {renderAvatar(entry.avatar, entry.name, 'sm')}
-                    <div className="min-w-0">
-                      <p className="font-medium text-gray-900 dark:text-white truncate">{entry.name}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                        {entry.ensName || entry.address}
-                      </p>
+                  <label className="cursor-pointer group">
+                    <div
+                      className="w-12 h-12 rounded-full bg-muted
+                    flex items-center justify-center group-hover:bg-muted/80 transition-colors"
+                    >
+                      <ImageIcon className="w-6 h-6 text-muted-foreground" />
                     </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 ml-auto">
-                    <div className="flex items-center space-x-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={`h-8 w-8 ${iconButtonAnimation}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          startEdit(entry);
-                        }}
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={`h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 ${deleteIconAnimation}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(entry.id, entry.name);
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <ChevronDown
-                      className={`w-4 h-4 text-muted-foreground transition-transform duration-200
-                        ${expandedId === entry.id ? 'rotate-180' : ''}`}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
                     />
-                  </div>
-                </div>
-
-                <div className={`p-3 border-t border-border space-y-2
-                  ${dropdownAnimation}`}
-                  style={{
-                    maxHeight: expandedId === entry.id ? '500px' : '0',
-                    opacity: expandedId === entry.id ? 1 : 0,
-                    visibility: expandedId === entry.id ? 'visible' : 'hidden',
-                    marginTop: expandedId === entry.id ? '0.75rem' : '0',
-                  }}
-                >
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-xs text-muted-foreground">Address</label>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-sm font-mono">{entry.address}</p>
-                      <a
-                        href={`https://etherscan.io/address/${entry.address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`text-primary hover:text-primary/80 ${iconButtonAnimation}`}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {entry.ensName && (
-                    <div className="flex flex-col space-y-1">
-                      <label className="text-xs text-muted-foreground">ENS Name</label>
-                      <p className="text-sm">{entry.ensName}</p>
-                    </div>
-                  )}
-
-                  {entry.notes && (
-                    <div className="flex flex-col space-y-1">
-                      <label className="text-xs text-muted-foreground">Notes</label>
-                      <p className="text-sm text-muted-foreground">{entry.notes}</p>
-                    </div>
-                  )}
-                </div>
+                  </label>
+                )}
+                <div className="flex-1">{renderNameInput()}</div>
               </div>
-            ))}
-          </div>
+
+              {renderAddressInput()}
+
+              <Textarea
+                value={newEntry.notes}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setNewEntry({ ...newEntry, notes: e.target.value })
+                }
+                placeholder="Notes (optional)"
+                rows={3}
+              />
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="ghost" size="sm" onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSubmit}
+                  disabled={
+                    !newEntry.name || !newEntry.address || isLoading("add") || isLoading("edit")
+                  }
+                  className="min-w-[60px]"
+                >
+                  {isLoading("add") || isLoading("edit") ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isSuccess("add") || isSuccess("edit") ? (
+                    <svg
+                      className="h-4 w-4 animate-in zoom-in duration-200"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <span>{editingId ? "Save" : "Add"}</span>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {filteredEntries.slice(0, 5).map((entry, index) => (
+                <div
+                  key={entry.id}
+                  className={`flex flex-col bg-white dark:bg-gray-800 rounded-lg transition-all ${listItemAnimation}`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div
+                    className="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50
+                    dark:hover:bg-gray-700/50 rounded-lg transition-all group"
+                    onClick={() => toggleExpand(entry.id)}
+                  >
+                    <div className="flex items-center space-x-3 min-w-0">
+                      {renderAvatar(entry.avatar, entry.name, "sm")}
+                      <div className="min-w-0">
+                        <p className="font-medium text-gray-900 dark:text-white truncate">
+                          {entry.name}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                          {entry.ensName || entry.address}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2 ml-auto">
+                      <div className="flex items-center space-x-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={`h-8 w-8 ${iconButtonAnimation}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startEdit(entry);
+                          }}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={`h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 ${deleteIconAnimation}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(entry.id, entry.name);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-muted-foreground transition-transform duration-200
+                        ${expandedId === entry.id ? "rotate-180" : ""}`}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-3 border-t border-border space-y-2
+                  ${dropdownAnimation}`}
+                    style={{
+                      maxHeight: expandedId === entry.id ? "500px" : "0",
+                      opacity: expandedId === entry.id ? 1 : 0,
+                      visibility: expandedId === entry.id ? "visible" : "hidden",
+                      marginTop: expandedId === entry.id ? "0.75rem" : "0",
+                    }}
+                  >
+                    <div className="flex flex-col space-y-1">
+                      <label className="text-xs text-muted-foreground">Address</label>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm font-mono">{entry.address}</p>
+                        <a
+                          href={`https://etherscan.io/address/${entry.address}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`text-primary hover:text-primary/80 ${iconButtonAnimation}`}
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
+
+                    {entry.ensName && (
+                      <div className="flex flex-col space-y-1">
+                        <label className="text-xs text-muted-foreground">ENS Name</label>
+                        <p className="text-sm">{entry.ensName}</p>
+                      </div>
+                    )}
+
+                    {entry.notes && (
+                      <div className="flex flex-col space-y-1">
+                        <label className="text-xs text-muted-foreground">Notes</label>
+                        <p className="text-sm text-muted-foreground">{entry.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
@@ -551,7 +577,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
 
         <DeleteConfirmationModal
           isOpen={deleteModal.isOpen}
-          onClose={() => setDeleteModal({ isOpen: false, id: '', name: '' })}
+          onClose={() => setDeleteModal({ isOpen: false, id: "", name: "" })}
           onConfirm={confirmDelete}
           name={deleteModal.name}
         />
@@ -572,200 +598,209 @@ export const AddressBook: React.FC<AddressBookProps> = ({
           </div>
         </CardHeader>
         <CardContent>
-
-        <div
-          className={`relative ${searchBarAnimation}`}
-          style={{
-            maxHeight: isAdding ? '0' : '40px',
-            opacity: isAdding ? 0 : 1,
-            visibility: isAdding ? 'hidden' : 'visible',
-            marginBottom: isAdding ? '0' : '1rem',
-            overflow: 'hidden'
-          }}
-        >
-          <Input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search addresses..."
-            className="pl-9"
-          />
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
-        </div>
-
-        <div className="divide-y divide-border">
           <div
-            className={`space-y-4 ${formAnimation}`}
+            className={`relative ${searchBarAnimation}`}
             style={{
-              maxHeight: isAdding ? '500px' : '0',
-              opacity: isAdding ? 1 : 0,
-              visibility: isAdding ? 'visible' : 'hidden',
-              marginBottom: isAdding ? '1rem' : '0',
-              overflow: 'hidden',
-              padding: isAdding ? '1rem' : '0'
+              maxHeight: isAdding ? "0" : "40px",
+              opacity: isAdding ? 0 : 1,
+              visibility: isAdding ? "hidden" : "visible",
+              marginBottom: isAdding ? "0" : "1rem",
+              overflow: "hidden",
             }}
           >
-            <div className="flex items-center space-x-4">
-              {newEntry.avatar ? (
-                <div className="relative">
-                  <img
-                    src={newEntry.avatar}
-                    alt="Avatar preview"
-                    width={48}
-                    height={48}
-                    className="rounded-full object-cover w-12 h-12"
-                  />
-                  <button
-                    onClick={() => setNewEntry(prev => ({ ...prev, avatar: '' }))}
-                    className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
-                      hover:bg-red-600 transition-colors"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
-              ) : (
-                <label className="cursor-pointer group">
-                  <div className="w-12 h-12 rounded-full bg-muted
-                    flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </label>
-              )}
-              <div className="flex-1">
-                {renderNameInput()}
-              </div>
-            </div>
-
-            {renderAddressInput()}
-
-            <Textarea
-              value={newEntry.notes}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEntry({ ...newEntry, notes: e.target.value })}
-              placeholder="Notes (optional)"
-              rows={3}
+            <Input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search addresses..."
+              className="pl-9"
             />
-
-            <div className="flex justify-end space-x-2">
-              <Button variant="ghost" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={!newEntry.name || !newEntry.address || isLoading('add') || isLoading('edit')}
-              >
-                {(isLoading('add') || isLoading('edit')) ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (isSuccess('add') || isSuccess('edit')) ? (
-                  <svg className="h-4 w-4 animate-in zoom-in duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                ) : (
-                  <span>{editingId ? 'Save' : 'Add'}</span>
-                )}
-              </Button>
-            </div>
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
           </div>
 
-          {filteredEntries.map((entry, index) => (
+          <div className="divide-y divide-border">
             <div
-              key={entry.id}
-              className={`py-4 flex flex-col ${listItemAnimation}`}
-              style={{ animationDelay: `${index * 50}ms` }}
+              className={`space-y-4 ${formAnimation}`}
+              style={{
+                maxHeight: isAdding ? "500px" : "0",
+                opacity: isAdding ? 1 : 0,
+                visibility: isAdding ? "visible" : "hidden",
+                marginBottom: isAdding ? "1rem" : "0",
+                overflow: "hidden",
+                padding: isAdding ? "1rem" : "0",
+              }}
             >
-              <div
-                className="flex items-center justify-between cursor-pointer"
-                onClick={() => toggleExpand(entry.id)}
-              >
-                <div className="flex items-center space-x-4 min-w-0">
-                  {renderAvatar(entry.avatar, entry.name, 'md')}
-                  <div className="min-w-0">
-                    <p className="font-medium">{entry.name}</p>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {entry.ensName || entry.address}
-                    </p>
+              <div className="flex items-center space-x-4">
+                {newEntry.avatar ? (
+                  <div className="relative">
+                    <img
+                      src={newEntry.avatar}
+                      alt="Avatar preview"
+                      width={48}
+                      height={48}
+                      className="rounded-full object-cover w-12 h-12"
+                    />
+                    <button
+                      onClick={() => setNewEntry((prev) => ({ ...prev, avatar: "" }))}
+                      className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full
+                      hover:bg-red-600 transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
                   </div>
-                </div>
-                <div className="flex items-center space-x-2 ml-auto">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={`h-8 w-8 ${iconButtonAnimation}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      startEdit(entry);
-                    }}
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={`h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 ${deleteIconAnimation}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(entry.id, entry.name);
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                  <ChevronDown
-                    className={`w-5 h-5 text-muted-foreground transition-transform duration-200
-                      ${expandedId === entry.id ? 'rotate-180' : ''}`}
-                  />
-                </div>
+                ) : (
+                  <label className="cursor-pointer group">
+                    <div
+                      className="w-12 h-12 rounded-full bg-muted
+                    flex items-center justify-center group-hover:bg-muted/80 transition-colors"
+                    >
+                      <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                )}
+                <div className="flex-1">{renderNameInput()}</div>
               </div>
 
-              <div className={`pl-14 space-y-3 ${dropdownAnimation}`}
-                style={{
-                  maxHeight: expandedId === entry.id ? '500px' : '0',
-                  opacity: expandedId === entry.id ? 1 : 0,
-                  visibility: expandedId === entry.id ? 'visible' : 'hidden',
-                  marginTop: expandedId === entry.id ? '1rem' : '0',
-                }}
-              >
-                <div className="flex flex-col space-y-1">
-                  <label className="text-sm text-muted-foreground">Address</label>
-                  <div className="flex items-center space-x-2">
-                    <p className="font-mono">{entry.address}</p>
-                    <a
-                      href={`https://etherscan.io/address/${entry.address}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`text-primary hover:text-primary/80 ${iconButtonAnimation}`}
+              {renderAddressInput()}
+
+              <Textarea
+                value={newEntry.notes}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setNewEntry({ ...newEntry, notes: e.target.value })
+                }
+                placeholder="Notes (optional)"
+                rows={3}
+              />
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="ghost" onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={
+                    !newEntry.name || !newEntry.address || isLoading("add") || isLoading("edit")
+                  }
+                >
+                  {isLoading("add") || isLoading("edit") ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isSuccess("add") || isSuccess("edit") ? (
+                    <svg
+                      className="h-4 w-4 animate-in zoom-in duration-200"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
                     >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-
-                {entry.ensName && (
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-sm text-muted-foreground">ENS Name</label>
-                    <p>{entry.ensName}</p>
-                  </div>
-                )}
-
-                {entry.notes && (
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-sm text-muted-foreground">Notes</label>
-                    <p className="text-muted-foreground">{entry.notes}</p>
-                  </div>
-                )}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <span>{editingId ? "Save" : "Add"}</span>
+                  )}
+                </Button>
               </div>
             </div>
-          ))}
-        </div>
+
+            {filteredEntries.map((entry, index) => (
+              <div
+                key={entry.id}
+                className={`py-4 flex flex-col ${listItemAnimation}`}
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div
+                  className="flex items-center justify-between cursor-pointer"
+                  onClick={() => toggleExpand(entry.id)}
+                >
+                  <div className="flex items-center space-x-4 min-w-0">
+                    {renderAvatar(entry.avatar, entry.name, "md")}
+                    <div className="min-w-0">
+                      <p className="font-medium">{entry.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {entry.ensName || entry.address}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-auto">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 ${iconButtonAnimation}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startEdit(entry);
+                      }}
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 ${deleteIconAnimation}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(entry.id, entry.name);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                    <ChevronDown
+                      className={`w-5 h-5 text-muted-foreground transition-transform duration-200
+                      ${expandedId === entry.id ? "rotate-180" : ""}`}
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className={`pl-14 space-y-3 ${dropdownAnimation}`}
+                  style={{
+                    maxHeight: expandedId === entry.id ? "500px" : "0",
+                    opacity: expandedId === entry.id ? 1 : 0,
+                    visibility: expandedId === entry.id ? "visible" : "hidden",
+                    marginTop: expandedId === entry.id ? "1rem" : "0",
+                  }}
+                >
+                  <div className="flex flex-col space-y-1">
+                    <label className="text-sm text-muted-foreground">Address</label>
+                    <div className="flex items-center space-x-2">
+                      <p className="font-mono">{entry.address}</p>
+                      <a
+                        href={`https://etherscan.io/address/${entry.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-primary hover:text-primary/80 ${iconButtonAnimation}`}
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {entry.ensName && (
+                    <div className="flex flex-col space-y-1">
+                      <label className="text-sm text-muted-foreground">ENS Name</label>
+                      <p>{entry.ensName}</p>
+                    </div>
+                  )}
+
+                  {entry.notes && (
+                    <div className="flex flex-col space-y-1">
+                      <label className="text-sm text-muted-foreground">Notes</label>
+                      <p className="text-muted-foreground">{entry.notes}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
@@ -778,7 +813,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
 
       <DeleteConfirmationModal
         isOpen={deleteModal.isOpen}
-        onClose={() => setDeleteModal({ isOpen: false, id: '', name: '' })}
+        onClose={() => setDeleteModal({ isOpen: false, id: "", name: "" })}
         onConfirm={confirmDelete}
         name={deleteModal.name}
       />

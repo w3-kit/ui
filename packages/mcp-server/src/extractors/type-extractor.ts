@@ -1,4 +1,4 @@
-import { PropDefinition } from '../types.js';
+import { PropDefinition } from "../types.js";
 
 export interface ExtractedInterface {
   name: string;
@@ -25,8 +25,8 @@ function extractBody(source: string, startIndex: number): string {
   let depth = 1;
   let i = startIndex;
   while (i < source.length && depth > 0) {
-    if (source[i] === '{') depth++;
-    if (source[i] === '}') depth--;
+    if (source[i] === "{") depth++;
+    if (source[i] === "}") depth--;
     i++;
   }
   return source.slice(startIndex, i - 1);
@@ -42,13 +42,13 @@ function parseProps(body: string): PropDefinition[] {
 
     const nameMatch = body.slice(i).match(/^(\w+)(\?)?:\s*/);
     if (!nameMatch) {
-      const nextLine = body.indexOf('\n', i);
+      const nextLine = body.indexOf("\n", i);
       i = nextLine === -1 ? body.length : nextLine + 1;
       continue;
     }
 
     const propName = nameMatch[1];
-    const optional = nameMatch[2] === '?';
+    const optional = nameMatch[2] === "?";
     i += nameMatch[0].length;
 
     const type = extractType(body, i);
@@ -65,18 +65,24 @@ function parseProps(body: string): PropDefinition[] {
 
 function extractType(body: string, start: number): { raw: string; cleaned: string } {
   let i = start;
-  let braceDepth = 0;   // tracks { }
-  let parenDepth = 0;   // tracks ( )
-  let angleDepth = 0;   // tracks < >
+  let braceDepth = 0; // tracks { }
+  let parenDepth = 0; // tracks ( )
+  let angleDepth = 0; // tracks < >
 
   while (i < body.length) {
     const ch = body[i];
-    if (ch === '{') braceDepth++;
-    if (ch === '}') { braceDepth--; if (braceDepth < 0) break; }
-    if (ch === '(') parenDepth++;
-    if (ch === ')') { parenDepth--; if (parenDepth < 0) break; }
-    if (ch === '<') angleDepth++;
-    if (ch === '>') {
+    if (ch === "{") braceDepth++;
+    if (ch === "}") {
+      braceDepth--;
+      if (braceDepth < 0) break;
+    }
+    if (ch === "(") parenDepth++;
+    if (ch === ")") {
+      parenDepth--;
+      if (parenDepth < 0) break;
+    }
+    if (ch === "<") angleDepth++;
+    if (ch === ">") {
       // Only treat as closing angle if we're actually inside one,
       // otherwise it could be part of => arrow
       if (angleDepth > 0) {
@@ -85,11 +91,11 @@ function extractType(body: string, start: number): { raw: string; cleaned: strin
       // If not inside angle brackets, it's part of => — skip
     }
     const totalDepth = braceDepth + parenDepth + angleDepth;
-    if (totalDepth === 0 && (ch === ';' || ch === '\n')) break;
+    if (totalDepth === 0 && (ch === ";" || ch === "\n")) break;
     i++;
   }
 
   const raw = body.slice(start, i);
-  const cleaned = raw.replace(/\/\/.*$/gm, '').trim();
+  const cleaned = raw.replace(/\/\/.*$/gm, "").trim();
   return { raw, cleaned };
 }

@@ -32,7 +32,12 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
   // Empty state
   if (!pools || pools.length === 0) {
     return (
-      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      <div
+        className={cn(
+          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+          className,
+        )}
+      >
         <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
           <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
             Staking Pools
@@ -41,14 +46,21 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <Layers className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No pools available</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Staking pools will appear here when configured</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Staking pools will appear here when configured
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -65,7 +77,8 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
           const isLoading = loadingPoolId === pool.id;
           const minStakeNum = parseFloat(pool.minStake);
           const amountNum = parseFloat(amount);
-          const isBelowMin = isStaking && amount !== "" && !isNaN(amountNum) && amountNum < minStakeNum;
+          const isBelowMin =
+            isStaking && amount !== "" && !isNaN(amountNum) && amountNum < minStakeNum;
 
           return (
             <div key={pool.id}>
@@ -76,7 +89,9 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                 }}
                 className={cn(
                   "flex items-center justify-between w-full px-4 py-3 text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
-                  isExpanded ? "bg-gray-50 dark:bg-gray-900" : "hover:bg-gray-50 dark:hover:bg-gray-900"
+                  isExpanded
+                    ? "bg-gray-50 dark:bg-gray-900"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-900",
                 )}
               >
                 <div className="flex items-center gap-3">
@@ -107,7 +122,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                   <ChevronDown
                     className={cn(
                       "h-4 w-4 text-gray-400 dark:text-gray-500 transition-transform duration-150",
-                      isExpanded && "rotate-180"
+                      isExpanded && "rotate-180",
                     )}
                   />
                 </div>
@@ -119,23 +134,29 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                   {/* Stake / Unstake toggle */}
                   <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <button
-                      onClick={() => { setIsStaking(true); setAmount(""); }}
+                      onClick={() => {
+                        setIsStaking(true);
+                        setAmount("");
+                      }}
                       className={cn(
                         "flex-1 py-1.5 text-xs font-medium rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400",
                         isStaking
                           ? "bg-white dark:bg-gray-950 text-gray-900 dark:text-white shadow-sm"
-                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300",
                       )}
                     >
                       Stake
                     </button>
                     <button
-                      onClick={() => { setIsStaking(false); setAmount(""); }}
+                      onClick={() => {
+                        setIsStaking(false);
+                        setAmount("");
+                      }}
                       className={cn(
                         "flex-1 py-1.5 text-xs font-medium rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400",
                         !isStaking
                           ? "bg-white dark:bg-gray-950 text-gray-900 dark:text-white shadow-sm"
-                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300",
                       )}
                     >
                       Unstake
@@ -176,7 +197,9 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                         Processing…
                       </>
                     ) : (
-                      <>{isStaking ? "Stake" : "Unstake"} {pool.token.symbol}</>
+                      <>
+                        {isStaking ? "Stake" : "Unstake"} {pool.token.symbol}
+                      </>
                     )}
                   </Button>
                 </div>

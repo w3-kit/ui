@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { formatCurrency, formatBalance } from '../token-list/utils';
+import { formatCurrency, formatBalance } from "../token-list/utils";
 
 interface Token {
   symbol: string;
@@ -17,7 +17,7 @@ interface WalletBalanceProps {
   tokens: Token[];
   onTokenClick?: (token: Token) => void;
   className?: string;
-  variant?: 'default' | 'compact';
+  variant?: "default" | "compact";
   onRefresh?: () => Promise<void>; // Callback to refresh balances
 }
 
@@ -61,25 +61,25 @@ const animationStyles = `
   }
 `;
 
-type SortOption = 'balance' | 'name' | 'value' | 'change';
+type SortOption = "balance" | "name" | "value" | "change";
 
 export const WalletBalance: React.FC<WalletBalanceProps> = ({
   tokens,
   onTokenClick,
-  className = '',
-  variant = 'default',
-  onRefresh
+  className = "",
+  variant = "default",
+  onRefresh,
 }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [sortBy, setSortBy] = useState<SortOption>('value');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState<SortOption>("value");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [showAllTokens, setShowAllTokens] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const totalValue = tokens.reduce(
-    (sum, token) => sum + (Number(token.balance) * (token.price || 0)),
-    0
+    (sum, token) => sum + Number(token.balance) * (token.price || 0),
+    0,
   );
 
   const handleRefresh = async () => {
@@ -95,10 +95,10 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
 
   const handleSort = (option: SortOption) => {
     if (sortBy === option) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortBy(option);
-      setSortDirection('desc');
+      setSortDirection("desc");
     }
   };
 
@@ -107,41 +107,43 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
     onTokenClick?.(token);
   };
 
-  const filteredTokens = tokens.filter(token => 
-    token.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTokens = tokens.filter(
+    (token) =>
+      token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      token.symbol.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const sortedTokens = [...filteredTokens].sort((a, b) => {
     let comparison = 0;
-    
+
     switch (sortBy) {
-      case 'name':
+      case "name":
         comparison = a.name.localeCompare(b.name);
         break;
-      case 'balance':
+      case "balance":
         comparison = Number(a.balance) - Number(b.balance);
         break;
-      case 'value':
-        comparison = (Number(a.balance) * (a.price || 0)) - (Number(b.balance) * (b.price || 0));
+      case "value":
+        comparison = Number(a.balance) * (a.price || 0) - Number(b.balance) * (b.price || 0);
         break;
-      case 'change':
+      case "change":
         comparison = (a.priceChange24h || 0) - (b.priceChange24h || 0);
         break;
     }
-    
-    return sortDirection === 'asc' ? comparison : -comparison;
+
+    return sortDirection === "asc" ? comparison : -comparison;
   });
 
-  const displayTokens = variant === 'compact' && !showAllTokens 
-    ? sortedTokens.slice(0, 3) 
-    : sortedTokens;
+  const displayTokens =
+    variant === "compact" && !showAllTokens ? sortedTokens.slice(0, 3) : sortedTokens;
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <>
         <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
-        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 w-full animate-fadeIn ${className}`}>
+        <div
+          className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 w-full animate-fadeIn ${className}`}
+        >
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
               Wallet Balance
@@ -150,25 +152,30 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
               <span className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(totalValue)}
               </span>
-              <button 
+              <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 title="Refresh balances"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-4 w-4 text-gray-500 dark:text-gray-400 ${isRefreshing ? 'animate-spin' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 text-gray-500 dark:text-gray-400 ${isRefreshing ? "animate-spin" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
                 </svg>
               </button>
             </div>
           </div>
-          
+
           {/* Search input for compact view */}
           <div className="relative mb-3">
             <input
@@ -182,33 +189,45 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
             />
             {searchTerm && (
               <button
-                onClick={() => setSearchTerm('')}
+                onClick={() => setSearchTerm("")}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             )}
           </div>
-          
+
           <div className="space-y-2">
             {displayTokens.map((token, index) => {
               const tokenValue = Number(token.balance) * (token.price || 0);
               const isSelected = selectedToken?.symbol === token.symbol;
-              
+
               return (
                 <div
                   key={token.symbol}
                   className={`flex items-center justify-between p-2 
-                    ${isSelected ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'} 
+                    ${isSelected ? "" : "hover:bg-gray-50 dark:hover:bg-gray-700/50"} 
                     rounded-lg cursor-pointer transition-all duration-200 animate-slideIn`}
                   style={{ animationDelay: `${index * 50}ms` }}
                   onClick={() => handleTokenClick(token)}
                 >
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <div className="relative">
-                      <img loading="lazy"
+                      <img
+                        loading="lazy"
                         src={token.logoURI}
                         alt={token.symbol}
                         width={24}
@@ -216,26 +235,46 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         className="rounded-full w-6 h-6 sm:w-7 sm:h-7 object-contain bg-white dark:bg-gray-700"
                         onError={(e) => {
                           // Fallback for failed image loads
-                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).style.display = "none";
                         }}
                       />
                       {token.priceChange24h !== undefined && (
-                        <div 
+                        <div
                           className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center
-                            ${token.priceChange24h > 0 
-                              ? 'bg-green-500' 
-                              : token.priceChange24h < 0 
-                                ? 'bg-red-500' 
-                                : 'bg-gray-400'}`}
-                          title={`${token.priceChange24h > 0 ? '+' : ''}${token.priceChange24h.toFixed(2)}% (24h)`}
+                            ${
+                              token.priceChange24h > 0
+                                ? "bg-green-500"
+                                : token.priceChange24h < 0
+                                  ? "bg-red-500"
+                                  : "bg-gray-400"
+                            }`}
+                          title={`${token.priceChange24h > 0 ? "+" : ""}${token.priceChange24h.toFixed(2)}% (24h)`}
                         >
                           {token.priceChange24h > 0 ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" className="w-2 h-2">
-                              <path fillRule="evenodd" d="M12 7a1 1 0 01-1 1H9v1h2a1 1 0 110 2H9v1h2a1 1 0 110 2H9a1 1 0 01-1-1v-2a1 1 0 00-2 0v2a1 1 0 01-1 1H4a1 1 0 110-2h1v-1H4a1 1 0 110-2h1V9H4a1 1 0 010-2h1a1 1 0 011 1v2a1 1 0 002 0V8a1 1 0 011-1h2z" clipRule="evenodd" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="white"
+                              className="w-2 h-2"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M12 7a1 1 0 01-1 1H9v1h2a1 1 0 110 2H9v1h2a1 1 0 110 2H9a1 1 0 01-1-1v-2a1 1 0 00-2 0v2a1 1 0 01-1 1H4a1 1 0 110-2h1v-1H4a1 1 0 110-2h1V9H4a1 1 0 010-2h1a1 1 0 011 1v2a1 1 0 002 0V8a1 1 0 011-1h2z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           ) : token.priceChange24h < 0 ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" className="w-2 h-2">
-                              <path fillRule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clipRule="evenodd" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="white"
+                              className="w-2 h-2"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           ) : null}
                         </div>
@@ -261,13 +300,13 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                 </div>
               );
             })}
-            
+
             {sortedTokens.length === 0 && (
               <div className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                 No tokens found
               </div>
             )}
-            
+
             {sortedTokens.length > 3 && (
               <button
                 onClick={() => setShowAllTokens(!showAllTokens)}
@@ -275,7 +314,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   hover:text-blue-800 dark:hover:text-blue-300 transition-colors rounded-lg
                   hover:bg-blue-50 dark:hover:bg-blue-900/20"
               >
-                {showAllTokens ? 'Show Less' : `Show All (${sortedTokens.length})`}
+                {showAllTokens ? "Show Less" : `Show All (${sortedTokens.length})`}
               </button>
             )}
           </div>
@@ -287,27 +326,34 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
-      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full animate-fadeIn ${className}`}>
+      <div
+        className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full animate-fadeIn ${className}`}
+      >
         <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-2 sm:mb-4">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
               Total Balance
             </h2>
             <div className="flex items-center space-x-2">
-              <button 
+              <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 title="Refresh balances"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 text-gray-500 dark:text-gray-400 ${isRefreshing ? 'animate-spin' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 text-gray-500 dark:text-gray-400 ${isRefreshing ? "animate-spin" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
                 </svg>
               </button>
             </div>
@@ -349,66 +395,83 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
               </svg>
               {searchTerm && (
                 <button
-                  onClick={() => setSearchTerm('')}
+                  onClick={() => setSearchTerm("")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               )}
             </div>
-            
+
             {/* Sort buttons */}
             <div className="w-full">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
                 <button
-                  onClick={() => handleSort('value')}
+                  onClick={() => handleSort("value")}
                   className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                    ${sortBy === 'value' 
-                      ? 'bg-blue-500 text-white border-blue-500 dark:border-blue-500' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ${
+                      sortBy === "value"
+                        ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}
                 >
-                  Value {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                  Value {sortBy === "value" && (sortDirection === "asc" ? "↑" : "↓")}
                 </button>
                 <button
-                  onClick={() => handleSort('name')}
+                  onClick={() => handleSort("name")}
                   className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                    ${sortBy === 'name' 
-                      ? 'bg-blue-500 text-white border-blue-500 dark:border-blue-500' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ${
+                      sortBy === "name"
+                        ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}
                 >
-                  Name {sortBy === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                  Name {sortBy === "name" && (sortDirection === "asc" ? "↑" : "↓")}
                 </button>
                 <button
-                  onClick={() => handleSort('balance')}
+                  onClick={() => handleSort("balance")}
                   className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                    ${sortBy === 'balance' 
-                      ? 'bg-blue-500 text-white border-blue-500 dark:border-blue-500' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ${
+                      sortBy === "balance"
+                        ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}
                 >
-                  Balance {sortBy === 'balance' && (sortDirection === 'asc' ? '↑' : '↓')}
+                  Balance {sortBy === "balance" && (sortDirection === "asc" ? "↑" : "↓")}
                 </button>
                 <button
-                  onClick={() => handleSort('change')}
+                  onClick={() => handleSort("change")}
                   className={`h-[42px] px-3 py-2 text-xs border border-gray-200 dark:border-gray-700 rounded-lg
-                    ${sortBy === 'change' 
-                      ? 'bg-blue-500 text-white border-blue-500 dark:border-blue-500' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ${
+                      sortBy === "change"
+                        ? "bg-blue-500 text-white border-blue-500 dark:border-blue-500"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}
                 >
-                  24h {sortBy === 'change' && (sortDirection === 'asc' ? '↑' : '↓')}
+                  24h {sortBy === "change" && (sortDirection === "asc" ? "↑" : "↓")}
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="divide-y divide-gray-200 dark:divide-gray-700 max-h-[300px] sm:max-h-[400px] 
-          overflow-y-auto scrollbar-thin">
+        <div
+          className="divide-y divide-gray-200 dark:divide-gray-700 max-h-[300px] sm:max-h-[400px] 
+          overflow-y-auto scrollbar-thin"
+        >
           {sortedTokens.length === 0 ? (
             <div className="py-8 text-center text-gray-500 dark:text-gray-400">
               No tokens found matching your search
@@ -417,12 +480,12 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
             sortedTokens.map((token, index) => {
               const tokenValue = Number(token.balance) * (token.price || 0);
               const isSelected = selectedToken?.symbol === token.symbol;
-              
+
               return (
                 <div
                   key={token.symbol}
                   className={`p-3 sm:p-4 
-                    ${isSelected ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'} 
+                    ${isSelected ? "" : "hover:bg-gray-50 dark:hover:bg-gray-700/50"} 
                     cursor-pointer transition-colors animate-slideIn`}
                   style={{ animationDelay: `${index * 30}ms` }}
                   onClick={() => handleTokenClick(token)}
@@ -430,7 +493,8 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                       <div className="relative">
-                        <img loading="lazy"
+                        <img
+                          loading="lazy"
                           src={token.logoURI}
                           alt={token.symbol}
                           width={40}
@@ -438,25 +502,45 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                           className="rounded-full w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 object-contain bg-white dark:bg-gray-700"
                           onError={(e) => {
                             // Fallback for failed image loads
-                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).style.display = "none";
                           }}
                         />
                         {token.priceChange24h !== undefined && (
-                          <div 
+                          <div
                             className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center
-                              ${token.priceChange24h > 0 
-                                ? 'bg-green-500' 
-                                : token.priceChange24h < 0 
-                                  ? 'bg-red-500' 
-                                  : 'bg-gray-400'}`}
+                              ${
+                                token.priceChange24h > 0
+                                  ? "bg-green-500"
+                                  : token.priceChange24h < 0
+                                    ? "bg-red-500"
+                                    : "bg-gray-400"
+                              }`}
                           >
                             {token.priceChange24h > 0 ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" className="w-3 h-3">
-                                <path fillRule="evenodd" d="M12 7a1 1 0 01-1 1H9v1h2a1 1 0 110 2H9v1h2a1 1 0 110 2H9a1 1 0 01-1-1v-2a1 1 0 00-2 0v2a1 1 0 01-1 1H4a1 1 0 110-2h1v-1H4a1 1 0 110-2h1V9H4a1 1 0 010-2h1a1 1 0 011 1v2a1 1 0 002 0V8a1 1 0 011-1h2z" clipRule="evenodd" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="white"
+                                className="w-3 h-3"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M12 7a1 1 0 01-1 1H9v1h2a1 1 0 110 2H9v1h2a1 1 0 110 2H9a1 1 0 01-1-1v-2a1 1 0 00-2 0v2a1 1 0 01-1 1H4a1 1 0 110-2h1v-1H4a1 1 0 110-2h1V9H4a1 1 0 010-2h1a1 1 0 011 1v2a1 1 0 002 0V8a1 1 0 011-1h2z"
+                                  clipRule="evenodd"
+                                />
                               </svg>
                             ) : token.priceChange24h < 0 ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" className="w-3 h-3">
-                                <path fillRule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clipRule="evenodd" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="white"
+                                className="w-3 h-3"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                                  clipRule="evenodd"
+                                />
                               </svg>
                             ) : null}
                           </div>
@@ -469,16 +553,17 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex items-center">
                           <span>{token.symbol}</span>
                           {token.priceChange24h !== undefined && (
-                            <span 
+                            <span
                               className={`ml-2 ${
-                                token.priceChange24h > 0 
-                                  ? 'text-green-500' 
-                                  : token.priceChange24h < 0 
-                                    ? 'text-red-500' 
-                                    : 'text-gray-400'
+                                token.priceChange24h > 0
+                                  ? "text-green-500"
+                                  : token.priceChange24h < 0
+                                    ? "text-red-500"
+                                    : "text-gray-400"
                               }`}
                             >
-                              {token.priceChange24h > 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
+                              {token.priceChange24h > 0 ? "+" : ""}
+                              {token.priceChange24h.toFixed(2)}%
                             </span>
                           )}
                         </div>
@@ -493,7 +578,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Expanded token details */}
                   {isSelected && (
                     <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
@@ -512,21 +597,26 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         </div>
                         {token.priceChange24h !== undefined && (
                           <div className="col-span-2 border-t border-gray-200 dark:border-gray-700 pt-2 mt-1">
-                            <div className="text-gray-500 dark:text-gray-400 mb-1 text-xs">24h Change</div>
-                            <div className={`font-medium text-xs ${
-                              token.priceChange24h > 0 
-                                ? 'text-green-500' 
-                                : token.priceChange24h < 0 
-                                  ? 'text-red-500' 
-                                  : 'text-gray-500 dark:text-gray-400'
-                            }`}>
-                              {token.priceChange24h > 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
+                            <div className="text-gray-500 dark:text-gray-400 mb-1 text-xs">
+                              24h Change
+                            </div>
+                            <div
+                              className={`font-medium text-xs ${
+                                token.priceChange24h > 0
+                                  ? "text-green-500"
+                                  : token.priceChange24h < 0
+                                    ? "text-red-500"
+                                    : "text-gray-500 dark:text-gray-400"
+                              }`}
+                            >
+                              {token.priceChange24h > 0 ? "+" : ""}
+                              {token.priceChange24h.toFixed(2)}%
                             </div>
                           </div>
                         )}
                       </div>
                       <div className="mt-3 grid grid-cols-2 gap-2">
-                        <button 
+                        <button
                           className="py-1.5 sm:py-2 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 
                             rounded hover:bg-blue-200 dark:hover:bg-blue-800/70 transition-colors flex items-center justify-center"
                           onClick={(e) => {
@@ -535,12 +625,23 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                             alert(`Send ${token.symbol} functionality would go here`);
                           }}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                            />
                           </svg>
                           Send
                         </button>
-                        <button 
+                        <button
                           className="py-1.5 sm:py-2 text-xs sm:text-sm bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 
                             rounded hover:bg-green-200 dark:hover:bg-green-800/70 transition-colors flex items-center justify-center"
                           onClick={(e) => {
@@ -549,8 +650,19 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                             alert(`Swap ${token.symbol} functionality would go here`);
                           }}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                            />
                           </svg>
                           Swap
                         </button>

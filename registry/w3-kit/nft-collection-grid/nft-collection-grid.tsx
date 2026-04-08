@@ -50,17 +50,13 @@ function NFTCardSimple({
               />
             ) : (
               <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                <span className="text-gray-400 dark:text-gray-500">
-                  Failed to load
-                </span>
+                <span className="text-gray-400 dark:text-gray-500">Failed to load</span>
               </div>
             )}
           </div>
           <div className="p-4 flex-1">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                {nft.name}
-              </h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{nft.name}</h3>
               <span className="text-sm text-gray-500 dark:text-gray-400 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
                 #{nft.tokenId}
               </span>
@@ -71,9 +67,7 @@ function NFTCardSimple({
               </p>
             )}
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">
-                {getChainName(nft.chainId)}
-              </span>
+              <span className="text-gray-500 dark:text-gray-400">{getChainName(nft.chainId)}</span>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -111,16 +105,12 @@ function NFTCardSimple({
           />
         ) : (
           <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-            <span className="text-gray-400 dark:text-gray-500">
-              Failed to load
-            </span>
+            <span className="text-gray-400 dark:text-gray-500">Failed to load</span>
           </div>
         )}
       </div>
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate">
-          {nft.name}
-        </h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate">{nft.name}</h3>
         <div className="flex items-center justify-between mt-auto">
           <button
             onClick={(e) => {
@@ -131,9 +121,7 @@ function NFTCardSimple({
           >
             {formatAddress(nft.owner)}
           </button>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            #{nft.tokenId}
-          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">#{nft.tokenId}</span>
         </div>
       </div>
     </div>
@@ -189,7 +177,7 @@ export function NFTCollectionGrid({
         (nft) =>
           nft.name.toLowerCase().includes(lowerSearch) ||
           nft.collection?.toLowerCase().includes(lowerSearch) ||
-          nft.description?.toLowerCase().includes(lowerSearch)
+          nft.description?.toLowerCase().includes(lowerSearch),
       );
     }
 
@@ -253,9 +241,7 @@ export function NFTCollectionGrid({
                   focus:ring-blue-500 focus:border-blue-500
                   p-2.5 pr-8 appearance-none cursor-pointer transition-all duration-200"
                 value={selectedChain || ""}
-                onChange={(e) =>
-                  setSelectedChain(e.target.value ? Number(e.target.value) : null)
-                }
+                onChange={(e) => setSelectedChain(e.target.value ? Number(e.target.value) : null)}
               >
                 <option value="">All Chains</option>
                 {availableChains.map((chain) => (
@@ -329,12 +315,7 @@ export function NFTCollectionGrid({
                   onClick={() => setSearchInput("")}
                   className="ml-1.5 text-blue-600 dark:text-blue-400 hover:text-blue-800"
                 >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -353,12 +334,7 @@ export function NFTCollectionGrid({
                   onClick={() => setSelectedChain(null)}
                   className="ml-1.5 text-purple-600 dark:text-purple-400 hover:text-purple-800"
                 >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -377,12 +353,7 @@ export function NFTCollectionGrid({
                   onClick={() => setSortBy("recent")}
                   className="ml-1.5 text-green-600 dark:text-green-400 hover:text-green-800"
                 >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -394,29 +365,18 @@ export function NFTCollectionGrid({
               </span>
             )}
 
-            {!debouncedSearchTerm &&
-              selectedChain === null &&
-              sortBy === "recent" && (
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  No filters applied
-                </span>
-              )}
+            {!debouncedSearchTerm && selectedChain === null && sortBy === "recent" && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">No filters applied</span>
+            )}
           </div>
 
-          {(debouncedSearchTerm ||
-            selectedChain !== null ||
-            sortBy !== "recent") && (
+          {(debouncedSearchTerm || selectedChain !== null || sortBy !== "recent") && (
             <button
               onClick={handleResetFilters}
               className="ml-auto text-sm text-red-600 dark:text-red-400 hover:text-red-800
                 transition-colors duration-200 flex items-center gap-1"
             >
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -434,14 +394,8 @@ export function NFTCollectionGrid({
       <div className="mb-4 flex flex-wrap items-center justify-between">
         <div className="text-sm text-gray-600 dark:text-gray-400">
           Showing{" "}
-          <span className="font-medium text-gray-900 dark:text-white">
-            {filteredNFTs.length}
-          </span>{" "}
-          of{" "}
-          <span className="font-medium text-gray-900 dark:text-white">
-            {nfts.length}
-          </span>{" "}
-          NFTs
+          <span className="font-medium text-gray-900 dark:text-white">{filteredNFTs.length}</span>{" "}
+          of <span className="font-medium text-gray-900 dark:text-white">{nfts.length}</span> NFTs
         </div>
 
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -457,12 +411,7 @@ export function NFTCollectionGrid({
                 transition-colors duration-200`}
               aria-label="Grid view"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -481,12 +430,7 @@ export function NFTCollectionGrid({
                 transition-colors duration-200`}
               aria-label="List view"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -522,12 +466,10 @@ export function NFTCollectionGrid({
               d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
-            No NFTs Found
-          </h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No NFTs Found</h3>
           <p className="text-gray-500 dark:text-gray-400 max-w-md">
-            We couldn&apos;t find any NFTs matching your search criteria. Try
-            adjusting your filters or search term.
+            We couldn&apos;t find any NFTs matching your search criteria. Try adjusting your filters
+            or search term.
           </p>
           <button
             onClick={handleResetFilters}
@@ -551,9 +493,7 @@ export function NFTCollectionGrid({
             <div
               key={nft.id}
               className={`transition-all duration-500 ease-in-out transform ${
-                viewMode === "list"
-                  ? "w-full"
-                  : "w-full hover:-translate-y-1 hover:shadow-lg"
+                viewMode === "list" ? "w-full" : "w-full hover:-translate-y-1 hover:shadow-lg"
               }`}
             >
               <NFTCardSimple

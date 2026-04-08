@@ -14,6 +14,6 @@ export interface RecentSearch {
 export interface ENSResolverProps {
   onResolve?: (result: ENSResult) => void;
   className?: string;
-  variant?: 'default' | 'compact';
+  variant?: "default" | "compact";
   resolver?: (input: string) => Promise<ENSResult>;
 }

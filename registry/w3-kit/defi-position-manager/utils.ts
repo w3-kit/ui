@@ -1,4 +1,4 @@
-import { PositionData } from './types';
+import { PositionData } from "./types";
 
 // Get health factor color based on value
 export const getHealthFactorColor = (healthFactor: number): string => {

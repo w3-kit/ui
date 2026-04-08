@@ -20,13 +20,13 @@ This is fundamentally different from order books where buyers and sellers set sp
 
 ### EVM vs Solana
 
-| | EVM (Uniswap, SushiSwap) | Solana (Jupiter, Raydium) |
-|---|---|---|
-| **Standard** | ERC-20 token approvals | SPL token accounts |
+|                     | EVM (Uniswap, SushiSwap)                         | Solana (Jupiter, Raydium)            |
+| ------------------- | ------------------------------------------------ | ------------------------------------ |
+| **Standard**        | ERC-20 token approvals                           | SPL token accounts                   |
 | **Before swapping** | Must `approve()` the router to spend your tokens | Token accounts created automatically |
-| **Gas cost** | $2-50 on mainnet, <$0.01 on L2s | <$0.01 always |
-| **Speed** | 12s (Ethereum), 2s (L2s) | ~400ms |
-| **Aggregators** | 1inch, Paraswap | Jupiter |
+| **Gas cost**        | $2-50 on mainnet, <$0.01 on L2s                  | <$0.01 always                        |
+| **Speed**           | 12s (Ethereum), 2s (L2s)                         | ~400ms                               |
+| **Aggregators**     | 1inch, Paraswap                                  | Jupiter                              |
 
 ### Key terms
 
@@ -45,6 +45,7 @@ This is fundamentally different from order books where buyers and sellers set sp
 ## How this component works
 
 This component provides the UI for a token swap interface. It handles:
+
 - Token selection (input/output)
 - Amount input with balance display
 - Slippage settings

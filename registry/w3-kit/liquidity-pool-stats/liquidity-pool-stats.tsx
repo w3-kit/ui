@@ -1,27 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  ArrowUpRight,
-  ArrowDownRight,
-  TrendingUp,
-  Info,
-  Activity,
-} from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Info, Activity } from "lucide-react";
 import { LiquidityPoolStatsProps, PoolData } from "./types";
-import {
-  formatCurrency,
-  formatNumber,
-  formatPercentage,
-  getChangeColor,
-} from "./utils";
+import { formatCurrency, formatNumber, formatPercentage, getChangeColor } from "./utils";
 
 function Skeleton({ className = "" }: { className?: string }) {
-  return (
-    <div
-      className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded ${className}`}
-    />
-  );
+  return <div className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded ${className}`} />;
 }
 
 function LoadingCard() {
@@ -65,8 +50,7 @@ function getTooltipContent(poolData: PoolData) {
   return {
     tvl: {
       title: "Total Value Locked",
-      description:
-        "The total value of all assets deposited in this liquidity pool",
+      description: "The total value of all assets deposited in this liquidity pool",
       stats: [
         { label: "24h High", value: formatCurrency(poolData.tvl * 1.1) },
         { label: "24h Low", value: formatCurrency(poolData.tvl * 0.9) },
@@ -79,16 +63,13 @@ function getTooltipContent(poolData: PoolData) {
         { label: "Trades", value: formatNumber(poolData.transactions24h) },
         {
           label: "Avg Trade",
-          value: formatCurrency(
-            poolData.volume24h / poolData.transactions24h
-          ),
+          value: formatCurrency(poolData.volume24h / poolData.transactions24h),
         },
       ],
     },
     apr: {
       title: "Annual Percentage Rate",
-      description:
-        "Estimated yearly earnings based on current trading volume",
+      description: "Estimated yearly earnings based on current trading volume",
       stats: [
         { label: "Daily Rate", value: formatPercentage(poolData.apr / 365) },
         { label: "Monthly Rate", value: formatPercentage(poolData.apr / 12) },
@@ -96,8 +77,7 @@ function getTooltipContent(poolData: PoolData) {
     },
     fees: {
       title: "Trading Fees",
-      description:
-        "Fees earned by liquidity providers in the last 24 hours",
+      description: "Fees earned by liquidity providers in the last 24 hours",
       stats: [
         { label: "Fee Tier", value: `${poolData.fee / 10000}%` },
         {
@@ -157,9 +137,7 @@ export function LiquidityPoolStats({
                     bg-gray-900 dark:bg-gray-700 text-white p-4 rounded-lg text-sm
                     shadow-lg z-50 w-64 pointer-events-none"
                 >
-                  <h4 className="font-medium mb-1">
-                    {tooltipContent[tooltipKey].title}
-                  </h4>
+                  <h4 className="font-medium mb-1">{tooltipContent[tooltipKey].title}</h4>
                   <p className="text-gray-300 text-xs mb-3">
                     {tooltipContent[tooltipKey].description}
                   </p>
@@ -191,9 +169,7 @@ export function LiquidityPoolStats({
               <span className="ml-2 text-sm text-gray-500">24h change</span>
             </div>
           )}
-          {subtitle && (
-            <p className="text-sm text-gray-500 mt-2">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-sm text-gray-500 mt-2">{subtitle}</p>}
         </div>
       </div>
     );
@@ -312,9 +288,7 @@ export function LiquidityPoolStats({
             {/* TVL */}
             <div className="relative group">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  TVL
-                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">TVL</span>
                 <div className="relative">
                   <button
                     onMouseEnter={() => setShowTooltip("tvl")}
@@ -329,12 +303,8 @@ export function LiquidityPoolStats({
                       bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
                       shadow-lg z-50 w-56 pointer-events-none"
                     >
-                      <h4 className="font-medium mb-1">
-                        {tooltipContent.tvl.title}
-                      </h4>
-                      <p className="text-gray-300 text-xs">
-                        {tooltipContent.tvl.description}
-                      </p>
+                      <h4 className="font-medium mb-1">{tooltipContent.tvl.title}</h4>
+                      <p className="text-gray-300 text-xs">{tooltipContent.tvl.description}</p>
                       <div
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
                         border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
@@ -354,9 +324,7 @@ export function LiquidityPoolStats({
             {/* APR */}
             <div className="relative group">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  APR
-                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">APR</span>
                 <div className="relative">
                   <button
                     onMouseEnter={() => setShowTooltip("apr")}
@@ -371,12 +339,8 @@ export function LiquidityPoolStats({
                       bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
                       shadow-lg z-50 w-56 pointer-events-none"
                     >
-                      <h4 className="font-medium mb-1">
-                        {tooltipContent.apr.title}
-                      </h4>
-                      <p className="text-gray-300 text-xs">
-                        {tooltipContent.apr.description}
-                      </p>
+                      <h4 className="font-medium mb-1">{tooltipContent.apr.title}</h4>
+                      <p className="text-gray-300 text-xs">{tooltipContent.apr.description}</p>
                       <div
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full
                         border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"

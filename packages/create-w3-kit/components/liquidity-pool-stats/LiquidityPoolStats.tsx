@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { formatCurrency, formatNumber, formatPercentage } from './utils';
-import { LiquidityPoolStatsProps } from './types';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Info, Activity } from 'lucide-react';
-
+import React, { useState } from "react";
+import { formatCurrency, formatNumber, formatPercentage } from "./utils";
+import { LiquidityPoolStatsProps } from "./types";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Info, Activity } from "lucide-react";
 
 // Add Skeleton Component
 const Skeleton = ({ className = "" }: { className?: string }) => (
@@ -28,29 +27,32 @@ const LoadingCard = () => (
 
 export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
   poolData,
-  className = '',
+  className = "",
   onTokenClick,
-  variant = 'default',
-  isLoading = false
+  variant = "default",
+  isLoading = false,
 }) => {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
   const getChangeColor = (value: number) => {
-    if (value > 0) return 'text-green-600 dark:text-green-400';
-    if (value < 0) return 'text-red-600 dark:text-red-400';
-    return 'text-gray-600 dark:text-gray-400';
+    if (value > 0) return "text-green-600 dark:text-green-400";
+    if (value < 0) return "text-red-600 dark:text-red-400";
+    return "text-gray-600 dark:text-gray-400";
   };
 
   const ChangeIndicator = ({ value }: { value: number }) => (
-    <span className={`
+    <span
+      className={`
       flex items-center ${getChangeColor(value)} 
       transition-all duration-300 ease-out
       transform hover:translate-x-1
-    `}>
-      {value > 0 ? 
-        <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4" /> : 
+    `}
+    >
+      {value > 0 ? (
+        <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
+      ) : (
         <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4" />
-      }
+      )}
       {formatPercentage(Math.abs(value))}
     </span>
   );
@@ -61,43 +63,46 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
       description: "The total value of all assets deposited in this liquidity pool",
       stats: [
         { label: "24h High", value: formatCurrency(poolData.tvl * 1.1) },
-        { label: "24h Low", value: formatCurrency(poolData.tvl * 0.9) }
-      ]
+        { label: "24h Low", value: formatCurrency(poolData.tvl * 0.9) },
+      ],
     },
     volume: {
       title: "24h Trading Volume",
       description: "Total value of all trades in the last 24 hours",
       stats: [
         { label: "Trades", value: formatNumber(poolData.transactions24h) },
-        { label: "Avg Trade", value: formatCurrency(poolData.volume24h / poolData.transactions24h) }
-      ]
+        {
+          label: "Avg Trade",
+          value: formatCurrency(poolData.volume24h / poolData.transactions24h),
+        },
+      ],
     },
     apr: {
       title: "Annual Percentage Rate",
       description: "Estimated yearly earnings based on current trading volume",
       stats: [
         { label: "Daily Rate", value: formatPercentage(poolData.apr / 365) },
-        { label: "Monthly Rate", value: formatPercentage(poolData.apr / 12) }
-      ]
+        { label: "Monthly Rate", value: formatPercentage(poolData.apr / 12) },
+      ],
     },
     fees: {
       title: "Trading Fees",
       description: "Fees earned by liquidity providers in the last 24 hours",
       stats: [
         { label: "Fee Tier", value: `${poolData.fee / 10000}%` },
-        { label: "Per $1M", value: formatCurrency(10000 * (poolData.fee / 10000)) }
-      ]
-    }
+        { label: "Per $1M", value: formatCurrency(10000 * (poolData.fee / 10000)) },
+      ],
+    },
   };
 
-  const StatCard = ({ 
-    title, 
-    value, 
-    change, 
-    subtitle, 
-    tooltipKey, 
-    icon
-  }: { 
+  const StatCard = ({
+    title,
+    value,
+    change,
+    subtitle,
+    tooltipKey,
+    icon,
+  }: {
     title: string;
     value: string;
     change?: number;
@@ -106,9 +111,7 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
     icon?: React.ReactNode;
   }) => {
     return (
-      <div 
-        className="bg-gray-50 dark:bg-gray-750 rounded-lg p-6 relative group"
-      >
+      <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-6 relative group">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">
@@ -123,13 +126,15 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
                 <Info className="w-4 h-4" />
               </button>
               {showTooltip === tooltipKey && (
-                <div 
+                <div
                   className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
                     bg-gray-900 dark:bg-gray-700 text-white p-4 rounded-lg text-sm
                     shadow-lg z-50 w-64 animate-fade-in pointer-events-none"
                 >
                   <h4 className="font-medium mb-1">{tooltipContent[tooltipKey].title}</h4>
-                  <p className="text-gray-300 text-xs mb-3">{tooltipContent[tooltipKey].description}</p>
+                  <p className="text-gray-300 text-xs mb-3">
+                    {tooltipContent[tooltipKey].description}
+                  </p>
                   <div className="grid grid-cols-2 gap-3 border-t border-gray-600 pt-2">
                     {tooltipContent[tooltipKey].stats.map((stat, i) => (
                       <div key={i} className="space-y-1">
@@ -138,8 +143,10 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
                       </div>
                     ))}
                   </div>
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
-                    border-8 border-transparent border-t-gray-900 dark:border-t-gray-700" />
+                  <div
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
+                    border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                  />
                 </div>
               )}
             </div>
@@ -156,21 +163,21 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
               <span className="ml-2 text-sm text-gray-500">24h change</span>
             </div>
           )}
-          {subtitle && (
-            <p className="text-sm text-gray-500 mt-2">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-sm text-gray-500 mt-2">{subtitle}</p>}
         </div>
       </div>
     );
   };
 
   // Loading State for Compact Variant
-  if (isLoading && variant === 'compact') {
+  if (isLoading && variant === "compact") {
     return (
-      <div className={`
+      <div
+        className={`
         bg-white dark:bg-gray-800 rounded-lg border border-gray-200 
         dark:border-gray-700 shadow-sm p-4 ${className}
-      `}>
+      `}
+      >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <Skeleton className="w-10 h-10 rounded-full" />
@@ -200,10 +207,12 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
   // Loading State for Default Variant
   if (isLoading) {
     return (
-      <div className={`
+      <div
+        className={`
         bg-white dark:bg-gray-800 rounded-lg border border-gray-200 
         dark:border-gray-700 shadow-sm ${className}
-      `}>
+      `}
+      >
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -226,7 +235,7 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
     );
   }
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div
         className={`
@@ -240,7 +249,8 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative w-10 h-10 flex-shrink-0 group">
-                <img loading="lazy"
+                <img
+                  loading="lazy"
                   src={poolData.token.logoURI}
                   alt={poolData.token.symbol}
                   sizes="40px"
@@ -275,20 +285,24 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
                 <span className="text-sm text-gray-500 dark:text-gray-400">TVL</span>
                 <div className="relative">
                   <button
-                    onMouseEnter={() => setShowTooltip('tvl')}
+                    onMouseEnter={() => setShowTooltip("tvl")}
                     onMouseLeave={() => setShowTooltip(null)}
                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                   >
                     <Info className="w-3 h-3" />
                   </button>
-                  {showTooltip === 'tvl' && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                  {showTooltip === "tvl" && (
+                    <div
+                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
                       bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
-                      shadow-lg z-50 w-56 animate-fade-in pointer-events-none">
+                      shadow-lg z-50 w-56 animate-fade-in pointer-events-none"
+                    >
                       <h4 className="font-medium mb-1">{tooltipContent.tvl.title}</h4>
                       <p className="text-gray-300 text-xs">{tooltipContent.tvl.description}</p>
-                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
-                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700" />
+                      <div
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
+                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                      />
                     </div>
                   )}
                 </div>
@@ -307,20 +321,24 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
                 <span className="text-sm text-gray-500 dark:text-gray-400">APR</span>
                 <div className="relative">
                   <button
-                    onMouseEnter={() => setShowTooltip('apr')}
+                    onMouseEnter={() => setShowTooltip("apr")}
                     onMouseLeave={() => setShowTooltip(null)}
                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                   >
                     <Info className="w-3 h-3" />
                   </button>
-                  {showTooltip === 'apr' && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                  {showTooltip === "apr" && (
+                    <div
+                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
                       bg-gray-900 dark:bg-gray-700 text-white p-3 rounded-lg text-sm
-                      shadow-lg z-50 w-56 animate-fade-in pointer-events-none">
+                      shadow-lg z-50 w-56 animate-fade-in pointer-events-none"
+                    >
                       <h4 className="font-medium mb-1">{tooltipContent.apr.title}</h4>
                       <p className="text-gray-300 text-xs">{tooltipContent.apr.description}</p>
-                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
-                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700" />
+                      <div
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full 
+                        border-8 border-transparent border-t-gray-900 dark:border-t-gray-700"
+                      />
                     </div>
                   )}
                 </div>
@@ -341,18 +359,21 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
   }
 
   return (
-    <div className={`
+    <div
+      className={`
       bg-white dark:bg-gray-800 rounded-lg border border-gray-200 
       dark:border-gray-700 shadow-sm hover:shadow-md 
       transition-all duration-300 ease-out
       h-full ${className}
-    `}>
+    `}
+    >
       {/* Pool Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="relative w-10 h-10 flex-shrink-0 group">
-              <img loading="lazy"
+              <img
+                loading="lazy"
                 src={poolData.token.logoURI}
                 alt={poolData.token.symbol}
                 sizes="40px"

@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { TrendingUp, TrendingDown, AlertTriangle, ArrowUpRight, ArrowDownRight, ChevronRight, Wallet, Activity, Shield, Coins } from "lucide-react";
-
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  ArrowUpRight,
+  ArrowDownRight,
+  ChevronRight,
+  Wallet,
+  Activity,
+  Shield,
+  Coins,
+} from "lucide-react";
 
 export interface PositionData {
   id: string;
@@ -29,7 +39,10 @@ export interface PositionData {
 
 interface DeFiPositionManagerProps {
   positions: PositionData[];
-  onAdjustPosition?: (positionId: string, action: "deposit" | "withdraw" | "borrow" | "repay") => void;
+  onAdjustPosition?: (
+    positionId: string,
+    action: "deposit" | "withdraw" | "borrow" | "repay",
+  ) => void;
   className?: string;
 }
 
@@ -40,7 +53,9 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 }) => {
   const [selectedPosition, setSelectedPosition] = useState<PositionData | null>(null);
   const [showAdjustModal, setShowAdjustModal] = useState(false);
-  const [adjustAction, setAdjustAction] = useState<"deposit" | "withdraw" | "borrow" | "repay">("deposit");
+  const [adjustAction, setAdjustAction] = useState<"deposit" | "withdraw" | "borrow" | "repay">(
+    "deposit",
+  );
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -63,7 +78,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
 
   const handleAdjustPosition = async () => {
     if (!selectedPosition || !amount) return;
-    
+
     setIsProcessing(true);
     try {
       await onAdjustPosition?.(selectedPosition.id, adjustAction);
@@ -80,7 +95,9 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">DeFi Positions</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your DeFi investments</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Manage your DeFi investments
+          </p>
         </div>
         <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700 px-4 py-2 rounded-lg">
           <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -105,7 +122,8 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 p-2 shadow-sm">
-                    <img loading="lazy"
+                    <img
+                      loading="lazy"
                       src={position.protocol.logoURI}
                       alt={position.protocol.name}
                       width={32}
@@ -132,7 +150,9 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                 <div className="font-medium text-gray-900 dark:text-white">
                   ${position.value.toFixed(2)}
                 </div>
-                <div className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}>
+                <div
+                  className={`text-sm ${getHealthFactorColor(position.healthFactor)} flex items-center justify-end space-x-1`}
+                >
                   <Shield className="w-3 h-3" />
                   <span>Health: {position.healthFactor.toFixed(2)}</span>
                 </div>
@@ -145,12 +165,17 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">APY</div>
                 <div className="font-medium text-gray-900 dark:text-white flex items-center space-x-1">
                   <Activity className="w-4 h-4" />
-                  <span>{position.apy > 0 ? "+" : ""}{position.apy.toFixed(2)}%</span>
+                  <span>
+                    {position.apy > 0 ? "+" : ""}
+                    {position.apy.toFixed(2)}%
+                  </span>
                 </div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Risk Level</div>
-                <div className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}>
+                <div
+                  className={`font-medium ${getRiskColor(position.risk)} flex items-center space-x-1`}
+                >
                   <AlertTriangle className="w-4 h-4" />
                   <span>{position.risk.charAt(0).toUpperCase() + position.risk.slice(1)}</span>
                 </div>
@@ -217,7 +242,8 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 animate-slideIn">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)} {selectedPosition.token.symbol}
+                {adjustAction.charAt(0).toUpperCase() + adjustAction.slice(1)}{" "}
+                {selectedPosition.token.symbol}
               </h3>
               <button
                 onClick={() => setShowAdjustModal(false)}
@@ -226,7 +252,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -241,7 +267,8 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                     placeholder="0.0"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <img loading="lazy"
+                    <img
+                      loading="lazy"
                       src={selectedPosition.token.logoURI}
                       alt={selectedPosition.token.symbol}
                       width={24}
@@ -283,4 +310,4 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
       )}
     </div>
   );
-}; 
+};

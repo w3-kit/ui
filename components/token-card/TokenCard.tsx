@@ -9,26 +9,19 @@ import { formatCurrency, formatBalance, formatPercentage } from "./utils";
 
 export type { Token, TokenCardProps };
 
-export const TokenCard: React.FC<TokenCardProps> = ({
-  token,
-  onClick,
-  className,
-}) => {
+export const TokenCard: React.FC<TokenCardProps> = ({ token, onClick, className }) => {
   const hasPrice = token.price != null;
   const hasBalance = token.balance != null;
   const hasChange = token.priceChange24h != null;
   const isPositive = (token.priceChange24h ?? 0) >= 0;
-  const totalValue =
-    hasPrice && hasBalance
-      ? Number(token.balance) * token.price!
-      : undefined;
+  const totalValue = hasPrice && hasBalance ? Number(token.balance) * token.price! : undefined;
 
   return (
     <div
       className={cn(
         "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900",
         onClick && "cursor-pointer",
-        className
+        className,
       )}
       onClick={() => onClick?.(token)}
     >
@@ -37,12 +30,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         <div className="flex items-center gap-3">
           <TokenIcon symbol={token.symbol} logoURI={token.logoURI} size="lg" />
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              {token.name}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {token.symbol}
-            </p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">{token.name}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{token.symbol}</p>
           </div>
         </div>
 
@@ -52,14 +41,10 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
               isPositive
                 ? "bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400"
-                : "bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400"
+                : "bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400",
             )}
           >
-            {isPositive ? (
-              <TrendingUp className="h-3 w-3" />
-            ) : (
-              <TrendingDown className="h-3 w-3" />
-            )}
+            {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
             {formatPercentage(token.priceChange24h!)}
           </span>
         )}

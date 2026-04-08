@@ -31,13 +31,18 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
         onBuy?.(listing);
       }
     },
-    [onBuy]
+    [onBuy],
   );
 
   // Empty state
   if (!listings || listings.length === 0) {
     return (
-      <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+      <div
+        className={cn(
+          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+          className,
+        )}
+      >
         <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
           <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
             NFT Marketplace
@@ -46,14 +51,21 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <ImageOff className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No listings found</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">NFT listings will appear here when available</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            NFT listings will appear here when available
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -78,7 +90,8 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
               className={cn(
                 "flex items-center gap-3 px-4 py-3 transition-colors duration-150",
                 "hover:bg-gray-50 dark:hover:bg-gray-900",
-                isClickable && "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset"
+                isClickable &&
+                  "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
               )}
               onClick={() => onBuy?.(listing)}
             >
@@ -91,7 +104,7 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
                       alt={listing.name}
                       className={cn(
                         "w-full h-full object-cover transition-opacity duration-150",
-                        imageLoaded.has(listing.id) ? "opacity-100" : "opacity-0"
+                        imageLoaded.has(listing.id) ? "opacity-100" : "opacity-0",
                       )}
                       onLoad={() => setImageLoaded((prev) => new Set(prev).add(listing.id))}
                       onError={() => setImageErrors((prev) => new Set(prev).add(listing.id))}
@@ -101,18 +114,26 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
                     )}
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 dark:text-gray-500">NFT</div>
+                  <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 dark:text-gray-500">
+                    NFT
+                  </div>
                 )}
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{listing.name}</p>
-                  {listing.verified && <BadgeCheck className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />}
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {listing.name}
+                  </p>
+                  {listing.verified && (
+                    <BadgeCheck className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                  )}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{listing.collection}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {listing.collection}
+                  </span>
                   <Badge>{listing.marketplace}</Badge>
                 </div>
               </div>
@@ -129,7 +150,9 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
                     {formatPrice(listing.price, listing.currency)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 tabular-nums">{formatUSD(listing.usdPrice)}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 tabular-nums">
+                  {formatUSD(listing.usdPrice)}
+                </p>
               </div>
             </div>
           );

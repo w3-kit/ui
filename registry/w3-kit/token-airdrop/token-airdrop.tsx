@@ -45,10 +45,7 @@ const StatusBadge: React.FC<{ status: AirdropStatus }> = ({ status }) => {
   );
 };
 
-export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
-  airdrops,
-  onClaim,
-}) => {
+export const TokenAirdrop: React.FC<TokenAirdropProps> = ({ airdrops, onClaim }) => {
   const [claimingId, setClaimingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState<string | null>(null);
@@ -85,9 +82,7 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
           className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200
             dark:border-gray-700 p-5 cursor-pointer transition-all duration-200 ease-out
             hover:shadow-md"
-          onClick={() =>
-            setExpandedId(expandedId === airdrop.id ? null : airdrop.id)
-          }
+          onClick={() => setExpandedId(expandedId === airdrop.id ? null : airdrop.id)}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -104,9 +99,7 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
                   <span>{airdrop.tokenName}</span>
-                  <span className="text-sm text-gray-500">
-                    ({airdrop.tokenSymbol})
-                  </span>
+                  <span className="text-sm text-gray-500">({airdrop.tokenSymbol})</span>
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Amount: {airdrop.amount} {airdrop.tokenSymbol}
@@ -143,33 +136,25 @@ export const TokenAirdrop: React.FC<TokenAirdropProps> = ({
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Start Time
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Start Time</p>
                 <p className="font-medium text-gray-900 dark:text-white">
                   {formatDate(airdrop.startTime)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  End Time
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">End Time</p>
                 <p className="font-medium text-gray-900 dark:text-white">
                   {formatDate(airdrop.endTime)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Token Address
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Token Address</p>
                 <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
                   {airdrop.tokenAddress}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Merkle Root
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Merkle Root</p>
                 <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
                   {airdrop.merkleRoot}
                 </p>

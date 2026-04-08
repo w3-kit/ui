@@ -1,4 +1,4 @@
-import { MetadataResolver } from '../resolver.js';
+import { MetadataResolver } from "../resolver.js";
 
 export function handleListComponents(resolver: MetadataResolver, args: { category?: string }) {
   const components = resolver.listComponents(args.category);
@@ -11,6 +11,6 @@ export function handleListComponents(resolver: MetadataResolver, args: { categor
   }));
 
   return {
-    content: [{ type: 'text' as const, text: JSON.stringify(summary, null, 2) }],
+    content: [{ type: "text" as const, text: JSON.stringify(summary, null, 2) }],
   };
 }

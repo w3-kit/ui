@@ -12,10 +12,7 @@ export async function fetchGasPrice(_chainId: number): Promise<GasPrice> {
   };
 }
 
-export function estimateTransactionCost(
-  gasPrice: GasPrice,
-  gasLimit: number
-): GasEstimate {
+export function estimateTransactionCost(gasPrice: GasPrice, gasLimit: number): GasEstimate {
   return {
     gasLimit,
     estimatedCost: {

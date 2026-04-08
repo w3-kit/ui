@@ -1,14 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
-import { Token } from './types';
-import { formatBalance, formatCurrency } from './utils';
+import { Token } from "./types";
+import { formatBalance, formatCurrency } from "./utils";
 import {
-  TrendingUp, TrendingDown, ArrowRight, Wallet, DollarSign,
-  Star, StarOff, Share2, Info, BarChart2, Clock, ChevronDown, ChevronUp,
-  MoreVertical, Copy, Check, Zap
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+  TrendingUp,
+  TrendingDown,
+  ArrowRight,
+  Wallet,
+  DollarSign,
+  Star,
+  StarOff,
+  Share2,
+  Info,
+  BarChart2,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  MoreVertical,
+  Copy,
+  Check,
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Extend the Token interface with additional properties we need
 interface ExtendedToken extends Token {
@@ -23,7 +37,7 @@ interface ExtendedToken extends Token {
 
 interface TokenCardProps {
   token: ExtendedToken;
-  variant?: 'default' | 'compact' | 'expanded' | 'minimal';
+  variant?: "default" | "compact" | "expanded" | "minimal";
   onClick?: (token: ExtendedToken) => void;
   showBalance?: boolean;
   showPrice?: boolean;
@@ -33,7 +47,7 @@ interface TokenCardProps {
 
 export const TokenCard: React.FC<TokenCardProps> = ({
   token,
-  variant = 'default',
+  variant = "default",
   onClick,
   showBalance = true,
   showPrice = true,
@@ -64,9 +78,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -74,22 +88,26 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   const renderPriceChange = (change: number) => {
     const isPositive = change >= 0;
     return (
-      <div className={`flex items-center text-xs font-medium ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+      <div
+        className={`flex items-center text-xs font-medium ${isPositive ? "text-green-500" : "text-red-500"}`}
+      >
         {isPositive ? (
           <TrendingUp className="w-3 h-3 mr-1" />
         ) : (
           <TrendingDown className="w-3 h-3 mr-1" />
         )}
-        <span>{isPositive ? '+' : ''}{change.toFixed(2)}%</span>
+        <span>
+          {isPositive ? "+" : ""}
+          {change.toFixed(2)}%
+        </span>
       </div>
     );
   };
 
-
   // Helper function to format date
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
   };
 
   // Handle favorite toggle
@@ -104,14 +122,18 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (navigator.share) {
-      navigator.share({
-        title: `${token.name} (${token.symbol})`,
-        text: `Check out ${token.name} (${token.symbol}) - Current price: ${token.price ? formatCurrency(token.price) : 'N/A'}`,
-        url: `https://example.com/tokens/${token.symbol.toLowerCase()}`
-      }).catch(err => console.error('Error sharing:', err));
+      navigator
+        .share({
+          title: `${token.name} (${token.symbol})`,
+          text: `Check out ${token.name} (${token.symbol}) - Current price: ${token.price ? formatCurrency(token.price) : "N/A"}`,
+          url: `https://example.com/tokens/${token.symbol.toLowerCase()}`,
+        })
+        .catch((err) => console.error("Error sharing:", err));
     } else {
       // Fallback - copy to clipboard
-      navigator.clipboard.writeText(`${token.name} (${token.symbol}) - Current price: ${token.price ? formatCurrency(token.price) : 'N/A'}`);
+      navigator.clipboard.writeText(
+        `${token.name} (${token.symbol}) - Current price: ${token.price ? formatCurrency(token.price) : "N/A"}`,
+      );
       setCopySuccess(true);
     }
   };
@@ -131,7 +153,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   // Copy token information to clipboard
   const copyTokenInfo = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(`${token.name} (${token.symbol}) - ${token.price ? formatCurrency(token.price) : 'N/A'}`);
+    navigator.clipboard.writeText(
+      `${token.name} (${token.symbol}) - ${token.price ? formatCurrency(token.price) : "N/A"}`,
+    );
     setCopySuccess(true);
     setTimeout(() => {
       setShowDropdown(false);
@@ -139,7 +163,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   };
 
   // Ensure logoURI is a valid string for Next.js Image component
-  const logoURI = token.logoURI || '/placeholder-token.png'; // Fallback image
+  const logoURI = token.logoURI || "/placeholder-token.png"; // Fallback image
 
   const variants = {
     default: (
@@ -150,30 +174,31 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         <CardContent className="p-4">
           {/* Subtle background pattern */}
           <div className="absolute top-0 right-0 w-16 h-16 opacity-5 dark:opacity-10">
-            <div className="w-full h-full bg-contain bg-no-repeat bg-right-top"
-                 style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50 L100 0 L100 100 Z' fill='%23${token.symbol.charCodeAt(0).toString(16).padStart(2, '0')}${token.symbol.charCodeAt(1)?.toString(16).padStart(2, '0') || '00'}${token.symbol.charCodeAt(2)?.toString(16).padStart(2, '0') || '00'}' /%3E%3C/svg%3E")`}}></div>
+            <div
+              className="w-full h-full bg-contain bg-no-repeat bg-right-top"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50 L100 0 L100 100 Z' fill='%23${token.symbol.charCodeAt(0).toString(16).padStart(2, "0")}${token.symbol.charCodeAt(1)?.toString(16).padStart(2, "0") || "00"}${token.symbol.charCodeAt(2)?.toString(16).padStart(2, "0") || "00"}' /%3E%3C/svg%3E")`,
+              }}
+            ></div>
           </div>
 
           {/* Token rank badge (if available) */}
           {token.rank && (
             <div className="absolute top-3 right-3 bg-secondary text-xs font-medium px-1.5 py-0.5 rounded-md flex items-center">
-              <Zap className="w-3 h-3 mr-1 text-yellow-500" />
-              #{token.rank}
+              <Zap className="w-3 h-3 mr-1 text-yellow-500" />#{token.rank}
             </div>
           )}
 
           <div className="flex items-center space-x-3">
             <div className="relative flex-shrink-0">
               <div className="relative w-10 h-10 rounded-full overflow-hidden bg-secondary shadow-sm">
-                <img loading="lazy"
-                  src={logoURI}
-                  alt={token.symbol}
-                  className="object-cover"
-                />
+                <img loading="lazy" src={logoURI} alt={token.symbol} className="object-cover" />
               </div>
               {showPriceChange && token.priceChange24h !== undefined && (
                 <div className="absolute -bottom-1 -right-1">
-                  <div className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm ${token.priceChange24h >= 0 ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
+                  <div
+                    className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm ${token.priceChange24h >= 0 ? "bg-green-100 dark:bg-green-900/30" : "bg-red-100 dark:bg-red-900/30"}`}
+                  >
                     {token.priceChange24h >= 0 ? (
                       <TrendingUp className={`w-3 h-3 text-green-500`} />
                     ) : (
@@ -191,10 +216,14 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     onClick={handleFavoriteToggle}
                     variant="ghost"
                     size="icon"
-                    className={`h-7 w-7 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20' : 'text-muted-foreground'}`}
+                    className={`h-7 w-7 ${isFavorite ? "text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20" : "text-muted-foreground"}`}
                     title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                   >
-                    {isFavorite ? <Star className="w-3.5 h-3.5" /> : <StarOff className="w-3.5 h-3.5" />}
+                    {isFavorite ? (
+                      <Star className="w-3.5 h-3.5" />
+                    ) : (
+                      <StarOff className="w-3.5 h-3.5" />
+                    )}
                   </Button>
                   <Button
                     onClick={handleShare}
@@ -224,9 +253,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     >
                       <CardContent className="p-0">
                         <div className="p-3 border-b border-border">
-                          <p className="text-xs font-medium text-foreground">{token.name} ({token.symbol})</p>
+                          <p className="text-xs font-medium text-foreground">
+                            {token.name} ({token.symbol})
+                          </p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            {token.price ? formatCurrency(token.price) : 'Price N/A'}
+                            {token.price ? formatCurrency(token.price) : "Price N/A"}
                           </p>
                         </div>
                         <div className="py-1">
@@ -258,7 +289,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                           <Button
                             onClick={copyTokenInfo}
                             variant="ghost"
-                            className={`w-full justify-start text-xs h-8 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                            className={`w-full justify-start text-xs h-8 px-3 ${copySuccess ? "text-green-500" : ""}`}
                           >
                             {copySuccess ? (
                               <>
@@ -275,7 +306,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                         </div>
                         {(token.marketCap || token.volume24h || token.allTimeHigh) && (
                           <div className="border-t border-border px-3 py-2">
-                            <p className="text-xs font-medium text-foreground mb-1.5">Quick Stats</p>
+                            <p className="text-xs font-medium text-foreground mb-1.5">
+                              Quick Stats
+                            </p>
                             {token.marketCap && (
                               <div className="flex justify-between items-center mb-1.5">
                                 <p className="text-xs text-muted-foreground">Market Cap</p>
@@ -323,21 +356,22 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             <div className="mt-3 p-3 bg-secondary rounded-md">
               <div className="flex justify-between items-center">
                 <p className="text-xs text-muted-foreground">Current Price</p>
-                <p className="text-sm font-medium text-foreground">
-                  {formatCurrency(token.price)}
-                </p>
+                <p className="text-sm font-medium text-foreground">{formatCurrency(token.price)}</p>
               </div>
               {showPriceChange && token.priceChange24h !== undefined && (
                 <div className="mt-2 w-full">
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs text-muted-foreground">24h Change</span>
-                    <span className={`text-xs font-medium ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
+                    <span
+                      className={`text-xs font-medium ${token.priceChange24h >= 0 ? "text-green-500" : "text-red-500"}`}
+                    >
+                      {token.priceChange24h >= 0 ? "+" : ""}
+                      {token.priceChange24h.toFixed(2)}%
                     </span>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-1.5">
                     <div
-                      className={`h-1.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}
+                      className={`h-1.5 rounded-full ${token.priceChange24h >= 0 ? "bg-green-500" : "bg-red-500"}`}
                       style={{ width: `${Math.min(Math.abs(token.priceChange24h * 2), 100)}%` }}
                     ></div>
                   </div>
@@ -382,9 +416,13 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               className="text-primary text-xs h-7 px-2"
             >
               {showDetails ? (
-                <>Less <ChevronUp className="w-3 h-3 ml-1" /></>
+                <>
+                  Less <ChevronUp className="w-3 h-3 ml-1" />
+                </>
               ) : (
-                <>More <ChevronDown className="w-3 h-3 ml-1" /></>
+                <>
+                  More <ChevronDown className="w-3 h-3 ml-1" />
+                </>
               )}
             </Button>
             <Button
@@ -396,7 +434,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               size="sm"
               className="text-primary text-xs h-7 px-2"
             >
-              Details <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-0.5" />
+              Details{" "}
+              <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-0.5" />
             </Button>
           </div>
 
@@ -452,9 +491,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   <Info className="w-3.5 h-3.5 mr-1.5" />
                   Chain ID
                 </p>
-                <p className="text-xs font-medium text-foreground">
-                  {token.chainId}
-                </p>
+                <p className="text-xs font-medium text-foreground">{token.chainId}</p>
               </div>
             </div>
           )}
@@ -471,7 +508,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
       >
         <div className="flex items-center space-x-2.5">
           <div className="relative">
-            <img loading="lazy"
+            <img
+              loading="lazy"
               src={logoURI}
               alt={token.symbol}
               width={30}
@@ -480,7 +518,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             />
             {showPriceChange && token.priceChange24h !== undefined && (
               <div className="absolute -bottom-1 -right-1">
-                <div className={`flex items-center justify-center w-3.5 h-3.5 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}>
+                <div
+                  className={`flex items-center justify-center w-3.5 h-3.5 rounded-full ${token.priceChange24h >= 0 ? "bg-green-500" : "bg-red-500"}`}
+                >
                   {token.priceChange24h >= 0 ? (
                     <TrendingUp className="w-2 h-2 text-white" />
                   ) : (
@@ -504,13 +544,14 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             </div>
             <div className="flex items-center space-x-2">
               {showPrice && token.price && (
-                <p className="text-xs text-muted-foreground">
-                  {formatCurrency(token.price)}
-                </p>
+                <p className="text-xs text-muted-foreground">{formatCurrency(token.price)}</p>
               )}
               {showPriceChange && token.priceChange24h !== undefined && (
-                <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                  {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
+                <span
+                  className={`text-xs ${token.priceChange24h >= 0 ? "text-green-500" : "text-red-500"}`}
+                >
+                  {token.priceChange24h >= 0 ? "+" : ""}
+                  {token.priceChange24h.toFixed(2)}%
                 </span>
               )}
             </div>
@@ -525,7 +566,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               <p className="text-xs text-muted-foreground">
                 {token.price && token.balance
                   ? formatCurrency(Number(token.balance) * token.price)
-                  : ''}
+                  : ""}
               </p>
             </div>
           )}
@@ -534,7 +575,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               onClick={handleFavoriteToggle}
               variant="ghost"
               size="icon"
-              className={`h-6 w-6 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-muted-foreground'}`}
+              className={`h-6 w-6 ${isFavorite ? "text-yellow-500 hover:text-yellow-600" : "text-muted-foreground"}`}
             >
               {isFavorite ? <Star className="w-3.5 h-3.5" /> : <StarOff className="w-3.5 h-3.5" />}
             </Button>
@@ -564,9 +605,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
               >
                 <CardContent className="p-0">
                   <div className="p-2 border-b border-border">
-                    <p className="text-xs font-medium text-foreground">{token.name} ({token.symbol})</p>
+                    <p className="text-xs font-medium text-foreground">
+                      {token.name} ({token.symbol})
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                      {token.price ? formatCurrency(token.price) : 'Price N/A'}
+                      {token.price ? formatCurrency(token.price) : "Price N/A"}
                     </p>
                   </div>
                   <div className="py-1">
@@ -598,7 +641,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     <Button
                       onClick={copyTokenInfo}
                       variant="ghost"
-                      className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                      className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? "text-green-500" : ""}`}
                     >
                       {copySuccess ? (
                         <>
@@ -663,7 +706,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <img loading="lazy"
+                  <img
+                    loading="lazy"
                     src={logoURI}
                     alt={token.symbol}
                     width={30}
@@ -672,7 +716,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   />
                   {showPriceChange && token.priceChange24h !== undefined && (
                     <div className="absolute -bottom-1 -right-1">
-                      <div className={`flex items-center justify-center w-4 h-4 rounded-full ${token.priceChange24h >= 0 ? 'bg-green-500' : 'bg-red-500'}`}>
+                      <div
+                        className={`flex items-center justify-center w-4 h-4 rounded-full ${token.priceChange24h >= 0 ? "bg-green-500" : "bg-red-500"}`}
+                      >
                         {token.priceChange24h >= 0 ? (
                           <TrendingUp className="w-2.5 h-2.5 text-white" />
                         ) : (
@@ -718,9 +764,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                     >
                       <CardContent className="p-0">
                         <div className="p-2 border-b border-border">
-                          <p className="text-xs font-medium text-foreground">{token.name} ({token.symbol})</p>
+                          <p className="text-xs font-medium text-foreground">
+                            {token.name} ({token.symbol})
+                          </p>
                           <p className="text-xs text-muted-foreground">
-                            {token.price ? formatCurrency(token.price) : 'Price N/A'}
+                            {token.price ? formatCurrency(token.price) : "Price N/A"}
                           </p>
                         </div>
                         <div className="py-1">
@@ -752,7 +800,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                           <Button
                             onClick={copyTokenInfo}
                             variant="ghost"
-                            className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                            className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? "text-green-500" : ""}`}
                           >
                             {copySuccess ? (
                               <>
@@ -769,7 +817,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                         </div>
                         {(token.marketCap || token.volume24h || token.allTimeHigh) && (
                           <div className="border-t border-border px-3 py-2">
-                            <p className="text-xs font-medium text-foreground mb-1.5">Quick Stats</p>
+                            <p className="text-xs font-medium text-foreground mb-1.5">
+                              Quick Stats
+                            </p>
                             {token.marketCap && (
                               <div className="flex justify-between items-center mb-1">
                                 <p className="text-xs text-muted-foreground">Market Cap</p>
@@ -825,12 +875,10 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                       </p>
                       <div className="flex items-center mt-1">
                         <p className="text-sm font-medium text-foreground">
-                          {token.price ? formatCurrency(token.price) : '-'}
+                          {token.price ? formatCurrency(token.price) : "-"}
                         </p>
                         {showPriceChange && token.priceChange24h !== undefined && (
-                          <span className="ml-2">
-                            {renderPriceChange(token.priceChange24h)}
-                          </span>
+                          <span className="ml-2">{renderPriceChange(token.priceChange24h)}</span>
                         )}
                       </div>
                     </div>
@@ -839,7 +887,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                       <p className="text-base font-semibold text-foreground mt-1">
                         {token.price && token.balance
                           ? formatCurrency(Number(token.balance) * token.price)
-                          : '-'}
+                          : "-"}
                       </p>
                     </div>
                   </>
@@ -853,7 +901,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   onClick={handleFavoriteToggle}
                   variant="secondary"
                   size="icon"
-                  className={`h-8 w-8 ${isFavorite ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20' : ''}`}
+                  className={`h-8 w-8 ${isFavorite ? "text-yellow-500 hover:text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20" : ""}`}
                   title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   {isFavorite ? <Star className="w-4 h-4" /> : <StarOff className="w-4 h-4" />}
@@ -875,9 +923,13 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                 className="text-primary text-xs"
               >
                 {showDetails ? (
-                  <>Less info <ChevronUp className="w-3 h-3 ml-1" /></>
+                  <>
+                    Less info <ChevronUp className="w-3 h-3 ml-1" />
+                  </>
                 ) : (
-                  <>More info <ChevronDown className="w-3 h-3 ml-1" /></>
+                  <>
+                    More info <ChevronDown className="w-3 h-3 ml-1" />
+                  </>
                 )}
               </Button>
             </div>
@@ -944,7 +996,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         onClick={() => onClick?.(token)}
       >
         <div className="relative">
-          <img loading="lazy"
+          <img
+            loading="lazy"
             src={logoURI}
             alt={token.symbol}
             width={18}
@@ -960,13 +1013,14 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         </div>
         <span className="text-xs font-medium text-foreground">{token.symbol}</span>
         {showPrice && token.price && (
-          <span className="text-xs text-muted-foreground">
-            {formatCurrency(token.price)}
-          </span>
+          <span className="text-xs text-muted-foreground">{formatCurrency(token.price)}</span>
         )}
         {showPriceChange && token.priceChange24h !== undefined && (
-          <span className={`text-xs ${token.priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {token.priceChange24h >= 0 ? '+' : ''}{token.priceChange24h.toFixed(1)}%
+          <span
+            className={`text-xs ${token.priceChange24h >= 0 ? "text-green-500" : "text-red-500"}`}
+          >
+            {token.priceChange24h >= 0 ? "+" : ""}
+            {token.priceChange24h.toFixed(1)}%
           </span>
         )}
         <div className="relative">
@@ -991,9 +1045,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             >
               <CardContent className="p-0">
                 <div className="p-2 border-b border-border">
-                  <p className="text-xs font-medium text-foreground">{token.name} ({token.symbol})</p>
+                  <p className="text-xs font-medium text-foreground">
+                    {token.name} ({token.symbol})
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    {token.price ? formatCurrency(token.price) : 'Price N/A'}
+                    {token.price ? formatCurrency(token.price) : "Price N/A"}
                   </p>
                 </div>
                 <div className="py-1">
@@ -1025,7 +1081,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
                   <Button
                     onClick={copyTokenInfo}
                     variant="ghost"
-                    className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? 'text-green-500' : ''}`}
+                    className={`w-full justify-start text-xs h-7 px-3 ${copySuccess ? "text-green-500" : ""}`}
                   >
                     {copySuccess ? (
                       <>

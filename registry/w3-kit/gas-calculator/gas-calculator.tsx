@@ -1,15 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  Zap,
-  Clock,
-  Wallet,
-  RefreshCw,
-  AlertCircle,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { Zap, Clock, Wallet, RefreshCw, AlertCircle, ChevronUp, ChevronDown } from "lucide-react";
 import { GasCalculatorProps, GasPrice, GasEstimate } from "./types";
 import { fetchGasPrice, estimateTransactionCost, formatGwei } from "./utils";
 
@@ -71,8 +63,7 @@ export function GasCalculator({
   const [error, setError] = useState<string | null>(null);
   const [selectedSpeed, setSelectedSpeed] = useState<SpeedType>("medium");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedPreset, setSelectedPreset] =
-    useState<keyof typeof gasPresets>("Transfer");
+  const [selectedPreset, setSelectedPreset] = useState<keyof typeof gasPresets>("Transfer");
 
   const updateGasPrice = useCallback(
     async (showRefreshAnimation = true) => {
@@ -94,7 +85,7 @@ export function GasCalculator({
         }
       }
     },
-    [chainId]
+    [chainId],
   );
 
   useEffect(() => {
@@ -123,9 +114,7 @@ export function GasCalculator({
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Gas Calculator
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Gas Calculator</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Current network gas prices and estimates
             </p>
@@ -137,9 +126,7 @@ export function GasCalculator({
               dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700
               transition-all duration-200 disabled:opacity-50"
           >
-            <RefreshCw
-              className={`w-5 h-5 ${isRefreshing ? "animate-spin" : ""}`}
-            />
+            <RefreshCw className={`w-5 h-5 ${isRefreshing ? "animate-spin" : ""}`} />
           </button>
         </div>
 
@@ -184,9 +171,7 @@ export function GasCalculator({
               >
                 <div className="font-medium">{name}</div>
                 <div className="text-xs mt-1 opacity-80">{description}</div>
-                <div className="text-xs mt-1 opacity-60">
-                  Gas: {value.toLocaleString()}
-                </div>
+                <div className="text-xs mt-1 opacity-60">Gas: {value.toLocaleString()}</div>
               </button>
             ))}
           </div>
@@ -206,9 +191,7 @@ export function GasCalculator({
               placeholder="Custom gas limit"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-4 gap-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                Gas units
-              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">Gas units</span>
               <div className="flex flex-col -space-y-1">
                 <button
                   onClick={() => setGasLimit(gasLimit + 1000)}

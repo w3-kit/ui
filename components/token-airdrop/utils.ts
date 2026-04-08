@@ -9,9 +9,21 @@ export function getAirdropStatus(airdrop: AirdropInfo): AirdropStatus {
 }
 
 export function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return new Date(timestamp).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
-export function getStatusVariant(status: AirdropStatus): "success" | "default" | "warning" | "error" {
-  return status === "active" ? "success" : status === "claimed" ? "default" : status === "upcoming" ? "warning" : "error";
+export function getStatusVariant(
+  status: AirdropStatus,
+): "success" | "default" | "warning" | "error" {
+  return status === "active"
+    ? "success"
+    : status === "claimed"
+      ? "default"
+      : status === "upcoming"
+        ? "warning"
+        : "error";
 }

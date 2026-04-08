@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { NFTCardProps } from './types';
-import { formatAddress, getChainName, getExplorerUrl } from './utils';
+import { NFTCardProps } from "./types";
+import { formatAddress, getChainName, getExplorerUrl } from "./utils";
 
 const styles = {
   cardWrapper: `
@@ -54,15 +54,15 @@ const styles = {
   `,
   statsLabel: `
     text-gray-500 dark:text-gray-400
-  `
+  `,
 };
 
 export const NFTCard: React.FC<NFTCardProps> = ({
   nft,
   onOwnerClick,
   onNFTClick,
-  className = '',
-  variant = 'default'
+  className = "",
+  variant = "default",
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -76,7 +76,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({
 
   const handleExplorerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    window.open(getExplorerUrl(nft.chainId, nft.owner), '_blank');
+    window.open(getExplorerUrl(nft.chainId, nft.owner), "_blank");
   };
 
   const handleImageClick = (e: React.MouseEvent) => {
@@ -92,7 +92,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({
     });
   };
 
-  if (variant === 'expanded') {
+  if (variant === "expanded") {
     return (
       <>
         <div className={`${styles.cardWrapper} ${className}`} onClick={() => onNFTClick?.(nft)}>
@@ -102,26 +102,31 @@ export const NFTCard: React.FC<NFTCardProps> = ({
             )}
             {!imageError ? (
               <>
-                <img loading="lazy"
+                <img
+                  loading="lazy"
                   src={nft.image}
                   alt={nft.name}
                   sizes="(max-width: 640px) 100vw, 500px"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: "cover" }}
                   onLoad={() => setIsImageLoaded(true)}
                   onError={() => setImageError(true)}
-                  className={`${styles.image} ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`${styles.image} ${isImageLoaded ? "opacity-100" : "opacity-0"}`}
                 />
                 <div className={styles.imageOverlay}>
-                  <span className="text-white font-medium text-lg 
+                  <span
+                    className="text-white font-medium text-lg 
                     transform transition-all duration-300 
-                    group-hover:scale-110">
+                    group-hover:scale-110"
+                  >
                     View
                   </span>
                 </div>
               </>
             ) : (
-              <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 
-                flex items-center justify-center rounded-t-lg">
+              <div
+                className="absolute inset-0 bg-gray-100 dark:bg-gray-700 
+                flex items-center justify-center rounded-t-lg"
+              >
                 <span className="text-gray-400 dark:text-gray-500 animate-pulse">
                   Failed to load image
                 </span>
@@ -132,9 +137,11 @@ export const NFTCard: React.FC<NFTCardProps> = ({
           <div className={styles.infoSection}>
             <div className="flex items-center justify-between mb-4">
               <div className="transform transition-all duration-300 hover:scale-105 relative group/copy">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white 
+                <h3
+                  className="text-xl font-bold text-gray-900 dark:text-white 
                   hover:text-blue-600 dark:hover:text-blue-400 
-                  transition-colors duration-300 pr-8">
+                  transition-colors duration-300 pr-8"
+                >
                   {nft.name}
                   <button
                     onClick={handleCopyName}
@@ -145,28 +152,51 @@ export const NFTCard: React.FC<NFTCardProps> = ({
                       p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     {copySuccess ? (
-                      <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4 text-green-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     ) : (
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                        />
                       </svg>
                     )}
                   </button>
                 </h3>
                 {copySuccess && (
-                  <div className="absolute -right-2 top-8 
+                  <div
+                    className="absolute -right-2 top-8 
                     bg-black/75 text-white text-xs px-2 py-1 rounded
-                    transform -translate-y-1 opacity-0 animate-fadeInOut">
+                    transform -translate-y-1 opacity-0 animate-fadeInOut"
+                  >
                     Copied!
                   </div>
                 )}
                 {nft.collection && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 
+                  <p
+                    className="text-sm text-gray-500 dark:text-gray-400 
                     hover:text-gray-700 dark:hover:text-gray-300 
-                    transition-colors duration-300">
+                    transition-colors duration-300"
+                  >
                     {nft.collection}
                   </p>
                 )}
@@ -175,8 +205,10 @@ export const NFTCard: React.FC<NFTCardProps> = ({
             </div>
 
             {nft.description && (
-              <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 
-                group-hover:line-clamp-none transition-all duration-500">
+              <p
+                className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 
+                group-hover:line-clamp-none transition-all duration-500"
+              >
                 {nft.description}
               </p>
             )}
@@ -184,9 +216,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({
             <div className="flex flex-col space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className={styles.statsLabel}>Chain</span>
-                <span className={styles.statsValue}>
-                  {getChainName(nft.chainId)}
-                </span>
+                <span className={styles.statsValue}>{getChainName(nft.chainId)}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className={styles.statsLabel}>Owner</span>
@@ -201,8 +231,12 @@ export const NFTCard: React.FC<NFTCardProps> = ({
                       transition-all duration-300 transform hover:scale-110"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -214,12 +248,16 @@ export const NFTCard: React.FC<NFTCardProps> = ({
                 <div className="grid grid-cols-2 gap-2">
                   {nft.attributes.map((attr, index) => (
                     <div key={index} className={styles.attributeTag}>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 
-                        transition-colors duration-300">
+                      <p
+                        className="text-xs text-gray-500 dark:text-gray-400 
+                        transition-colors duration-300"
+                      >
                         {attr.trait_type}
                       </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white 
-                        transition-colors duration-300">
+                      <p
+                        className="text-sm font-medium text-gray-900 dark:text-white 
+                        transition-colors duration-300"
+                      >
                         {attr.value}
                       </p>
                     </div>
@@ -231,17 +269,20 @@ export const NFTCard: React.FC<NFTCardProps> = ({
         </div>
 
         {showImageModal && (
-          <div 
+          <div
             className="fixed inset-0 bg-black/70 z-50 
               flex items-center justify-center p-4
               animate-fadeIn backdrop-blur-sm"
             onClick={() => setShowImageModal(false)}
           >
-            <div className="relative w-full max-w-4xl max-h-[90vh] 
+            <div
+              className="relative w-full max-w-4xl max-h-[90vh] 
               rounded-lg overflow-hidden
               transform transition-all duration-300
-              animate-scaleIn">
-              <img loading="lazy"
+              animate-scaleIn"
+            >
+              <img
+                loading="lazy"
                 src={nft.image}
                 alt={nft.name}
                 width={1200}
@@ -256,8 +297,12 @@ export const NFTCard: React.FC<NFTCardProps> = ({
                   transition-all duration-300 transform hover:scale-110"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -268,7 +313,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({
   }
 
   return (
-    <div 
+    <div
       className={`bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col ${className}`}
       onClick={() => onNFTClick?.(nft)}
     >
@@ -277,14 +322,15 @@ export const NFTCard: React.FC<NFTCardProps> = ({
           <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 animate-pulse" />
         )}
         {!imageError ? (
-          <img loading="lazy"
+          <img
+            loading="lazy"
             src={nft.image}
             alt={nft.name}
             sizes="(max-width: 640px) 100vw, 500px"
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: "cover" }}
             onLoad={() => setIsImageLoaded(true)}
             onError={() => setImageError(true)}
-            className={`${isImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+            className={`${isImageLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
           />
         ) : (
           <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
@@ -305,21 +351,37 @@ export const NFTCard: React.FC<NFTCardProps> = ({
                 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               {copySuccess ? (
-                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               ) : (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                  />
                 </svg>
               )}
             </button>
           </h3>
           {copySuccess && (
-            <div className="absolute -right-2 top-8 
+            <div
+              className="absolute -right-2 top-8 
               bg-black/75 text-white text-xs px-2 py-1 rounded
-              transform -translate-y-1 opacity-0 animate-fadeInOut">
+              transform -translate-y-1 opacity-0 animate-fadeInOut"
+            >
               Copied!
             </div>
           )}
@@ -336,4 +398,4 @@ export const NFTCard: React.FC<NFTCardProps> = ({
       </div>
     </div>
   );
-}; 
+};

@@ -15,12 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TransactionHistoryProps, Transaction } from "./types";
-import {
-  formatAddress,
-  formatTimestamp,
-  formatEther,
-  getStatusBadgeVariant,
-} from "./utils";
+import { formatAddress, formatTimestamp, formatEther, getStatusBadgeVariant } from "./utils";
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   transactions,
@@ -73,10 +68,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
 
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedTransactions = filteredTransactions.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -129,16 +121,10 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
               </Button>
             )}
           </div>
-          <Button
-            variant="outline"
-            onClick={() => setShowFilters(!showFilters)}
-            className="gap-2"
-          >
+          <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="gap-2">
             <Filter className="h-4 w-4" />
             Filters
-            {hasActiveFilters && (
-              <span className="w-2 h-2 bg-primary rounded-full" />
-            )}
+            {hasActiveFilters && <span className="w-2 h-2 bg-primary rounded-full" />}
           </Button>
         </div>
 
@@ -198,9 +184,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                 <Button variant="outline" onClick={resetFilters}>
                   Reset Filters
                 </Button>
-                <Button onClick={() => setShowFilters(false)}>
-                  Apply Filters
-                </Button>
+                <Button onClick={() => setShowFilters(false)}>Apply Filters</Button>
               </div>
             </CardContent>
           </Card>
@@ -242,7 +226,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                   <tr
                     className={cn(
                       "hover:bg-muted/50 transition-colors cursor-pointer",
-                      expandedTransaction === tx.hash && "bg-muted/50"
+                      expandedTransaction === tx.hash && "bg-muted/50",
                     )}
                     onClick={() => toggleTransactionDetails(tx.hash)}
                   >
@@ -263,9 +247,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Badge variant={getStatusBadgeVariant(tx.status)}>
-                        {tx.status}
-                      </Badge>
+                      <Badge variant={getStatusBadgeVariant(tx.status)}>{tx.status}</Badge>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                       <button
@@ -295,9 +277,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                         )}
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {formatEther(tx.value)}
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{formatEther(tx.value)}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                       {formatTimestamp(tx.timestamp)}
                     </td>
@@ -315,7 +295,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                           <ChevronDown
                             className={cn(
                               "h-4 w-4 transition-transform",
-                              expandedTransaction === tx.hash && "rotate-180"
+                              expandedTransaction === tx.hash && "rotate-180",
                             )}
                           />
                         </Button>
@@ -339,9 +319,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                         <div className="bg-muted/30 px-6 py-3 border-t">
                           <div className="flex flex-wrap gap-4 items-center justify-between">
                             <div>
-                              <h4 className="text-xs font-medium mb-1.5">
-                                Transaction Details
-                              </h4>
+                              <h4 className="text-xs font-medium mb-1.5">Transaction Details</h4>
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                                 <span className="text-muted-foreground">Block:</span>
                                 <span>{tx.blockNumber || "Pending"}</span>

@@ -12,9 +12,7 @@ export function formatEther(value: string): string {
   return num.toFixed(4);
 }
 
-export function getStatusBadgeVariant(
-  status: string
-): "default" | "success" | "warning" | "error" {
+export function getStatusBadgeVariant(status: string): "default" | "success" | "warning" | "error" {
   switch (status.toLowerCase()) {
     case "pending":
       return "warning";
