@@ -117,7 +117,6 @@ const AssetItem: React.FC<{
               width={32}
               height={32}
               className="rounded-full relative z-10 transition-transform group-hover:scale-105"
-              priority
             />
             <div 
               className="absolute inset-0 rounded-full ring-2 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -443,7 +442,6 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                       width={24}
                       height={24}
                       className="rounded-full relative z-10 transition-transform group-hover:scale-105"
-                      priority
                     />
                   </div>
                   <div>
