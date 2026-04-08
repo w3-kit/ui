@@ -411,7 +411,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
 
             <Textarea
               value={newEntry.notes}
-              onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEntry({ ...newEntry, notes: e.target.value })}
               placeholder="Notes (optional)"
               rows={3}
             />
@@ -646,7 +646,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
 
             <Textarea
               value={newEntry.notes}
-              onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEntry({ ...newEntry, notes: e.target.value })}
               placeholder="Notes (optional)"
               rows={3}
             />

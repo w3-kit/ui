@@ -1,4 +1,4 @@
-import { TokenSymbol } from '../../config/tokens';
+import { TokenSymbol } from '@/config/tokens';
 
 export interface Token {
   address: string;

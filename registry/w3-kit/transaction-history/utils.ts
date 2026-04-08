@@ -14,7 +14,7 @@ export function formatEther(value: string): string {
 
 export function getStatusBadgeVariant(
   status: string
-): "default" | "secondary" | "destructive" | "outline" | "success" | "warning" {
+): "default" | "success" | "warning" | "error" {
   switch (status.toLowerCase()) {
     case "pending":
       return "warning";
@@ -23,8 +23,8 @@ export function getStatusBadgeVariant(
       return "success";
     case "failed":
     case "error":
-      return "destructive";
+      return "error";
     default:
-      return "secondary";
+      return "default";
   }
 }

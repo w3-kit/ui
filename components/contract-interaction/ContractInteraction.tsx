@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { StatusDot } from "../ui/status-dot";
 import { ContractFunction, ContractInteractionProps } from "./types";
-import { DEFAULT_FUNCTIONS, validateAddress } from "./utils";
+import { DEFAULT_FUNCTIONS } from "./utils";
 
 export type { ContractFunction, ContractInteractionProps };
 

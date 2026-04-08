@@ -47,7 +47,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   customLabel,
   variant = 'dark',
   walletType = 'metamask',
-  walletConnectConfig = DEFAULT_WALLETCONNECT_CONFIG,
+  walletConnectConfig: _walletConnectConfig = DEFAULT_WALLETCONNECT_CONFIG,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

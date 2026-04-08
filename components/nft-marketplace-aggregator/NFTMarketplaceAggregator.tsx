@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useCallback, useMemo } from "react";
-import { ShoppingCart, BadgeCheck, ImageOff, Loader2 } from "lucide-react";
+import { BadgeCheck, ImageOff } from "lucide-react";
 import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { NFTListing, NFTMarketplaceAggregatorProps } from "./types";
 import { formatPrice, formatUSD, MOCK_LISTINGS } from "./utils";
@@ -13,7 +12,7 @@ export type { NFTListing, NFTMarketplaceAggregatorProps };
 export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> = ({
   initialListings,
   onBuy,
-  loadingListingId,
+  loadingListingId: _loadingListingId,
   className,
 }) => {
   const listings = initialListings || MOCK_LISTINGS;
@@ -69,7 +68,6 @@ export const NFTMarketplaceAggregator: React.FC<NFTMarketplaceAggregatorProps> =
         {listings.map((listing) => {
           const isBestPrice = listing.id === bestPriceId && listings.length > 1;
           const isClickable = !!onBuy;
-          const isLoading = loadingListingId === listing.id;
 
           return (
             <div

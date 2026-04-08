@@ -423,7 +423,7 @@ export function NFTMarketplaceAggregator({
   const [isLoading, setIsLoading] = useState(false);
 
   const marketplaces = useMemo(() => {
-    const unique = [...new Set(allListings.map((l) => l.marketplace))];
+    const unique = Array.from(new Set(allListings.map((l) => l.marketplace)));
     return ["all", ...unique];
   }, []);
 

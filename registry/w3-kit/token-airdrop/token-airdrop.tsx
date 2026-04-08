@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
-import { AirdropInfo, TokenAirdropProps, AirdropStatus } from "./types";
+import React, { useState, useEffect } from "react";
+import { TokenAirdropProps, AirdropStatus } from "./types";
 import {
   formatDate,
   isAirdropActive,

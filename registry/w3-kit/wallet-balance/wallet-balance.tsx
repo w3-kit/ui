@@ -88,11 +88,11 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
       ? sortedTokens.slice(0, 3)
       : sortedTokens;
 
-  const getPriceChangeBadgeVariant = (change: number | undefined) => {
-    if (change === undefined) return "secondary";
+  const getPriceChangeBadgeVariant = (change: number | undefined): "default" | "success" | "warning" | "error" => {
+    if (change === undefined) return "default";
     if (change > 0) return "success";
-    if (change < 0) return "destructive";
-    return "secondary";
+    if (change < 0) return "error";
+    return "default";
   };
 
   if (variant === "compact") {
