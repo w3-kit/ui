@@ -1,10 +1,10 @@
-import { CompositionTemplate } from '../types.js';
+import { CompositionTemplate } from "../types.js";
 
 export const COMPOSITIONS: CompositionTemplate[] = [
   {
-    name: 'token-dashboard',
-    description: 'A dashboard showing token prices, portfolio balance, and a token list',
-    components: ['token-list', 'price-ticker', 'wallet-balance'],
+    name: "token-dashboard",
+    description: "A dashboard showing token prices, portfolio balance, and a token list",
+    components: ["token-list", "price-ticker", "wallet-balance"],
     template: `import { TokenList } from '@/components/token-list';
 import { PriceTicker } from '@/components/price-ticker';
 import { WalletBalance } from '@/components/wallet-balance';
@@ -24,9 +24,9 @@ export default function TokenDashboard() {
 }`,
   },
   {
-    name: 'nft-gallery',
-    description: 'An NFT collection browser with wallet connection',
-    components: ['nft-collection-grid', 'nft-card', 'connect-wallet'],
+    name: "nft-gallery",
+    description: "An NFT collection browser with wallet connection",
+    components: ["nft-collection-grid", "nft-card", "connect-wallet"],
     template: `import { NftCollectionGrid } from '@/components/nft-collection-grid';
 import { ConnectWallet } from '@/components/connect-wallet';
 
@@ -43,9 +43,9 @@ export default function NftGallery() {
 }`,
   },
   {
-    name: 'defi-overview',
-    description: 'DeFi portfolio overview with staking and liquidity positions',
-    components: ['asset-portfolio', 'staking-interface', 'liquidity-pool-stats'],
+    name: "defi-overview",
+    description: "DeFi portfolio overview with staking and liquidity positions",
+    components: ["asset-portfolio", "staking-interface", "liquidity-pool-stats"],
     template: `import { AssetPortfolio } from '@/components/asset-portfolio';
 import { StakingInterface } from '@/components/staking-interface';
 import { LiquidityPoolStats } from '@/components/liquidity-pool-stats';
@@ -63,9 +63,9 @@ export default function DefiOverview() {
 }`,
   },
   {
-    name: 'swap-interface',
-    description: 'Token swap with gas estimation',
-    components: ['token-swap', 'gas-calculator', 'token-card'],
+    name: "swap-interface",
+    description: "Token swap with gas estimation",
+    components: ["token-swap", "gas-calculator", "token-card"],
     template: `import { TokenSwap } from '@/components/token-swap';
 import { GasCalculator } from '@/components/gas-calculator';
 
@@ -79,9 +79,9 @@ export default function SwapInterface() {
 }`,
   },
   {
-    name: 'wallet-view',
-    description: 'Full wallet view with balance, transactions, and network switching',
-    components: ['wallet-balance', 'transaction-history', 'network-switcher'],
+    name: "wallet-view",
+    description: "Full wallet view with balance, transactions, and network switching",
+    components: ["wallet-balance", "transaction-history", "network-switcher"],
     template: `import { WalletBalance } from '@/components/wallet-balance';
 import { TransactionHistory } from '@/components/transaction-history';
 import { NetworkSwitcher } from '@/components/network-switcher';

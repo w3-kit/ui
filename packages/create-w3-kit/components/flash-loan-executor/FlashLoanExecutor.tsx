@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ArrowUpDown, Loader2, Check, AlertCircle } from "lucide-react";
-import Image from "next/image";
 
 export interface FlashLoanData {
   id: string;
@@ -57,15 +56,15 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
-    
+
     if (!amount || parseFloat(amount) <= 0) {
       newErrors.amount = "Amount must be greater than 0";
     }
-    
+
     if (!selectedProtocol) {
       newErrors.protocol = "Please select a protocol";
     }
-    
+
     if (!selectedToken) {
       newErrors.token = "Please select a token";
     }
@@ -76,12 +75,12 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
 
   const handleExecute = async () => {
     if (!validateForm()) return;
-    
+
     setIsExecuting(true);
     try {
       // Simulate flash loan execution
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const flashLoanData: Omit<FlashLoanData, "id" | "timestamp"> = {
         protocol: selectedProtocol,
         token: selectedToken,
@@ -92,7 +91,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
       };
 
       await onExecute?.(flashLoanData);
-      
+
       // Show success animation
       setShowSuccess(true);
       setTimeout(() => {
@@ -133,7 +132,8 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                     : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
                 }`}
               >
-                <Image
+                <img
+                  loading="lazy"
                   src={protocol.logoURI}
                   alt={protocol.name}
                   width={24}
@@ -146,9 +146,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               </button>
             ))}
           </div>
-          {errors.protocol && (
-            <p className="mt-1 text-sm text-red-500">{errors.protocol}</p>
-          )}
+          {errors.protocol && <p className="mt-1 text-sm text-red-500">{errors.protocol}</p>}
         </div>
 
         <div>
@@ -166,7 +164,8 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                     : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
                 }`}
               >
-                <Image
+                <img
+                  loading="lazy"
                   src={token.logoURI}
                   alt={token.symbol}
                   width={24}
@@ -179,9 +178,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               </button>
             ))}
           </div>
-          {errors.token && (
-            <p className="mt-1 text-sm text-red-500">{errors.token}</p>
-          )}
+          {errors.token && <p className="mt-1 text-sm text-red-500">{errors.token}</p>}
         </div>
 
         <div>
@@ -199,7 +196,8 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               placeholder="0.0"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Image
+              <img
+                loading="lazy"
                 src={selectedToken.logoURI}
                 alt={selectedToken.symbol}
                 width={20}
@@ -208,9 +206,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               />
             </div>
           </div>
-          {errors.amount && (
-            <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
-          )}
+          {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount}</p>}
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -228,7 +224,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
           onClick={handleExecute}
           disabled={isExecuting || showSuccess}
           className={`w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center ${
-            (isExecuting || showSuccess) ? "opacity-75 cursor-not-allowed" : ""
+            isExecuting || showSuccess ? "opacity-75 cursor-not-allowed" : ""
           }`}
         >
           {isExecuting ? (
@@ -256,4 +252,4 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
       </div>
     </div>
   );
-}; 
+};

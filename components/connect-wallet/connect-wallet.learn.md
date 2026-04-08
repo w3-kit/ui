@@ -5,6 +5,7 @@
 Wallet connection is how users authenticate in web3. Instead of email + password, users prove who they are by signing a message with their private key. No accounts to create, no passwords to remember — your wallet IS your identity.
 
 When a user "connects" their wallet to a dApp, they're granting the dApp permission to:
+
 - **See** their public address and token balances
 - **Request** transaction signatures (the user must approve each one)
 
@@ -22,13 +23,13 @@ They are NOT giving the dApp access to their private key or permission to move f
 
 ### EVM vs Solana
 
-| | EVM | Solana |
-|---|---|---|
-| **Standard** | EIP-1193 (`window.ethereum`) + EIP-6963 (multi-wallet discovery) | Wallet Standard (`window.solana` or Wallet Standard API) |
-| **Libraries** | wagmi + RainbowKit, ConnectKit, Web3Modal | @solana/wallet-adapter-react |
-| **Key wallet** | MetaMask | Phantom |
-| **Address format** | `0x` + 40 hex chars (e.g., `0x1234...abcd`) | Base58 string (e.g., `7nYB...3kPW`) |
-| **Auth pattern** | SIWE (Sign-In With Ethereum) | SIWS (Sign-In With Solana) |
+|                    | EVM                                                              | Solana                                                   |
+| ------------------ | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| **Standard**       | EIP-1193 (`window.ethereum`) + EIP-6963 (multi-wallet discovery) | Wallet Standard (`window.solana` or Wallet Standard API) |
+| **Libraries**      | wagmi + RainbowKit, ConnectKit, Web3Modal                        | @solana/wallet-adapter-react                             |
+| **Key wallet**     | MetaMask                                                         | Phantom                                                  |
+| **Address format** | `0x` + 40 hex chars (e.g., `0x1234...abcd`)                      | Base58 string (e.g., `7nYB...3kPW`)                      |
+| **Auth pattern**   | SIWE (Sign-In With Ethereum)                                     | SIWS (Sign-In With Solana)                               |
 
 ### What is EIP-6963?
 
@@ -37,6 +38,7 @@ Before EIP-6963 (2023), if you had multiple EVM wallets installed, they'd fight 
 ### What is SIWE?
 
 Sign-In With Ethereum (EIP-4361) lets users authenticate to backends using their wallet. Instead of OAuth or passwords:
+
 1. Backend generates a nonce
 2. User signs a standardized message with their wallet
 3. Backend verifies the signature
@@ -52,6 +54,7 @@ Sign-In With Ethereum (EIP-4361) lets users authenticate to backends using their
 ## How this component works
 
 This component provides the wallet connection UI — the button, wallet selection modal, and connected state display. It handles:
+
 - "Connect" button with wallet provider icons
 - Wallet selection when multiple wallets are detected
 - Connected state (shows address, avatar, disconnect option)

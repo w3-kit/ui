@@ -1,4 +1,4 @@
-import { Network, Token } from './types';
+import { Network, Token } from "./types";
 
 export const DEFAULT_NETWORKS: Network[] = [
   {
@@ -25,32 +25,32 @@ export const DEFAULT_NETWORKS: Network[] = [
 
 export const DEFAULT_TOKENS: Token[] = [
   {
-    symbol: 'ETH',
-    name: 'Ethereum',
-    icon: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040',
-    balance: '1.234',
-    decimals: 18
+    symbol: "ETH",
+    name: "Ethereum",
+    icon: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
+    balance: "1.234",
+    decimals: 18,
   },
   {
-    symbol: 'USDC',
-    name: 'USD Coin',
-    icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040',
-    balance: '1234.56',
-    decimals: 6
+    symbol: "USDC",
+    name: "USD Coin",
+    icon: "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040",
+    balance: "1234.56",
+    decimals: 6,
   },
   {
-    symbol: 'USDT',
-    name: 'Tether',
-    icon: 'https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040',
-    balance: '5678.90',
-    decimals: 6
-  }
+    symbol: "USDT",
+    name: "Tether",
+    icon: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040",
+    balance: "5678.90",
+    decimals: 6,
+  },
 ];
 
 export const DEFAULT_TOKEN_FEES: Record<string, string> = {
-  'ETH': '0.001',
-  'USDC': '5',
-  'USDT': '5'
+  ETH: "0.001",
+  USDC: "5",
+  USDT: "5",
 };
 
 export const buttonAnimation = "transition-all duration-300 active:scale-95";

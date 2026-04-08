@@ -5,12 +5,19 @@ export function formatAddress(address: string): string {
 
 export function getChainName(chainId: number): string {
   switch (chainId) {
-    case 1: return "Ethereum";
-    case 137: return "Polygon";
-    case 56: return "BSC";
-    case 43114: return "Avalanche";
-    case 42161: return "Arbitrum";
-    case 10: return "Optimism";
-    default: return "Unknown";
+    case 1:
+      return "Ethereum";
+    case 137:
+      return "Polygon";
+    case 56:
+      return "BSC";
+    case 43114:
+      return "Avalanche";
+    case 42161:
+      return "Arbitrum";
+    case 10:
+      return "Optimism";
+    default:
+      return "Unknown";
   }
 }

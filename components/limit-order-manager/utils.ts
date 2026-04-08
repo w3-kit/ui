@@ -1,4 +1,6 @@
-export function getStatusVariant(status: "active" | "executed" | "cancelled"): "success" | "default" | "error" {
+export function getStatusVariant(
+  status: "active" | "executed" | "cancelled",
+): "success" | "default" | "error" {
   return status === "active" ? "success" : status === "executed" ? "default" : "error";
 }
 

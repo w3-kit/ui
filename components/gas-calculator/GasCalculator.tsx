@@ -30,17 +30,28 @@ export function GasCalculator({ className, onGasSelect, ethPrice }: GasCalculato
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    try { setGasPrice(await fetchGasPrice()); } finally { setLoading(false); }
+    try {
+      setGasPrice(await fetchGasPrice());
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const currentPrice = gasPrice ? gasPrice[speed] : 0;
   const ethCost = (currentPrice * gasLimit) / 1e9;
   const usdCost = ethPrice ? ethCost * ethPrice : null;
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -64,15 +75,25 @@ export function GasCalculator({ className, onGasSelect, ethPrice }: GasCalculato
             return (
               <button
                 key={s.key}
-                onClick={() => { setSpeed(s.key); onGasSelect?.(gasLimit, gasPrice?.[s.key] ?? 0); }}
+                onClick={() => {
+                  setSpeed(s.key);
+                  onGasSelect?.(gasLimit, gasPrice?.[s.key] ?? 0);
+                }}
                 className={cn(
                   "flex flex-col items-center p-3 rounded-lg border text-center transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400",
                   isSelected
                     ? "border-gray-900 dark:border-white bg-gray-50 dark:bg-gray-900"
-                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900"
+                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900",
                 )}
               >
-                <s.icon className={cn("h-4 w-4 mb-1", isSelected ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500")} />
+                <s.icon
+                  className={cn(
+                    "h-4 w-4 mb-1",
+                    isSelected
+                      ? "text-gray-900 dark:text-white"
+                      : "text-gray-400 dark:text-gray-500",
+                  )}
+                />
                 <span className="text-xs font-medium text-gray-900 dark:text-white">{s.label}</span>
                 <span className="text-[10px] text-gray-500 dark:text-gray-400">{s.desc}</span>
                 {loading ? (
@@ -101,7 +122,7 @@ export function GasCalculator({ className, onGasSelect, ethPrice }: GasCalculato
                   "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400",
                   gasLimit === p.gas
                     ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
                 )}
               >
                 {p.label}
@@ -127,7 +148,8 @@ export function GasCalculator({ className, onGasSelect, ethPrice }: GasCalculato
               )}
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 tabular-nums">
-              {formatGwei(currentPrice)} · {gasLimit.toLocaleString()} gas · base {formatGwei(gasPrice.baseFee)}
+              {formatGwei(currentPrice)} · {gasLimit.toLocaleString()} gas · base{" "}
+              {formatGwei(gasPrice.baseFee)}
             </p>
           </div>
         )}

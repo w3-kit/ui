@@ -1,6 +1,6 @@
 import { GasPrice, GasEstimate } from "./types";
 
-export async function fetchGasPrice(chainId: number): Promise<GasPrice> {
+export async function fetchGasPrice(_chainId: number): Promise<GasPrice> {
   // Simulated gas price fetch - replace with actual API call
   const baseFee = Math.floor(Math.random() * 30) + 10;
   return {
@@ -12,10 +12,7 @@ export async function fetchGasPrice(chainId: number): Promise<GasPrice> {
   };
 }
 
-export function estimateTransactionCost(
-  gasPrice: GasPrice,
-  gasLimit: number
-): GasEstimate {
+export function estimateTransactionCost(gasPrice: GasPrice, gasLimit: number): GasEstimate {
   return {
     gasLimit,
     estimatedCost: {

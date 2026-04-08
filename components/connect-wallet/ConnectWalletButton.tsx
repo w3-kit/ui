@@ -1,29 +1,8 @@
-import React, { useState, useCallback } from 'react';
-import { MetaMaskInpageProvider } from '@metamask/providers';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-import Image from 'next/image';
+import React, { useState, useCallback } from "react";
+import "../../lib/ethereum";
 
-interface CoinbaseWalletProvider {
-  request: (args: { method: string }) => Promise<string[]>;
-}
-
-interface SolanaProvider {
-  connect(): Promise<{ publicKey: { toString(): string } }>;
-}
-
-declare global {
-  interface Window {
-    ethereum?: MetaMaskInpageProvider;
-    coinbaseWalletExtension?: CoinbaseWalletProvider;
-    solana?: SolanaProvider;
-    phantom?: {
-      solana?: SolanaProvider;
-    };
-  }
-}
-
-type ButtonVariant = 'ghost' | 'light' | 'dark';
-type WalletType = 'metamask' | 'walletconnect' | 'coinbase' | 'phantom';
+type ButtonVariant = "ghost" | "light" | "dark";
+type WalletType = "metamask" | "walletconnect" | "coinbase" | "phantom";
 
 interface ConnectWalletButtonProps {
   onConnect?: (address: string) => void;
@@ -62,17 +41,10 @@ const variantStyles = {
   `,
 };
 
-const walletConnectConfig = {
-  rpc: {
-    1: 'https://mainnet.infura.io/v3/YOUR_INFURA_ID', // Replace with your Infura ID
-    4: 'https://rinkeby.infura.io/v3/YOUR_INFURA_ID',
-  },
-  bridge: 'https://bridge.walletconnect.org',
-};
-
 const WalletIcons = {
   metamask: (
-    <Image 
+    <img
+      loading="lazy"
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
       alt="MetaMask"
       width={24}
@@ -81,7 +53,8 @@ const WalletIcons = {
     />
   ),
   walletconnect: (
-    <Image
+    <img
+      loading="lazy"
       src="https://cdn-images-1.medium.com/max/1200/1*fgRGbOjhoJMHqh9czHETZQ.png"
       alt="WalletConnect"
       width={24}
@@ -89,7 +62,8 @@ const WalletIcons = {
     />
   ),
   coinbase: (
-    <Image
+    <img
+      loading="lazy"
       src="https://cdn.iconscout.com/icon/free/png-256/free-coinbase-logo-icon-download-in-svg-png-gif-file-formats--web-crypro-trading-platform-logos-pack-icons-7651204.png"
       alt="Coinbase"
       width={24}
@@ -99,90 +73,58 @@ const WalletIcons = {
   ),
   phantom: (
     <svg width="24" height="24" viewBox="0 0 128 128" fill="none">
-      <rect width="128" height="128" rx="64" fill="#AB9FF2"/>
-      <path d="M110.984 64.206C110.984 89.2476 90.7077 109.524 65.666 109.524C40.6244 109.524 20.3477 89.2476 20.3477 64.206C20.3477 39.1644 40.6244 18.8877 65.666 18.8877C90.7077 18.8877 110.984 39.1644 110.984 64.206Z" fill="white"/>
+      <rect width="128" height="128" rx="64" fill="#AB9FF2" />
+      <path
+        d="M110.984 64.206C110.984 89.2476 90.7077 109.524 65.666 109.524C40.6244 109.524 20.3477 89.2476 20.3477 64.206C20.3477 39.1644 40.6244 18.8877 65.666 18.8877C90.7077 18.8877 110.984 39.1644 110.984 64.206Z"
+        fill="white"
+      />
     </svg>
-  )
+  ),
 };
 
 export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   onConnect,
   onError,
-  className = '',
+  className = "",
   customLabel,
-  variant = 'dark',
-  walletType = 'metamask'
+  variant = "dark",
+  walletType = "metamask",
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const getDefaultLabel = (type: WalletType) => {
     switch (type) {
-      case 'metamask':
-        return 'Connect MetaMask';
-      case 'walletconnect':
-        return 'WalletConnect';
-      case 'coinbase':
-        return 'Coinbase Wallet';
-      case 'phantom':
-        return 'Phantom Wallet';
+      case "metamask":
+        return "Connect MetaMask";
+      case "walletconnect":
+        return "WalletConnect";
+      case "coinbase":
+        return "Coinbase Wallet";
+      case "phantom":
+        return "Phantom Wallet";
       default:
-        return 'Connect Wallet';
+        return "Connect Wallet";
     }
   };
 
-  const connectMetaMask = useCallback(async () => {
+  const connectEIP1193 = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // First check if MetaMask is actually installed
-      if (typeof window.ethereum === 'undefined') {
-        throw new Error('MetaMask is not installed');
+      if (typeof window.ethereum === "undefined") {
+        throw new Error("No wallet found. Please install a browser wallet.");
       }
 
-      // Check if the provider is actually MetaMask
-     
-      if (!window.ethereum.isMetaMask) {
-        throw new Error('Please switch to MetaMask');
-      }
-
-      // This is the actual connection request to MetaMask
       const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
+        method: "eth_requestAccounts",
       });
 
       if (accounts && Array.isArray(accounts) && accounts.length > 0) {
         onConnect?.(accounts[0] as string);
       } else {
-        throw new Error('No accounts found');
-      }
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onError?.(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onConnect, onError]);
-
-  const connectWalletConnect = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const connector = new WalletConnectConnector({
-        rpc: walletConnectConfig.rpc,
-        bridge: walletConnectConfig.bridge,
-        qrcode: true,
-      });
-
-      await connector.activate();
-      const account = await connector.getAccount();
-      if (account) {
-        onConnect?.(account);
-      } else {
-        throw new Error('No account found');
+        throw new Error("No accounts found");
       }
     } catch (err) {
       const error = err as Error;
@@ -200,17 +142,17 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     try {
       // Check specifically for Coinbase Wallet
       if (!window.coinbaseWalletExtension) {
-        throw new Error('Coinbase Wallet is not installed');
+        throw new Error("Coinbase Wallet is not installed");
       }
 
       const accounts = await window.coinbaseWalletExtension.request({
-        method: 'eth_requestAccounts'
+        method: "eth_requestAccounts",
       });
 
       if (accounts && Array.isArray(accounts) && accounts.length > 0) {
         onConnect?.(accounts[0]);
       } else {
-        throw new Error('No accounts found');
+        throw new Error("No accounts found");
       }
     } catch (err) {
       const error = err as Error;
@@ -227,7 +169,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
 
     try {
       if (!window.phantom?.solana) {
-        throw new Error('Phantom wallet is not installed');
+        throw new Error("Phantom wallet is not installed");
       }
 
       const response = await window.phantom.solana.connect();
@@ -244,18 +186,18 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
 
   const handleConnect = useCallback(() => {
     switch (walletType) {
-      case 'metamask':
-        return connectMetaMask();
-      case 'walletconnect':
-        return connectWalletConnect();
-      case 'coinbase':
+      case "metamask":
+        return connectEIP1193();
+      case "walletconnect":
+        return connectEIP1193();
+      case "coinbase":
         return connectCoinbase();
-      case 'phantom':
+      case "phantom":
         return connectPhantom();
       default:
-        return connectMetaMask();
+        return connectEIP1193();
     }
-  }, [walletType, connectMetaMask, connectWalletConnect, connectCoinbase, connectPhantom]);
+  }, [walletType, connectEIP1193, connectCoinbase, connectPhantom]);
 
   return (
     <div className="flex flex-col items-center">
@@ -300,9 +242,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
           </div>
         )}
       </button>
-      {error && (
-        <p className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</p>}
     </div>
   );
-}; 
+};

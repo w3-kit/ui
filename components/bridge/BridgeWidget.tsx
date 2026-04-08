@@ -46,13 +46,20 @@ function SelectorDropdown({
           {value ? (
             <>
               <TokenIcon symbol={value.name} logoURI={value.icon} size="sm" />
-              <span className="text-sm font-medium text-gray-900 dark:text-white">{value.name}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                {value.name}
+              </span>
             </>
           ) : (
             <span className="text-sm text-gray-400 dark:text-gray-500">{label}</span>
           )}
         </div>
-        <ChevronDown className={cn("h-3 w-3 text-gray-400 transition-transform duration-150", isOpen && "rotate-180")} />
+        <ChevronDown
+          className={cn(
+            "h-3 w-3 text-gray-400 transition-transform duration-150",
+            isOpen && "rotate-180",
+          )}
+        />
       </button>
       {isOpen && (
         <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
@@ -64,12 +71,14 @@ function SelectorDropdown({
                 onClick={() => onSelect(item)}
                 className={cn(
                   "flex items-center gap-2 w-full px-3 py-2 text-left transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-inset",
-                  isSelected && "bg-gray-50 dark:bg-gray-900"
+                  isSelected && "bg-gray-50 dark:bg-gray-900",
                 )}
               >
                 <TokenIcon symbol={item.name} logoURI={item.icon} size="sm" />
                 <span className="text-sm text-gray-900 dark:text-white flex-1">{item.name}</span>
-                {isSelected && <span className="text-[10px] text-gray-400 dark:text-gray-500">Selected</span>}
+                {isSelected && (
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500">Selected</span>
+                )}
               </button>
             );
           })}
@@ -107,17 +116,23 @@ export function BridgeWidget({
     setToNetwork(fromNetwork);
   }, [fromNetwork, toNetwork]);
 
-  const handleFromSelect = useCallback((network: Network) => {
-    if (network.id === toNetwork?.id) setToNetwork(fromNetwork);
-    setFromNetwork(network);
-    setOpenSelector(null);
-  }, [fromNetwork, toNetwork]);
+  const handleFromSelect = useCallback(
+    (network: Network) => {
+      if (network.id === toNetwork?.id) setToNetwork(fromNetwork);
+      setFromNetwork(network);
+      setOpenSelector(null);
+    },
+    [fromNetwork, toNetwork],
+  );
 
-  const handleToSelect = useCallback((network: Network) => {
-    if (network.id === fromNetwork?.id) setFromNetwork(toNetwork);
-    setToNetwork(network);
-    setOpenSelector(null);
-  }, [fromNetwork, toNetwork]);
+  const handleToSelect = useCallback(
+    (network: Network) => {
+      if (network.id === fromNetwork?.id) setFromNetwork(toNetwork);
+      setToNetwork(network);
+      setOpenSelector(null);
+    },
+    [fromNetwork, toNetwork],
+  );
 
   const handleTokenSelect = useCallback((token: BridgeToken) => {
     setSelectedToken(token);
@@ -127,7 +142,12 @@ export function BridgeWidget({
   const isSameNetwork = fromNetwork && toNetwork && fromNetwork.id === toNetwork.id;
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
@@ -139,7 +159,9 @@ export function BridgeWidget({
         {/* Networks */}
         <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-end mb-4">
           <div>
-            <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">From</p>
+            <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">
+              From
+            </p>
             <SelectorDropdown
               label="Select network"
               value={fromNetwork}
@@ -157,7 +179,9 @@ export function BridgeWidget({
             <ArrowRight className="h-4 w-4" />
           </button>
           <div>
-            <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">To</p>
+            <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">
+              To
+            </p>
             <SelectorDropdown
               label="Select network"
               value={toNetwork}
@@ -171,7 +195,9 @@ export function BridgeWidget({
 
         {/* Token */}
         <div className="mb-4">
-          <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">Token</p>
+          <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-1.5">
+            Token
+          </p>
           <SelectorDropdown
             label="Select token"
             value={selectedToken}
@@ -184,7 +210,9 @@ export function BridgeWidget({
 
         {/* Amount */}
         <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3 mb-4">
-          <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-2">Amount</p>
+          <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400 dark:text-gray-500 mb-2">
+            Amount
+          </p>
           <input
             type="number"
             placeholder="0.00"
@@ -203,7 +231,14 @@ export function BridgeWidget({
 
         <Button
           onClick={handleBridge}
-          disabled={!fromNetwork || !toNetwork || !selectedToken || !amount || isProcessing || !!isSameNetwork}
+          disabled={
+            !fromNetwork ||
+            !toNetwork ||
+            !selectedToken ||
+            !amount ||
+            isProcessing ||
+            !!isSameNetwork
+          }
           className="w-full"
         >
           {isProcessing ? (

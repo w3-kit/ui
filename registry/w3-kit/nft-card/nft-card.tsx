@@ -197,12 +197,7 @@ export function NFTCard({
                       hover:text-gray-600 dark:hover:text-gray-300
                       transition-all duration-300 transform hover:scale-110"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -266,12 +261,7 @@ export function NFTCard({
                   bg-black/50 hover:bg-black/70 text-white
                   transition-all duration-300 transform hover:scale-110"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -308,9 +298,7 @@ export function NFTCard({
           />
         ) : (
           <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-            <span className="text-gray-400 dark:text-gray-500">
-              Failed to load image
-            </span>
+            <span className="text-gray-400 dark:text-gray-500">Failed to load image</span>
           </div>
         )}
       </div>
@@ -341,12 +329,7 @@ export function NFTCard({
                   />
                 </svg>
               ) : (
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -365,9 +348,7 @@ export function NFTCard({
           >
             {formatAddress(nft.owner)}
           </button>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            #{nft.tokenId}
-          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">#{nft.tokenId}</span>
         </div>
       </div>
     </div>

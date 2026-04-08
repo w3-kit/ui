@@ -19,5 +19,5 @@ export interface NFTCardProps {
   onOwnerClick?: (owner: string) => void;
   onNFTClick?: (nft: NFT) => void;
   className?: string;
-  variant?: 'default' | 'expanded';
-} 
+  variant?: "default" | "expanded";
+}

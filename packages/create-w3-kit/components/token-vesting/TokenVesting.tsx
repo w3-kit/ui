@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from "react";
 
 export interface VestingSchedule {
   id: string;
@@ -10,7 +10,7 @@ export interface VestingSchedule {
   cliffDate: number;
   lastClaimDate: number | null;
   beneficiary: string;
-  status: 'active' | 'completed' | 'pending';
+  status: "active" | "completed" | "pending";
 }
 
 interface TokenVestingProps {
@@ -18,28 +18,30 @@ interface TokenVestingProps {
   onClaimTokens: (scheduleId: string) => Promise<void>;
 }
 
-const StatusBadge: React.FC<{ status: VestingSchedule['status'] }> = ({ status }) => {
+const StatusBadge: React.FC<{ status: VestingSchedule["status"] }> = ({ status }) => {
   const statusConfig = {
     active: {
-      bg: 'bg-green-100 dark:bg-green-900/30',
-      text: 'text-green-800 dark:text-green-400',
-      label: 'Active'
+      bg: "bg-green-100 dark:bg-green-900/30",
+      text: "text-green-800 dark:text-green-400",
+      label: "Active",
     },
     completed: {
-      bg: 'bg-gray-100 dark:bg-gray-900/30',
-      text: 'text-gray-800 dark:text-gray-400',
-      label: 'Completed'
+      bg: "bg-gray-100 dark:bg-gray-900/30",
+      text: "text-gray-800 dark:text-gray-400",
+      label: "Completed",
     },
     pending: {
-      bg: 'bg-yellow-100 dark:bg-yellow-900/30',
-      text: 'text-yellow-800 dark:text-yellow-400',
-      label: 'Pending'
-    }
+      bg: "bg-yellow-100 dark:bg-yellow-900/30",
+      text: "text-yellow-800 dark:text-yellow-400",
+      label: "Pending",
+    },
   };
 
   const config = statusConfig[status];
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+    >
       {config.label}
     </span>
   );
@@ -58,9 +60,9 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
 
   const formatDate = useCallback((timestamp: number) => {
     return new Date(timestamp).toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   }, []);
 
@@ -77,7 +79,7 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
   const isClaimable = useCallback((schedule: VestingSchedule) => {
     const now = Date.now();
     return (
-      schedule.status === 'active' &&
+      schedule.status === "active" &&
       now >= schedule.cliffDate &&
       parseFloat(schedule.vestedAmount) < parseFloat(schedule.totalAmount)
     );
@@ -108,13 +110,23 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
               </h3>
               <StatusBadge status={schedule.status} />
             </div>
-            <button 
+            <button
               className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 
                 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform duration-200
-                ${expandedId === schedule.id ? 'rotate-180' : ''}`}
+                ${expandedId === schedule.id ? "rotate-180" : ""}`}
             >
-              <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <svg
+                className="w-5 h-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
           </div>
@@ -130,7 +142,7 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
               <div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent
                   animate-shimmer"
-                style={{ '--tw-translate-x': '-100%' } as React.CSSProperties}
+                style={{ "--tw-translate-x": "-100%" } as React.CSSProperties}
               />
               <div
                 className="bg-blue-500 dark:bg-blue-400 h-full rounded-full transition-all duration-700 ease-out"
@@ -139,9 +151,9 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
             </div>
           </div>
 
-          <div 
+          <div
             className={`mt-4 transition-all duration-300 ease-out overflow-hidden
-              ${expandedId === schedule.id ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+              ${expandedId === schedule.id ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
           >
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               {formatDate(schedule.startDate)} - {formatDate(schedule.endDate)}
@@ -169,7 +181,7 @@ export function TokenVesting({ vestingSchedules, onClaimTokens }: TokenVestingPr
               <div className="bg-gray-50 dark:bg-gray-750 p-4 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-gray-700/50">
                 <span className="text-gray-500 dark:text-gray-400 text-sm">Last Claimed</span>
                 <p className="font-medium text-gray-900 dark:text-white mt-1">
-                  {schedule.lastClaimDate ? formatDate(schedule.lastClaimDate) : 'Never'}
+                  {schedule.lastClaimDate ? formatDate(schedule.lastClaimDate) : "Never"}
                 </p>
               </div>
             </div>

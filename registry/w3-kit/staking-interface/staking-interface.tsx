@@ -38,9 +38,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
   const [expandedPoolId, setExpandedPoolId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAllCompactPools, setShowAllCompactPools] = useState(false);
-  const [compactStakingView, setCompactStakingView] = useState<string | null>(
-    null
-  );
+  const [compactStakingView, setCompactStakingView] = useState<string | null>(null);
 
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -86,7 +84,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
 
       if (amountNum < minStakeNum) {
         setError(
-          `Minimum stake amount is ${formatNumber(selectedPool.minStake)} ${selectedPool.token.symbol}`
+          `Minimum stake amount is ${formatNumber(selectedPool.minStake)} ${selectedPool.token.symbol}`,
         );
         return false;
       }
@@ -110,14 +108,10 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
     try {
       if (isStaking) {
         onStake?.(selectedPool.id, amount);
-        setSuccess(
-          `Successfully staked ${formatNumber(amount)} ${selectedPool.token.symbol}`
-        );
+        setSuccess(`Successfully staked ${formatNumber(amount)} ${selectedPool.token.symbol}`);
       } else {
         onUnstake?.(selectedPool.id, amount);
-        setSuccess(
-          `Successfully unstaked ${formatNumber(amount)} ${selectedPool.token.symbol}`
-        );
+        setSuccess(`Successfully unstaked ${formatNumber(amount)} ${selectedPool.token.symbol}`);
       }
       setAmount("");
 
@@ -157,12 +151,8 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
   };
 
   const renderPoolItem = (pool: StakingPool, isCompact: boolean = false) => {
-    const isExpanded = isCompact
-      ? compactStakingView === pool.id
-      : expandedPoolId === pool.id;
-    const toggleFunction = isCompact
-      ? toggleCompactStakingView
-      : togglePoolExpansion;
+    const isExpanded = isCompact ? compactStakingView === pool.id : expandedPoolId === pool.id;
+    const toggleFunction = isCompact ? toggleCompactStakingView : togglePoolExpansion;
     const iconSize = isCompact ? 24 : 28;
 
     return (
@@ -194,20 +184,14 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
               {getStatusIcon(pool, isCompact ? "small" : "medium")}
             </div>
             <div>
-              <h3
-                className={`font-medium text-foreground ${isCompact ? "text-sm" : ""}`}
-              >
+              <h3 className={`font-medium text-foreground ${isCompact ? "text-sm" : ""}`}>
                 {pool.name}
               </h3>
               <p
                 className={`${isCompact ? "text-xs" : "text-sm"} text-muted-foreground flex items-center`}
               >
-                <Percent
-                  className={`${isCompact ? "w-3 h-3 mr-1" : "w-3.5 h-3.5 mr-1"}`}
-                />
-                <span className={getAPRColorClass(pool.apr)}>
-                  {formatNumber(pool.apr)}% APR
-                </span>
+                <Percent className={`${isCompact ? "w-3 h-3 mr-1" : "w-3.5 h-3.5 mr-1"}`} />
+                <span className={getAPRColorClass(pool.apr)}>{formatNumber(pool.apr)}% APR</span>
               </p>
             </div>
           </div>
@@ -219,9 +203,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
               >
                 {formatNumber(pool.apr)}%
               </span>
-              <span
-                className={`${isCompact ? "text-xs" : "text-xs"} text-muted-foreground`}
-              >
+              <span className={`${isCompact ? "text-xs" : "text-xs"} text-muted-foreground`}>
                 APR
               </span>
             </div>
@@ -264,9 +246,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                 <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
                   <div className="flex items-center justify-between bg-muted p-2 rounded">
                     <span className="text-muted-foreground">Lock Period:</span>
-                    <span className="font-medium text-foreground">
-                      {pool.lockPeriod} days
-                    </span>
+                    <span className="font-medium text-foreground">{pool.lockPeriod} days</span>
                   </div>
                   <div className="flex items-center justify-between bg-muted p-2 rounded">
                     <span className="text-muted-foreground">Min Stake:</span>
@@ -290,9 +270,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Enter amount to stake"
-                      className={`pr-14 text-xs ${
-                        error ? "border-destructive" : ""
-                      }`}
+                      className={`pr-14 text-xs ${error ? "border-destructive" : ""}`}
                     />
                     <Button
                       variant="ghost"
@@ -326,13 +304,11 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       <>
                         {pool.isStaked ? (
                           <>
-                            <Unlock className="w-3 h-3 mr-1.5 inline-block" />{" "}
-                            Unstake
+                            <Unlock className="w-3 h-3 mr-1.5 inline-block" /> Unstake
                           </>
                         ) : (
                           <>
-                            <Lock className="w-3 h-3 mr-1.5 inline-block" />{" "}
-                            Stake
+                            <Lock className="w-3 h-3 mr-1.5 inline-block" /> Stake
                           </>
                         )}{" "}
                         {pool.token.symbol}
@@ -385,16 +361,13 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className={`w-full mt-4 ${
-                    pool.isStaked
-                      ? "bg-amber-500 hover:bg-amber-600"
-                      : ""
+                    pool.isStaked ? "bg-amber-500 hover:bg-amber-600" : ""
                   }`}
                   variant={pool.isStaked ? "default" : "default"}
                 >
                   {pool.isStaked ? (
                     <>
-                      <Unlock className="w-4 h-4 mr-2" /> Unstake{" "}
-                      {pool.token.symbol}
+                      <Unlock className="w-4 h-4 mr-2" /> Unstake {pool.token.symbol}
                     </>
                   ) : (
                     <>
@@ -428,9 +401,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
             rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
             >
               <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-green-700 dark:text-green-400">
-                {success}
-              </p>
+              <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
             </div>
           )}
 
@@ -476,9 +447,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
             rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
           >
             <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-green-700 dark:text-green-400">
-              {success}
-            </p>
+            <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
           </div>
         )}
       </CardHeader>
@@ -563,11 +532,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
             <Button
               onClick={handleAction}
               disabled={!amount || Number(amount) <= 0 || isLoading}
-              className={`w-full ${
-                isStaking
-                  ? ""
-                  : "bg-amber-500 hover:bg-amber-600"
-              }`}
+              className={`w-full ${isStaking ? "" : "bg-amber-500 hover:bg-amber-600"}`}
               variant={isStaking ? "default" : "default"}
             >
               {isLoading ? (

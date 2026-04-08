@@ -26,7 +26,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
 
   const totalValue = tokens.reduce(
     (sum, token) => sum + Number(token.balance) * (token.price || 0),
-    0
+    0,
   );
 
   const handleRefresh = async () => {
@@ -57,7 +57,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
   const filteredTokens = tokens.filter(
     (token) =>
       token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+      token.symbol.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const sortedTokens = [...filteredTokens].sort((a, b) => {
@@ -71,9 +71,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
         comparison = Number(a.balance) - Number(b.balance);
         break;
       case "value":
-        comparison =
-          Number(a.balance) * (a.price || 0) -
-          Number(b.balance) * (b.price || 0);
+        comparison = Number(a.balance) * (a.price || 0) - Number(b.balance) * (b.price || 0);
         break;
       case "change":
         comparison = (a.priceChange24h || 0) - (b.priceChange24h || 0);
@@ -84,15 +82,15 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
   });
 
   const displayTokens =
-    variant === "compact" && !showAllTokens
-      ? sortedTokens.slice(0, 3)
-      : sortedTokens;
+    variant === "compact" && !showAllTokens ? sortedTokens.slice(0, 3) : sortedTokens;
 
-  const getPriceChangeBadgeVariant = (change: number | undefined) => {
-    if (change === undefined) return "secondary";
+  const getPriceChangeBadgeVariant = (
+    change: number | undefined,
+  ): "default" | "success" | "warning" | "error" => {
+    if (change === undefined) return "default";
     if (change > 0) return "success";
-    if (change < 0) return "destructive";
-    return "secondary";
+    if (change < 0) return "error";
+    return "default";
   };
 
   if (variant === "compact") {
@@ -102,9 +100,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base sm:text-lg">Wallet Balance</CardTitle>
             <div className="flex items-center gap-2">
-              <span className="text-lg sm:text-2xl font-bold">
-                {formatCurrency(totalValue)}
-              </span>
+              <span className="text-lg sm:text-2xl font-bold">{formatCurrency(totalValue)}</span>
               <Button
                 variant="ghost"
                 size="icon"
@@ -149,7 +145,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   key={token.symbol}
                   className={cn(
                     "flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors",
-                    !isSelected && "hover:bg-accent"
+                    !isSelected && "hover:bg-accent",
                   )}
                   onClick={() => handleTokenClick(token)}
                 >
@@ -166,15 +162,13 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                             "absolute -bottom-1 -right-1 w-3 h-3 rounded-full",
                             token.priceChange24h > 0 && "bg-green-500",
                             token.priceChange24h < 0 && "bg-red-500",
-                            token.priceChange24h === 0 && "bg-muted-foreground"
+                            token.priceChange24h === 0 && "bg-muted-foreground",
                           )}
                         />
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-sm sm:text-base">
-                        {token.symbol}
-                      </div>
+                      <div className="font-medium text-sm sm:text-base">{token.symbol}</div>
                       <div className="text-xs text-muted-foreground truncate max-w-[100px] sm:max-w-[150px]">
                         {token.name}
                       </div>
@@ -193,9 +187,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
             })}
 
             {sortedTokens.length === 0 && (
-              <div className="py-4 text-center text-sm text-muted-foreground">
-                No tokens found
-              </div>
+              <div className="py-4 text-center text-sm text-muted-foreground">No tokens found</div>
             )}
 
             {sortedTokens.length > 3 && (
@@ -218,21 +210,12 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between mb-2">
           <CardTitle>Total Balance</CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-          >
+          <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
             <RefreshCw className={cn("h-5 w-5", isRefreshing && "animate-spin")} />
           </Button>
         </div>
-        <div className="text-2xl sm:text-3xl font-bold">
-          {formatCurrency(totalValue)}
-        </div>
-        <div className="mt-2 text-sm text-muted-foreground">
-          {tokens.length} tokens in wallet
-        </div>
+        <div className="text-2xl sm:text-3xl font-bold">{formatCurrency(totalValue)}</div>
+        <div className="mt-2 text-sm text-muted-foreground">{tokens.length} tokens in wallet</div>
       </CardHeader>
 
       <CardContent className="space-y-4">
@@ -289,7 +272,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   key={token.symbol}
                   className={cn(
                     "py-3 sm:py-4 cursor-pointer transition-colors",
-                    !isSelected && "hover:bg-accent/50"
+                    !isSelected && "hover:bg-accent/50",
                   )}
                   onClick={() => handleTokenClick(token)}
                 >
@@ -307,7 +290,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                               "absolute -bottom-1 -right-1 w-4 h-4 rounded-full",
                               token.priceChange24h > 0 && "bg-green-500",
                               token.priceChange24h < 0 && "bg-red-500",
-                              token.priceChange24h === 0 && "bg-muted-foreground"
+                              token.priceChange24h === 0 && "bg-muted-foreground",
                             )}
                           />
                         )}
@@ -319,7 +302,10 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                         <div className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
                           <span>{token.symbol}</span>
                           {token.priceChange24h !== undefined && (
-                            <Badge variant={getPriceChangeBadgeVariant(token.priceChange24h)} className="text-xs">
+                            <Badge
+                              variant={getPriceChangeBadgeVariant(token.priceChange24h)}
+                              className="text-xs"
+                            >
                               {token.priceChange24h > 0 ? "+" : ""}
                               {token.priceChange24h.toFixed(2)}%
                             </Badge>
@@ -342,26 +328,16 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                       <Card className="bg-muted/50">
                         <CardContent className="p-3 grid grid-cols-2 gap-4 text-sm">
                           <div className="border-r pr-3">
-                            <div className="text-muted-foreground mb-1 text-xs">
-                              Price
-                            </div>
-                            <div className="font-medium">
-                              {formatCurrency(token.price || 0)}
-                            </div>
+                            <div className="text-muted-foreground mb-1 text-xs">Price</div>
+                            <div className="font-medium">{formatCurrency(token.price || 0)}</div>
                           </div>
                           <div className="pl-3">
-                            <div className="text-muted-foreground mb-1 text-xs">
-                              Value
-                            </div>
-                            <div className="font-medium">
-                              {formatCurrency(tokenValue)}
-                            </div>
+                            <div className="text-muted-foreground mb-1 text-xs">Value</div>
+                            <div className="font-medium">{formatCurrency(tokenValue)}</div>
                           </div>
                           {token.priceChange24h !== undefined && (
                             <div className="col-span-2 border-t pt-2 mt-1">
-                              <div className="text-muted-foreground mb-1 text-xs">
-                                24h Change
-                              </div>
+                              <div className="text-muted-foreground mb-1 text-xs">24h Change</div>
                               <Badge variant={getPriceChangeBadgeVariant(token.priceChange24h)}>
                                 {token.priceChange24h > 0 ? "+" : ""}
                                 {token.priceChange24h.toFixed(2)}%

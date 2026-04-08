@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { TrendingDown, TrendingUp, Check, Trash2 } from "lucide-react";
-import Image from "next/image";
 
 export interface OrderData {
   id: string;
@@ -48,15 +47,15 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
-    
+
     if (!amount || parseFloat(amount) <= 0) {
       newErrors.amount = "Amount must be greater than 0";
     }
-    
+
     if (!price || parseFloat(price) <= 0) {
       newErrors.price = "Price must be greater than 0";
     }
-    
+
     if (expiry && (parseInt(expiry) <= 0 || parseInt(expiry) > 30)) {
       newErrors.expiry = "Expiry must be between 1 and 30 days";
     }
@@ -67,7 +66,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
 
   const handleCreateOrder = async () => {
     if (!validateForm()) return;
-    
+
     setIsCreating(true);
     try {
       const newOrder: OrderData = {
@@ -75,7 +74,8 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
         type: orderType,
         token: {
           symbol: "ETH",
-          logoURI: "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
+          logoURI:
+            "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
           price: 2845.67,
         },
         amount,
@@ -85,7 +85,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
         expiry: expiry ? Date.now() + parseInt(expiry) * 24 * 60 * 60 * 1000 : undefined,
       };
 
-      setOrders(prev => [...prev, newOrder]);
+      setOrders((prev) => [...prev, newOrder]);
       await onOrderCreate?.({
         type: orderType,
         token: newOrder.token,
@@ -96,8 +96,8 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
       });
 
       // Show loading for 1 second before success
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Show success animation
       setShowSuccess(true);
       setTimeout(() => {
@@ -121,11 +121,11 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
 
   const handleConfirmCancel = () => {
     if (orderToCancel) {
-      setOrders(prev => prev.map(order => 
-        order.id === orderToCancel 
-          ? { ...order, status: "cancelled" }
-          : order
-      ));
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderToCancel ? { ...order, status: "cancelled" } : order,
+        ),
+      );
       onOrderCancel?.(orderToCancel);
       setShowCancelModal(false);
       setOrderToCancel(null);
@@ -133,7 +133,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
   };
 
   const handleDeleteOrder = (orderId: string) => {
-    setOrders(prev => prev.filter(order => order.id !== orderId));
+    setOrders((prev) => prev.filter((order) => order.id !== orderId));
   };
 
   const getStatusColor = (status: OrderData["status"]) => {
@@ -162,9 +162,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
       {/* Create Order Form with Transitions */}
       <div
         className={`transition-all duration-300 ease-in-out ${
-          showCreateOrder
-            ? "opacity-100 max-h-[1000px] mb-6"
-            : "opacity-0 max-h-0 overflow-hidden"
+          showCreateOrder ? "opacity-100 max-h-[1000px] mb-6" : "opacity-0 max-h-0 overflow-hidden"
         }`}
       >
         <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -205,9 +203,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
                 }`}
                 placeholder="0.0"
               />
-              {errors.amount && (
-                <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
-              )}
+              {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount}</p>}
             </div>
 
             <div>
@@ -223,9 +219,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
                 }`}
                 placeholder="0.0"
               />
-              {errors.price && (
-                <p className="mt-1 text-sm text-red-500">{errors.price}</p>
-              )}
+              {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
             </div>
 
             <div>
@@ -241,16 +235,14 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
                 }`}
                 placeholder="Optional"
               />
-              {errors.expiry && (
-                <p className="mt-1 text-sm text-red-500">{errors.expiry}</p>
-              )}
+              {errors.expiry && <p className="mt-1 text-sm text-red-500">{errors.expiry}</p>}
             </div>
 
             <button
               onClick={handleCreateOrder}
               disabled={isCreating || showSuccess}
               className={`w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center relative ${
-                (isCreating || showSuccess) ? "opacity-75 cursor-not-allowed" : ""
+                isCreating || showSuccess ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >
               {isCreating ? (
@@ -298,7 +290,8 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
           >
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <Image
+                <img
+                  loading="lazy"
                   src={order.token.logoURI}
                   alt={order.token.symbol}
                   width={32}

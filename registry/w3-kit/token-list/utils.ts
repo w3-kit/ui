@@ -1,4 +1,4 @@
-export function formatBalance(balance?: string, decimals = 18): string {
+export function formatBalance(balance?: string, _decimals = 18): string {
   if (!balance) return "0";
   return balance;
 }

@@ -10,5 +10,5 @@ export interface PriceTickerProps {
   className?: string;
   refreshInterval?: number; // in milliseconds
   onPriceUpdate?: (prices: TokenPrice[]) => void;
-  variant?: 'compact' | 'detailed';
-} 
+  variant?: "compact" | "detailed";
+}

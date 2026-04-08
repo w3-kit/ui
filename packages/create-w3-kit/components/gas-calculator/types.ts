@@ -20,4 +20,4 @@ export interface GasCalculatorProps {
   onGasSelect?: (gas: number, price: number) => void;
   refreshInterval?: number; // in milliseconds
   chainId?: number;
-} 
+}

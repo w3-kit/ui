@@ -1,12 +1,25 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { AlertTriangle, Shield, ShieldCheck, ShieldAlert, ExternalLink, Search, TrendingUp, Clock, Tag, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
-import Image from 'next/image';
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+import {
+  AlertTriangle,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  ExternalLink,
+  Search,
+  TrendingUp,
+  Clock,
+  Tag,
+  Filter,
+  X,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 export enum RiskLevel {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  CRITICAL = 'CRITICAL'
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  CRITICAL = "CRITICAL",
 }
 
 export interface SecurityMetric {
@@ -54,15 +67,15 @@ interface NFTMarketplaceAggregatorProps {
 const getRiskColor = (risk: RiskLevel) => {
   switch (risk) {
     case RiskLevel.LOW:
-      return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
     case RiskLevel.MEDIUM:
-      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
     case RiskLevel.HIGH:
-      return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400';
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
     case RiskLevel.CRITICAL:
-      return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
+      return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
+      return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400";
   }
 };
 
@@ -79,23 +92,23 @@ const mockProtocolData: ProtocolRisk = {
       risk: RiskLevel.LOW,
       description: "Role-based access control implemented correctly",
       impact: "Low risk of unauthorized access",
-      recommendation: "Consider implementing timelock for admin functions"
+      recommendation: "Consider implementing timelock for admin functions",
     },
     {
       name: "Oracle Usage",
       risk: RiskLevel.MEDIUM,
       description: "Single price oracle dependency",
       impact: "Potential price manipulation risks",
-      recommendation: "Implement multiple oracle sources"
+      recommendation: "Implement multiple oracle sources",
     },
     {
       name: "External Calls",
       risk: RiskLevel.HIGH,
       description: "Unchecked external calls present",
       impact: "Vulnerable to reentrancy attacks",
-      recommendation: "Implement reentrancy guards"
-    }
-  ]
+      recommendation: "Implement reentrancy guards",
+    },
+  ],
 };
 
 // Initial display data (one of each collection)
@@ -104,7 +117,8 @@ const initialListings: NFTListing[] = [
     id: "1",
     name: "Bored Ape #7834",
     collectionName: "Bored Ape Yacht Club",
-    imageUrl: "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 70,
@@ -113,13 +127,14 @@ const initialListings: NFTListing[] = [
     lastUpdate: "2024-03-16T12:00:00Z",
     link: "https://opensea.io/collection/boredapeyachtclub",
     rank: 2435,
-    rarity: 0.89
+    rarity: 0.89,
   },
   {
     id: "4",
     name: "Azuki #9839",
     collectionName: "Azuki",
-    imageUrl: "https://i.seadn.io/gae/H8jOCJuQokNqGBpkBN5wk1oZwO7LM8bNnrHCaekV2nKjnCqw6UB5oaH8XyNeBDj6bA_n1mjejzhFQUP3O1NfjFLHr3FOaeHcTOOT?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/H8jOCJuQokNqGBpkBN5wk1oZwO7LM8bNnrHCaekV2nKjnCqw6UB5oaH8XyNeBDj6bA_n1mjejzhFQUP3O1NfjFLHr3FOaeHcTOOT?w=500&auto=format",
     marketplace: "Blur",
     marketplaceIcon: "https://blur.io/favicon.ico",
     price: 14.2,
@@ -128,13 +143,14 @@ const initialListings: NFTListing[] = [
     lastUpdate: "2024-03-16T15:45:00Z",
     link: "https://blur.io/collection/azuki",
     rank: 2156,
-    rarity: 0.87
+    rarity: 0.87,
   },
   {
     id: "5",
     name: "Doodle #4875",
     collectionName: "Doodles",
-    imageUrl: "https://i.seadn.io/gae/7B0qai02OdHA8P_EOVK672qUliyjQdQDGNrACxs7WnTgZAkJa_wWURnIFKeOh5VTf8cfTqW3wQpozGedaC9mteKphEOtztls02RlWQ?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/7B0qai02OdHA8P_EOVK672qUliyjQdQDGNrACxs7WnTgZAkJa_wWURnIFKeOh5VTf8cfTqW3wQpozGedaC9mteKphEOtztls02RlWQ?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 6.9,
@@ -143,13 +159,14 @@ const initialListings: NFTListing[] = [
     lastUpdate: "2024-03-16T17:10:00Z",
     link: "https://opensea.io/collection/doodles-official",
     rank: 3421,
-    rarity: 0.82
+    rarity: 0.82,
   },
   {
     id: "6",
     name: "Pudgy #3156",
     collectionName: "Pudgy Penguins",
-    imageUrl: "https://i.seadn.io/gae/yNi-XdGxsgQCPpqSio4o31ygAV6wURdIdInWRcFIl46UjUQ1eV7BEndGe8L661OoG-clRi7EgInLX4LPu9Jfw4fq0bnVYHqg7RFi?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/yNi-XdGxsgQCPpqSio4o31ygAV6wURdIdInWRcFIl46UjUQ1eV7BEndGe8L661OoG-clRi7EgInLX4LPu9Jfw4fq0bnVYHqg7RFi?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 9.8,
@@ -158,8 +175,8 @@ const initialListings: NFTListing[] = [
     lastUpdate: "2024-03-16T18:05:00Z",
     link: "https://opensea.io/collection/pudgypenguins",
     rank: 876,
-    rarity: 0.94
-  }
+    rarity: 0.94,
+  },
 ];
 
 // Full collection data for search results
@@ -169,7 +186,8 @@ const allListings: NFTListing[] = [
     id: "2",
     name: "Bored Ape #3749",
     collectionName: "Bored Ape Yacht Club",
-    imageUrl: "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 68.5,
@@ -178,13 +196,14 @@ const allListings: NFTListing[] = [
     lastUpdate: "2024-03-16T14:30:00Z",
     link: "https://opensea.io/collection/boredapeyachtclub",
     rank: 1876,
-    rarity: 0.92
+    rarity: 0.92,
   },
   {
     id: "3",
     name: "Bored Ape #8817",
     collectionName: "Bored Ape Yacht Club",
-    imageUrl: "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 72.5,
@@ -193,7 +212,7 @@ const allListings: NFTListing[] = [
     lastUpdate: "2024-03-16T13:15:00Z",
     link: "https://opensea.io/collection/boredapeyachtclub",
     rank: 1234,
-    rarity: 0.95
+    rarity: 0.95,
   },
   {
     id: "7",
@@ -208,13 +227,14 @@ const allListings: NFTListing[] = [
     lastUpdate: "2024-03-16T19:30:00Z",
     link: "https://blur.io/collection/azuki",
     rank: 1245,
-    rarity: 0.92
+    rarity: 0.92,
   },
   {
     id: "8",
     name: "Doodle #2241",
     collectionName: "Doodles",
-    imageUrl: "https://i.seadn.io/gae/7B0qai02OdHA8P_EOVK672qUliyjQdQDGNrACxs7WnTgZAkJa_wWURnIFKeOh5VTf8cfTqW3wQpozGedaC9mteKphEOtztls02RlWQ?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/7B0qai02OdHA8P_EOVK672qUliyjQdQDGNrACxs7WnTgZAkJa_wWURnIFKeOh5VTf8cfTqW3wQpozGedaC9mteKphEOtztls02RlWQ?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 7.2,
@@ -223,13 +243,14 @@ const allListings: NFTListing[] = [
     lastUpdate: "2024-03-16T20:00:00Z",
     link: "https://opensea.io/collection/doodles-official",
     rank: 2876,
-    rarity: 0.85
+    rarity: 0.85,
   },
   {
     id: "9",
     name: "Pudgy #4492",
     collectionName: "Pudgy Penguins",
-    imageUrl: "https://i.seadn.io/gae/yNi-XdGxsgQCPpqSio4o31ygAV6wURdIdInWRcFIl46UjUQ1eV7BEndGe8L661OoG-clRi7EgInLX4LPu9Jfw4fq0bnVYHqg7RFi?w=500&auto=format",
+    imageUrl:
+      "https://i.seadn.io/gae/yNi-XdGxsgQCPpqSio4o31ygAV6wURdIdInWRcFIl46UjUQ1eV7BEndGe8L661OoG-clRi7EgInLX4LPu9Jfw4fq0bnVYHqg7RFi?w=500&auto=format",
     marketplace: "OpenSea",
     marketplaceIcon: "https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.png",
     price: 10.2,
@@ -238,12 +259,12 @@ const allListings: NFTListing[] = [
     lastUpdate: "2024-03-16T20:30:00Z",
     link: "https://opensea.io/collection/pudgypenguins",
     rank: 1543,
-    rarity: 0.88
-  }
+    rarity: 0.88,
+  },
 ];
 
 export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<ProtocolRisk | null>(null);
   const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
@@ -255,7 +276,7 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
       // For demo purposes, we'll set mock data
       setData(mockProtocolData);
     } catch (error) {
-      console.error('Scan failed:', error);
+      console.error("Scan failed:", error);
     } finally {
       setLoading(false);
     }
@@ -293,7 +314,7 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
                    disabled:opacity-50 disabled:cursor-not-allowed transition-colors
                    dark:bg-blue-500 dark:hover:bg-blue-600"
         >
-          {loading ? 'Scanning...' : 'Scan Protocol'}
+          {loading ? "Scanning..." : "Scan Protocol"}
         </button>
       </div>
 
@@ -307,9 +328,11 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
                 <p className="text-sm text-gray-500 dark:text-gray-400 font-mono">{data.address}</p>
               </div>
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-900 dark:text-white">TVL: {data.tvl}</div>
+                <div className="text-sm font-medium text-gray-900 dark:text-white">
+                  TVL: {data.tvl}
+                </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {data.audited ? `Last Audit: ${data.lastAudit}` : 'Not Audited'}
+                  {data.audited ? `Last Audit: ${data.lastAudit}` : "Not Audited"}
                 </div>
               </div>
             </div>
@@ -317,8 +340,12 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
             {/* Risk Score */}
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
               <div className="space-y-1">
-                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Risk Score</div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.riskScore}/100</div>
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Risk Score
+                </div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {data.riskScore}/100
+                </div>
               </div>
               <div className="h-16 w-16 relative">
                 <svg className="transform -rotate-90" viewBox="0 0 36 36">
@@ -352,25 +379,33 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
                   className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
                 >
                   <button
-                    onClick={() => setExpandedMetric(expandedMetric === metric.name ? null : metric.name)}
+                    onClick={() =>
+                      setExpandedMetric(expandedMetric === metric.name ? null : metric.name)
+                    }
                     className="w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50 
                              dark:hover:bg-gray-700/50 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       {getRiskIcon(metric.risk)}
-                      <span className="font-medium text-gray-900 dark:text-white">{metric.name}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {metric.name}
+                      </span>
                     </div>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getRiskColor(metric.risk)}`}>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getRiskColor(metric.risk)}`}
+                    >
                       {metric.risk}
                     </span>
                   </button>
-                  
+
                   {expandedMetric === metric.name && (
                     <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                       <dl className="space-y-3 text-sm">
                         <div>
                           <dt className="text-gray-500 dark:text-gray-400">Description</dt>
-                          <dd className="mt-1 text-gray-900 dark:text-white">{metric.description}</dd>
+                          <dd className="mt-1 text-gray-900 dark:text-white">
+                            {metric.description}
+                          </dd>
                         </div>
                         <div>
                           <dt className="text-gray-500 dark:text-gray-400">Impact</dt>
@@ -379,7 +414,9 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
                         {metric.recommendation && (
                           <div>
                             <dt className="text-gray-500 dark:text-gray-400">Recommendation</dt>
-                            <dd className="mt-1 text-gray-900 dark:text-white">{metric.recommendation}</dd>
+                            <dd className="mt-1 text-gray-900 dark:text-white">
+                              {metric.recommendation}
+                            </dd>
                           </div>
                         )}
                       </dl>
@@ -396,13 +433,13 @@ export function ProtocolRiskScanner({ onScan }: ProtocolRiskScannerProps) {
 }
 
 export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorProps) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState<NFTListing[]>(initialListings);
-  const [sortBy, setSortBy] = useState<'price' | 'lastUpdate' | 'rarity'>('price');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, setSortBy] = useState<"price" | "lastUpdate" | "rarity">("price");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [showFilters, setShowFilters] = useState(false);
-  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [selectedMarketplaces, setSelectedMarketplaces] = useState<string[]>([]);
 
   // Update the useEffect for search
@@ -413,7 +450,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
         try {
           await onSearch(query);
           // Search through all listings when query exists
-          const searchResults = allListings.filter(listing => {
+          const searchResults = allListings.filter((listing) => {
             const searchTerm = query.toLowerCase();
             return (
               listing.name.toLowerCase().includes(searchTerm) ||
@@ -423,7 +460,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
           });
           setListings(searchResults);
         } catch (error) {
-          console.error('Search failed:', error);
+          console.error("Search failed:", error);
           setListings([]);
         } finally {
           setLoading(false);
@@ -441,35 +478,35 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
     e.preventDefault(); // Prevent form submission
   };
 
-  const marketplaces = useMemo(() => 
-    Array.from(new Set(allListings.map(listing => listing.marketplace))),
-    []
+  const marketplaces = useMemo(
+    () => Array.from(new Set(allListings.map((listing) => listing.marketplace))),
+    [],
   );
 
   const filteredListings = useMemo(() => {
     let filtered = [...listings];
-    
+
     // Apply price range filter
     if (priceRange.min) {
-      filtered = filtered.filter(item => item.price >= Number(priceRange.min));
+      filtered = filtered.filter((item) => item.price >= Number(priceRange.min));
     }
     if (priceRange.max) {
-      filtered = filtered.filter(item => item.price <= Number(priceRange.max));
+      filtered = filtered.filter((item) => item.price <= Number(priceRange.max));
     }
 
     // Apply marketplace filter
     if (selectedMarketplaces.length > 0) {
-      filtered = filtered.filter(item => selectedMarketplaces.includes(item.marketplace));
+      filtered = filtered.filter((item) => selectedMarketplaces.includes(item.marketplace));
     }
 
     // Apply sorting
     return filtered.sort((a, b) => {
-      if (sortBy === 'price') {
-        return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
-      } else if (sortBy === 'rarity' && a.rarity && b.rarity) {
-        return sortOrder === 'asc' ? a.rarity - b.rarity : b.rarity - a.rarity;
+      if (sortBy === "price") {
+        return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
+      } else if (sortBy === "rarity" && a.rarity && b.rarity) {
+        return sortOrder === "asc" ? a.rarity - b.rarity : b.rarity - a.rarity;
       } else {
-        return sortOrder === 'asc' 
+        return sortOrder === "asc"
           ? new Date(a.lastUpdate).getTime() - new Date(b.lastUpdate).getTime()
           : new Date(b.lastUpdate).getTime() - new Date(a.lastUpdate).getTime();
       }
@@ -481,7 +518,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
   };
 
   const formatUSD = (price: number) => {
-    return price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return price.toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
   const formatDate = (dateString: string) => {
@@ -490,10 +527,8 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
   };
 
   const toggleMarketplace = (marketplace: string) => {
-    setSelectedMarketplaces(prev => 
-      prev.includes(marketplace)
-        ? prev.filter(m => m !== marketplace)
-        : [...prev, marketplace]
+    setSelectedMarketplaces((prev) =>
+      prev.includes(marketplace) ? prev.filter((m) => m !== marketplace) : [...prev, marketplace],
     );
   };
 
@@ -540,7 +575,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                       type="number"
                       placeholder="Min"
                       value={priceRange.min}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                      onChange={(e) => setPriceRange((prev) => ({ ...prev, min: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md
                                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
                     />
@@ -548,7 +583,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                       type="number"
                       placeholder="Max"
                       value={priceRange.max}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                      onChange={(e) => setPriceRange((prev) => ({ ...prev, max: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md
                                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
                     />
@@ -560,15 +595,15 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                     Marketplaces
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {marketplaces.map(marketplace => (
+                    {marketplaces.map((marketplace) => (
                       <button
                         key={marketplace}
                         type="button"
                         onClick={() => toggleMarketplace(marketplace)}
                         className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                           selectedMarketplaces.includes(marketplace)
-                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400'
-                            : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400"
+                            : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                         }`}
                       >
                         {marketplace}
@@ -583,7 +618,7 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                   type="button"
                   onClick={() => {
                     setSelectedMarketplaces([]);
-                    setPriceRange({ min: '', max: '' });
+                    setPriceRange({ min: "", max: "" });
                   }}
                   className="flex items-center text-sm text-red-600 dark:text-red-400 hover:text-red-700 
                            dark:hover:text-red-300 transition-colors"
@@ -603,31 +638,34 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
             <span className="text-sm text-gray-500 dark:text-gray-400">Sort by:</span>
             <div className="flex space-x-2">
               {[
-                { key: 'price' as const, icon: Tag, label: 'Price' },
-                { key: 'lastUpdate' as const, icon: Clock, label: 'Last Update' },
-                { key: 'rarity' as const, icon: TrendingUp, label: 'Rarity' }
+                { key: "price" as const, icon: Tag, label: "Price" },
+                { key: "lastUpdate" as const, icon: Clock, label: "Last Update" },
+                { key: "rarity" as const, icon: TrendingUp, label: "Rarity" },
               ].map(({ key, icon: Icon, label }) => (
                 <button
                   key={key}
                   onClick={() => {
                     if (sortBy === key) {
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
                     } else {
                       setSortBy(key);
-                      setSortOrder('asc');
+                      setSortOrder("asc");
                     }
                   }}
                   className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-sm transition-colors ${
-                    sortBy === key 
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400' 
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    sortBy === key
+                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{label}</span>
-                  {sortBy === key && (
-                    sortOrder === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                  )}
+                  {sortBy === key &&
+                    (sortOrder === "asc" ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    ))}
                 </button>
               ))}
             </div>
@@ -649,7 +687,8 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
               <div className="p-4">
                 <div className="flex items-start space-x-4">
                   <div className="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 overflow-hidden rounded-lg">
-                    <Image
+                    <img
+                      loading="lazy"
                       src={listing.imageUrl}
                       alt={listing.name}
                       width={160}
@@ -669,9 +708,12 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                           {listing.collectionName}
                         </p>
                       </div>
-                      <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 
-                                    px-3 py-1 rounded-full">
-                        <Image
+                      <div
+                        className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 
+                                    px-3 py-1 rounded-full"
+                      >
+                        <img
+                          loading="lazy"
                           src={listing.marketplaceIcon}
                           alt={listing.marketplace}
                           width={16}
@@ -703,10 +745,12 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
                       {(listing.rank || listing.rarity) && (
                         <div>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {listing.rank ? 'Rank' : 'Rarity'}
+                            {listing.rank ? "Rank" : "Rarity"}
                           </p>
                           <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {listing.rank ? `#${listing.rank}` : `${(listing.rarity! * 100).toFixed(2)}%`}
+                            {listing.rank
+                              ? `#${listing.rank}`
+                              : `${(listing.rarity! * 100).toFixed(2)}%`}
                           </p>
                         </div>
                       )}
@@ -731,8 +775,10 @@ export function NFTMarketplaceAggregator({ onSearch }: NFTMarketplaceAggregatorP
           ))}
         </div>
       ) : query && !loading ? (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border 
-                     border-gray-200 dark:border-gray-700">
+        <div
+          className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border 
+                     border-gray-200 dark:border-gray-700"
+        >
           <div className="space-y-3">
             <p className="text-gray-500 dark:text-gray-400 text-lg">
               No listings found for &quot;{query}&quot;

@@ -1,11 +1,36 @@
 import { Token } from "./types";
 
 export const defaultTokens: Token[] = [
-  { symbol: "ETH", name: "Ethereum", decimals: 18, logoURI: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040" },
-  { symbol: "USDT", name: "Tether USD", decimals: 6, logoURI: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040" },
-  { symbol: "USDC", name: "USD Coin", decimals: 6, logoURI: "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040" },
-  { symbol: "DAI", name: "Dai", decimals: 18, logoURI: "https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.svg?v=040" },
-  { symbol: "BTC", name: "Wrapped Bitcoin", decimals: 8, logoURI: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=040" },
+  {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimals: 18,
+    logoURI: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
+  },
+  {
+    symbol: "USDT",
+    name: "Tether USD",
+    decimals: 6,
+    logoURI: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040",
+  },
+  {
+    symbol: "USDC",
+    name: "USD Coin",
+    decimals: 6,
+    logoURI: "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040",
+  },
+  {
+    symbol: "DAI",
+    name: "Dai",
+    decimals: 18,
+    logoURI: "https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.svg?v=040",
+  },
+  {
+    symbol: "BTC",
+    name: "Wrapped Bitcoin",
+    decimals: 8,
+    logoURI: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=040",
+  },
 ];
 
 export function getMockExchangeRate(from: string, to: string): number {

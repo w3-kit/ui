@@ -83,10 +83,8 @@ export function LimitOrderManager({
     if (orderToCancel) {
       setOrders((prev) =>
         prev.map((order) =>
-          order.id === orderToCancel
-            ? { ...order, status: "cancelled" as const }
-            : order
-        )
+          order.id === orderToCancel ? { ...order, status: "cancelled" as const } : order,
+        ),
       );
       onOrderCancel?.(orderToCancel);
       setShowCancelModal(false);
@@ -99,13 +97,9 @@ export function LimitOrderManager({
   };
 
   return (
-    <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}
-    >
+    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Limit Orders
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Limit Orders</h2>
         <button
           onClick={() => setShowCreateOrder(!showCreateOrder)}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -117,9 +111,7 @@ export function LimitOrderManager({
       {/* Create Order Form with Transitions */}
       <div
         className={`transition-all duration-300 ease-in-out ${
-          showCreateOrder
-            ? "opacity-100 max-h-[1000px] mb-6"
-            : "opacity-0 max-h-0 overflow-hidden"
+          showCreateOrder ? "opacity-100 max-h-[1000px] mb-6" : "opacity-0 max-h-0 overflow-hidden"
         }`}
       >
         <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -156,15 +148,11 @@ export function LimitOrderManager({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                  errors.amount
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                  errors.amount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="0.0"
               />
-              {errors.amount && (
-                <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
-              )}
+              {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount}</p>}
             </div>
 
             <div>
@@ -176,15 +164,11 @@ export function LimitOrderManager({
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                  errors.price
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                  errors.price ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="0.0"
               />
-              {errors.price && (
-                <p className="mt-1 text-sm text-red-500">{errors.price}</p>
-              )}
+              {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
             </div>
 
             <div>
@@ -196,15 +180,11 @@ export function LimitOrderManager({
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                  errors.expiry
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                  errors.expiry ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Optional"
               />
-              {errors.expiry && (
-                <p className="mt-1 text-sm text-red-500">{errors.expiry}</p>
-              )}
+              {errors.expiry && <p className="mt-1 text-sm text-red-500">{errors.expiry}</p>}
             </div>
 
             <button
@@ -277,8 +257,7 @@ export function LimitOrderManager({
                   {order.amount} {order.token.symbol}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {order.type === "limit" ? "Limit" : "Stop Loss"} @ $
-                  {order.price}
+                  {order.type === "limit" ? "Limit" : "Stop Loss"} @ ${order.price}
                 </div>
               </div>
             </div>
@@ -318,8 +297,7 @@ export function LimitOrderManager({
               Confirm Cancellation
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Are you sure you want to cancel this order? This action cannot be
-              undone.
+              Are you sure you want to cancel this order? This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-4">
               <button

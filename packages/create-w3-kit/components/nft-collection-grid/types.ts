@@ -1,4 +1,4 @@
-import { NFT } from '../nft-card/types';
+import { NFT } from "../nft-card/types";
 
 export interface GridColumns {
   default: number;
@@ -12,6 +12,6 @@ export interface NFTCollectionGridProps {
   onNFTClick?: (nft: NFT) => void;
   onOwnerClick?: (owner: string) => void;
   className?: string;
-  variant?: 'default' | 'expanded';
+  variant?: "default" | "expanded";
   columns?: GridColumns;
-} 
+}

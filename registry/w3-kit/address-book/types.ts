@@ -16,11 +16,11 @@ export interface NewEntry {
 
 export interface AddressBookProps {
   entries: AddressEntry[];
-  onAdd?: (entry: Omit<AddressEntry, 'id'>) => void;
+  onAdd?: (entry: Omit<AddressEntry, "id">) => void;
   onEdit?: (entry: AddressEntry) => void;
   onDelete?: (id: string) => void;
   className?: string;
-  variant?: 'default' | 'compact';
+  variant?: "default" | "compact";
 }
 
 export interface DeleteModalProps {

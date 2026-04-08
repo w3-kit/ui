@@ -29,9 +29,7 @@ const TokenImage = memo(
         <div
           className={`${sizeClasses[size]} rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-medium overflow-hidden flex-shrink-0 animate-fadeIn`}
         >
-          <span className="text-xs sm:text-sm">
-            {symbol.substring(0, 2).toUpperCase()}
-          </span>
+          <span className="text-xs sm:text-sm">{symbol.substring(0, 2).toUpperCase()}</span>
         </div>
       );
     }
@@ -59,7 +57,7 @@ const TokenImage = memo(
         )}
       </div>
     );
-  }
+  },
 );
 TokenImage.displayName = "TokenImage";
 
@@ -90,12 +88,8 @@ const TokenGridCard = memo(
         <div className="flex items-center space-x-3">
           <TokenImage logoURI={token.logoURI} symbol={token.symbol} size="lg" />
           <div className="min-w-0 flex-1">
-            <h3 className="font-medium text-gray-900 dark:text-white truncate">
-              {token.name}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-              {token.symbol}
-            </p>
+            <h3 className="font-medium text-gray-900 dark:text-white truncate">{token.name}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{token.symbol}</p>
           </div>
           {isSelected && (
             <div className="flex-shrink-0 text-blue-500 dark:text-blue-400">
@@ -118,9 +112,7 @@ const TokenGridCard = memo(
         <div className="mt-3 space-y-1">
           {showBalances && (
             <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Balance:
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Balance:</span>
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-2 truncate">
                 {formatBalance(token.balance || "0", token.decimals)}
               </p>
@@ -129,9 +121,7 @@ const TokenGridCard = memo(
 
           {showPrices && (
             <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Price:
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Price:</span>
               <p className="text-sm font-medium text-gray-900 dark:text-white ml-2 truncate">
                 {formatCurrency(token.price || 0)}
               </p>
@@ -140,9 +130,7 @@ const TokenGridCard = memo(
 
           {showPrices && showBalances && (
             <div className="flex justify-between items-center pt-1 border-t border-gray-100 dark:border-gray-700 mt-1">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Value:
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Value:</span>
               <p className="text-sm font-semibold text-gray-900 dark:text-white ml-2 truncate">
                 {token.price && token.balance
                   ? formatCurrency(Number(token.balance) * token.price)
@@ -153,7 +141,7 @@ const TokenGridCard = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 TokenGridCard.displayName = "TokenGridCard";
 
@@ -183,12 +171,8 @@ const TokenListRow = memo(
         <div className="flex items-center space-x-3 min-w-0 flex-1">
           <TokenImage logoURI={token.logoURI} symbol={token.symbol} size="md" />
           <div className="min-w-0 flex-1">
-            <div className="font-medium text-gray-900 dark:text-white truncate">
-              {token.name}
-            </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-              {token.symbol}
-            </div>
+            <div className="font-medium text-gray-900 dark:text-white truncate">{token.name}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{token.symbol}</div>
           </div>
           {isSelected && (
             <div className="flex-shrink-0 text-blue-500 dark:text-blue-400 mr-2">
@@ -211,9 +195,7 @@ const TokenListRow = memo(
         <div className="flex items-center space-x-4 sm:space-x-6 flex-shrink-0">
           {showBalances && (
             <div className="flex flex-col items-end">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Balance
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Balance</span>
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                 {formatBalance(token.balance || "0", token.decimals)}
               </span>
@@ -222,9 +204,7 @@ const TokenListRow = memo(
 
           {showPrices && (
             <div className="flex flex-col items-end">
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Value
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Value</span>
               <span className="text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                 {token.price && token.balance
                   ? formatCurrency(Number(token.balance) * token.price)
@@ -235,7 +215,7 @@ const TokenListRow = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 TokenListRow.displayName = "TokenListRow";
 
@@ -251,9 +231,7 @@ export const TokenList: React.FC<TokenListProps> = ({
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-  const [isCompact, setIsCompact] = useState(
-    variant === "grid" && tokens.length > 6
-  );
+  const [isCompact, setIsCompact] = useState(variant === "grid" && tokens.length > 6);
 
   useEffect(() => {
     const styleTag = document.createElement("style");
@@ -274,7 +252,7 @@ export const TokenList: React.FC<TokenListProps> = ({
         setSortDirection("asc");
       }
     },
-    [sortField]
+    [sortField],
   );
 
   const filteredAndSortedTokens = useMemo(() => {
@@ -285,7 +263,7 @@ export const TokenList: React.FC<TokenListProps> = ({
       result = result.filter(
         (token) =>
           token.name.toLowerCase().includes(searchLower) ||
-          token.symbol.toLowerCase().includes(searchLower)
+          token.symbol.toLowerCase().includes(searchLower),
       );
     }
 
@@ -303,8 +281,7 @@ export const TokenList: React.FC<TokenListProps> = ({
           break;
         case "value":
           comparison =
-            Number(b.balance || 0) * (b.price || 0) -
-            Number(a.balance || 0) * (a.price || 0);
+            Number(b.balance || 0) * (b.price || 0) - Number(a.balance || 0) * (a.price || 0);
           break;
       }
       return sortDirection === "asc" ? comparison : -comparison;
@@ -337,19 +314,18 @@ export const TokenList: React.FC<TokenListProps> = ({
               </div>
             )}
             <div className={`grid ${getGridCols()} gap-2 sm:gap-3 md:gap-4`}>
-              {(isCompact
-                ? filteredAndSortedTokens.slice(0, 6)
-                : filteredAndSortedTokens
-              ).map((token, index) => (
-                <TokenGridCard
-                  key={`${token.chainId}-${token.address}-${index}`}
-                  token={token}
-                  isSelected={selectedToken === token.symbol}
-                  onSelect={() => onTokenSelect?.(token)}
-                  showBalances={showBalances}
-                  showPrices={showPrices}
-                />
-              ))}
+              {(isCompact ? filteredAndSortedTokens.slice(0, 6) : filteredAndSortedTokens).map(
+                (token, index) => (
+                  <TokenGridCard
+                    key={`${token.chainId}-${token.address}-${index}`}
+                    token={token}
+                    isSelected={selectedToken === token.symbol}
+                    onSelect={() => onTokenSelect?.(token)}
+                    showBalances={showBalances}
+                    showPrices={showPrices}
+                  />
+                ),
+              )}
             </div>
             {isCompact && filteredAndSortedTokens.length > 6 && (
               <button
@@ -450,19 +426,11 @@ export const TokenList: React.FC<TokenListProps> = ({
                       key={`${token.chainId}-${token.address}-${index}`}
                       onClick={() => onTokenSelect?.(token)}
                       className={`cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors
-                        ${
-                          selectedToken === token.symbol
-                            ? "bg-blue-50 dark:bg-blue-900/20"
-                            : ""
-                        }`}
+                        ${selectedToken === token.symbol ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
                     >
                       <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2 sm:gap-3">
-                          <TokenImage
-                            logoURI={token.logoURI}
-                            symbol={token.symbol}
-                            size="sm"
-                          />
+                          <TokenImage logoURI={token.logoURI} symbol={token.symbol} size="sm" />
                           <div className="min-w-0 flex-1">
                             <div className="font-medium text-sm sm:text-base text-gray-900 dark:text-white truncate max-w-[150px] sm:max-w-[200px]">
                               {token.name}
@@ -485,9 +453,7 @@ export const TokenList: React.FC<TokenListProps> = ({
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base text-gray-900 dark:text-white">
                             {token.price && token.balance
-                              ? formatCurrency(
-                                  Number(token.balance) * token.price
-                                )
+                              ? formatCurrency(Number(token.balance) * token.price)
                               : "-"}
                           </td>
                         </>
@@ -554,9 +520,7 @@ export const TokenList: React.FC<TokenListProps> = ({
 
       {filteredAndSortedTokens.length === 0 ? (
         <div className="text-center p-8 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-          <p className="text-gray-500 dark:text-gray-400">
-            No tokens found matching your search.
-          </p>
+          <p className="text-gray-500 dark:text-gray-400">No tokens found matching your search.</p>
         </div>
       ) : (
         renderVariant()

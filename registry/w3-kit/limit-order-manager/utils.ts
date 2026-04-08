@@ -11,11 +11,7 @@ export function getStatusColor(status: OrderData["status"]): string {
   }
 }
 
-export function validateOrderForm(
-  amount: string,
-  price: string,
-  expiry: string
-): FormErrors {
+export function validateOrderForm(amount: string, price: string, expiry: string): FormErrors {
   const errors: FormErrors = {};
 
   if (!amount || parseFloat(amount) <= 0) {

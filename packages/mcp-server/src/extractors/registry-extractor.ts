@@ -1,24 +1,24 @@
 const CATEGORY_PREFIXES: Record<string, string> = {
-  token: 'token',
-  nft: 'nft',
-  wallet: 'wallet',
-  defi: 'defi',
-  staking: 'defi',
-  liquidity: 'defi',
-  flash: 'defi',
-  limit: 'defi',
-  gas: 'utility',
-  network: 'utility',
-  ens: 'utility',
-  smart: 'utility',
-  contract: 'utility',
-  connect: 'wallet',
-  multisig: 'wallet',
-  address: 'wallet',
-  transaction: 'wallet',
-  asset: 'defi',
-  subscription: 'defi',
-  price: 'token',
+  token: "token",
+  nft: "nft",
+  wallet: "wallet",
+  defi: "defi",
+  staking: "defi",
+  liquidity: "defi",
+  flash: "defi",
+  limit: "defi",
+  gas: "utility",
+  network: "utility",
+  ens: "utility",
+  smart: "utility",
+  contract: "utility",
+  connect: "wallet",
+  multisig: "wallet",
+  address: "wallet",
+  transaction: "wallet",
+  asset: "defi",
+  subscription: "defi",
+  price: "token",
 };
 
 export interface RegistryEntry {
@@ -50,6 +50,6 @@ export function extractRegistry(registry: {
 }
 
 function categorize(name: string): string {
-  const firstWord = name.split('-')[0];
-  return CATEGORY_PREFIXES[firstWord] ?? 'general';
+  const firstWord = name.split("-")[0];
+  return CATEGORY_PREFIXES[firstWord] ?? "general";
 }

@@ -91,8 +91,7 @@ export const defaultTokens = [
     address: "0x6B175474E89094C44Da98b954EescdeCB5Badce",
     decimals: 18,
     chainId: 1,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/9956/small/dai-multi-collateral-mcd.png",
+    logoURI: "https://assets.coingecko.com/coins/images/9956/small/dai-multi-collateral-mcd.png",
   },
   {
     symbol: "DOGE",
@@ -108,8 +107,7 @@ export const defaultTokens = [
     address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
     decimals: 8,
     chainId: 1,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png",
+    logoURI: "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png",
   },
 ];
 

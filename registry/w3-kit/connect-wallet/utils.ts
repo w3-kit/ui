@@ -1,4 +1,4 @@
-import { ButtonVariant, WalletType, WalletConnectConfig } from './types';
+import { ButtonVariant, WalletType } from "./types";
 
 // Variant styles for button appearance
 export const variantStyles: Record<ButtonVariant, string> = {
@@ -29,35 +29,28 @@ export const variantStyles: Record<ButtonVariant, string> = {
   `,
 };
 
-// Default WalletConnect configuration
-export const DEFAULT_WALLETCONNECT_CONFIG: WalletConnectConfig = {
-  rpc: {
-    1: 'https://mainnet.infura.io/v3/YOUR_INFURA_ID',
-    4: 'https://rinkeby.infura.io/v3/YOUR_INFURA_ID',
-  },
-  bridge: 'https://bridge.walletconnect.org',
-};
-
 // Wallet icon URLs
 export const WALLET_ICONS = {
-  metamask: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png',
-  walletconnect: 'https://cdn-images-1.medium.com/max/1200/1*fgRGbOjhoJMHqh9czHETZQ.png',
-  coinbase: 'https://cdn.iconscout.com/icon/free/png-256/free-coinbase-logo-icon-download-in-svg-png-gif-file-formats--web-crypro-trading-platform-logos-pack-icons-7651204.png',
+  metamask:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png",
+  walletconnect: "https://cdn-images-1.medium.com/max/1200/1*fgRGbOjhoJMHqh9czHETZQ.png",
+  coinbase:
+    "https://cdn.iconscout.com/icon/free/png-256/free-coinbase-logo-icon-download-in-svg-png-gif-file-formats--web-crypro-trading-platform-logos-pack-icons-7651204.png",
 };
 
 // Get default label for wallet type
 export const getDefaultLabel = (type: WalletType): string => {
   switch (type) {
-    case 'metamask':
-      return 'Connect MetaMask';
-    case 'walletconnect':
-      return 'WalletConnect';
-    case 'coinbase':
-      return 'Coinbase Wallet';
-    case 'phantom':
-      return 'Phantom Wallet';
+    case "metamask":
+      return "Connect MetaMask";
+    case "walletconnect":
+      return "WalletConnect";
+    case "coinbase":
+      return "Coinbase Wallet";
+    case "phantom":
+      return "Phantom Wallet";
     default:
-      return 'Connect Wallet';
+      return "Connect Wallet";
   }
 };
 

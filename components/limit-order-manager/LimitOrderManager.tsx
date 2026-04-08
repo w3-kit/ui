@@ -16,7 +16,12 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
   className,
 }) => {
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Limit Orders</h3>
       </div>

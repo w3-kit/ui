@@ -1,5 +1,5 @@
-export type ButtonVariant = 'ghost' | 'light' | 'dark';
-export type WalletType = 'metamask' | 'walletconnect' | 'coinbase' | 'phantom';
+export type ButtonVariant = "ghost" | "light" | "dark";
+export type WalletType = "metamask" | "walletconnect" | "coinbase" | "phantom";
 
 export interface ConnectWalletButtonProps {
   onConnect?: (address: string) => void;
@@ -8,12 +8,6 @@ export interface ConnectWalletButtonProps {
   customLabel?: string;
   variant?: ButtonVariant;
   walletType?: WalletType;
-  walletConnectConfig?: WalletConnectConfig;
-}
-
-export interface WalletConnectConfig {
-  rpc: Record<number, string>;
-  bridge?: string;
 }
 
 export interface CoinbaseWalletProvider {

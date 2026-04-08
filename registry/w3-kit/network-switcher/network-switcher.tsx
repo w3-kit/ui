@@ -23,7 +23,7 @@ export function NetworkSwitcher({
   const filteredNetworks = currentNetworks.filter(
     (network) =>
       network.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      network.chainId.toString().includes(searchQuery)
+      network.chainId.toString().includes(searchQuery),
   );
 
   const handleNetworkSwitch = async (chainId: number) => {
@@ -36,9 +36,7 @@ export function NetworkSwitcher({
     }
   };
 
-  const selectedNetwork = [...networks, ...testNetworks].find(
-    (n) => n.chainId === selectedChainId
-  );
+  const selectedNetwork = [...networks, ...testNetworks].find((n) => n.chainId === selectedChainId);
 
   function StatusIndicator() {
     return (
@@ -48,16 +46,16 @@ export function NetworkSwitcher({
             networkStatus === "connected"
               ? "bg-green-500"
               : networkStatus === "connecting"
-              ? "bg-yellow-500"
-              : "bg-red-500"
+                ? "bg-yellow-500"
+                : "bg-red-500"
           }`}
         />
         <span className="text-sm text-muted-foreground">
           {networkStatus === "connected"
             ? "Connected"
             : networkStatus === "connecting"
-            ? "Connecting..."
-            : "Error"}
+              ? "Connecting..."
+              : "Error"}
         </span>
       </div>
     );
@@ -72,9 +70,7 @@ export function NetworkSwitcher({
       <div className="p-4 sm:p-6 border-b">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-foreground">
-              Network
-            </h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-foreground">Network</h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
               Select a blockchain network to connect to
             </p>
@@ -97,12 +93,7 @@ export function NetworkSwitcher({
                   onClick={() => setSearchQuery("")}
                   className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 p-0"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -147,9 +138,7 @@ export function NetworkSwitcher({
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 />
               </svg>
-              <span className="text-sm text-muted-foreground">
-                Gas: {gasPrice} Gwei
-              </span>
+              <span className="text-sm text-muted-foreground">Gas: {gasPrice} Gwei</span>
             </div>
           )}
           {latency > 0 && (
@@ -167,9 +156,7 @@ export function NetworkSwitcher({
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <span className="text-sm text-muted-foreground">
-                Latency: {latency}ms
-              </span>
+              <span className="text-sm text-muted-foreground">Latency: {latency}ms</span>
             </div>
           )}
         </div>
@@ -200,9 +187,7 @@ export function NetworkSwitcher({
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <div className="font-medium truncate">
-                    {network.name}
-                  </div>
+                  <div className="font-medium truncate">{network.name}</div>
                   <div className="text-xs text-muted-foreground mt-0.5">
                     Chain ID: {network.chainId}
                   </div>
@@ -240,9 +225,7 @@ export function NetworkSwitcher({
             </div>
             <div className="p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <span className="text-muted-foreground">Currency</span>
-              <span className="font-medium text-foreground">
-                {selectedNetwork.currency}
-              </span>
+              <span className="font-medium text-foreground">{selectedNetwork.currency}</span>
             </div>
             <div className="p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <span className="text-muted-foreground">Explorer</span>
@@ -253,12 +236,7 @@ export function NetworkSwitcher({
                 className="text-primary hover:underline flex items-center gap-1"
               >
                 View Explorer
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -269,21 +247,15 @@ export function NetworkSwitcher({
               </a>
             </div>
             <div className="p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <span className="text-muted-foreground">
-                Connection
-              </span>
+              <span className="text-muted-foreground">Connection</span>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500" />
-                  <span className="text-sm text-foreground">
-                    RPC
-                  </span>
+                  <span className="text-sm text-foreground">RPC</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500" />
-                  <span className="text-sm text-foreground">
-                    WebSocket
-                  </span>
+                  <span className="text-sm text-foreground">WebSocket</span>
                 </div>
               </div>
             </div>

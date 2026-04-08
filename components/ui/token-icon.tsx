@@ -26,7 +26,7 @@ export function TokenIcon({ symbol, logoURI, size = "md", className }: TokenIcon
         className={cn(
           "rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center font-medium text-gray-500 dark:text-gray-400 flex-shrink-0",
           sizeMap[size],
-          className
+          className,
         )}
       >
         {symbol.substring(0, 2).toUpperCase()}
@@ -35,20 +35,24 @@ export function TokenIcon({ symbol, logoURI, size = "md", className }: TokenIcon
   }
 
   return (
-    <div className={cn("rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 relative", sizeMap[size], className)}>
+    <div
+      className={cn(
+        "rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 relative",
+        sizeMap[size],
+        className,
+      )}
+    >
       <img
         src={logoURI}
         alt={symbol}
         className={cn(
           "w-full h-full object-contain transition-opacity duration-150",
-          isLoaded ? "opacity-100" : "opacity-0"
+          isLoaded ? "opacity-100" : "opacity-0",
         )}
         onError={() => setHasError(true)}
         onLoad={() => setIsLoaded(true)}
       />
-      {!isLoaded && (
-        <div className="absolute inset-0 animate-pulse bg-gray-100 dark:bg-gray-800" />
-      )}
+      {!isLoaded && <div className="absolute inset-0 animate-pulse bg-gray-100 dark:bg-gray-800" />}
     </div>
   );
 }

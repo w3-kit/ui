@@ -28,13 +28,11 @@ export function NetworkSwitcher({
     <div
       className={cn(
         "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
-        className
+        className,
       )}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-          Select Network
-        </h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Select Network</h3>
         {testNetworks.length > 0 && (
           <button
             onClick={() => setShowTestnets(!showTestnets)}
@@ -42,7 +40,7 @@ export function NetworkSwitcher({
               "text-xs font-medium px-2.5 py-1 rounded-full transition-colors duration-150",
               showTestnets
                 ? "bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400"
-                : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+                : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
             )}
           >
             {showTestnets ? "Testnets" : "Mainnets"}
@@ -61,13 +59,15 @@ export function NetworkSwitcher({
                 "flex items-center justify-between w-full px-4 py-3 text-left transition-colors duration-150",
                 isSelected
                   ? "bg-gray-50 dark:bg-gray-900"
-                  : "hover:bg-gray-50 dark:hover:bg-gray-900"
+                  : "hover:bg-gray-50 dark:hover:bg-gray-900",
               )}
             >
               <div className="flex items-center gap-3">
                 <TokenIcon symbol={network.symbol} logoURI={network.logoURI} size="md" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{network.name}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {network.name}
+                  </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{network.symbol}</p>
                 </div>
               </div>

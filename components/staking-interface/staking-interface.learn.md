@@ -14,6 +14,7 @@ On proof-of-stake chains, validators lock tokens as collateral to validate trans
 ### 2. DeFi staking (earning yield)
 
 Protocols incentivize users to lock tokens by distributing rewards. This could mean:
+
 - **Liquidity mining** — stake LP tokens to earn protocol tokens
 - **Single-sided staking** — lock a token to earn more of it
 - **Governance staking** — lock tokens to gain voting power + rewards
@@ -28,12 +29,12 @@ Protocols incentivize users to lock tokens by distributing rewards. This could m
 
 ### EVM vs Solana
 
-| | EVM | Solana |
-|---|---|---|
-| **Protocol staking** | 32 ETH minimum (or liquid staking) | Delegate to any validator, tiny minimum |
-| **Unstaking time** | Days to weeks (withdrawal queue) | ~2 days (epoch boundary) |
-| **Liquid staking tokens** | stETH (Lido), rETH (Rocket Pool) | mSOL (Marinade), jitoSOL (Jito) |
-| **DeFi staking** | Approve + stake in separate txns | Often single transaction |
+|                           | EVM                                | Solana                                  |
+| ------------------------- | ---------------------------------- | --------------------------------------- |
+| **Protocol staking**      | 32 ETH minimum (or liquid staking) | Delegate to any validator, tiny minimum |
+| **Unstaking time**        | Days to weeks (withdrawal queue)   | ~2 days (epoch boundary)                |
+| **Liquid staking tokens** | stETH (Lido), rETH (Rocket Pool)   | mSOL (Marinade), jitoSOL (Jito)         |
+| **DeFi staking**          | Approve + stake in separate txns   | Often single transaction                |
 
 ## Security considerations
 
@@ -45,6 +46,7 @@ Protocols incentivize users to lock tokens by distributing rewards. This could m
 ## How this component works
 
 This component provides the UI for a staking interface. It handles:
+
 - Stake/unstake amount input
 - Available balance display
 - Current staking position and earned rewards

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { ArrowUp, ArrowDown, ChevronDown, ExternalLink } from 'lucide-react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Asset, AssetPortfolioProps, Timeframe } from './types';
+import React, { useState } from "react";
+import { ArrowUp, ArrowDown, ChevronDown, ExternalLink } from "lucide-react";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Asset, AssetPortfolioProps, Timeframe } from "./types";
 import {
   cardAnimation,
   itemAnimation,
@@ -14,7 +14,7 @@ import {
   formatPercent,
   getChainName,
   getExplorerUrl,
-} from './utils';
+} from "./utils";
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -36,7 +36,7 @@ const PriceChart: React.FC<{ data: number[]; color: string }> = ({ data, color }
             style={{
               height: `${height}%`,
               backgroundColor: color,
-              minHeight: '4px'
+              minHeight: "4px",
             }}
           />
         );
@@ -53,7 +53,7 @@ const AssetItem: React.FC<{
   isExpanded: boolean;
   onExpand: (symbol: string) => void;
 }> = ({ asset, onClick, compact, isExpanded, onExpand }) => {
-  const [timeframe, setTimeframe] = useState<Timeframe>('24h');
+  const [timeframe, setTimeframe] = useState<Timeframe>("24h");
   const token = asset.tokenConfig;
 
   const handleClick = (e: React.MouseEvent) => {
@@ -66,8 +66,9 @@ const AssetItem: React.FC<{
   };
 
   return (
-    <div className={`${itemAnimation} bg-card rounded-lg overflow-hidden border
-      ${!compact && 'hover:shadow-md transition-shadow duration-200'}`}
+    <div
+      className={`${itemAnimation} bg-card rounded-lg overflow-hidden border
+      ${!compact && "hover:shadow-md transition-shadow duration-200"}`}
     >
       <div
         onClick={handleClick}
@@ -94,9 +95,7 @@ const AssetItem: React.FC<{
             <div className="flex items-center space-x-2">
               <span className="font-medium">{token.symbol}</span>
               {!compact && (
-                <span className="text-sm text-muted-foreground truncate">
-                  {token.name}
-                </span>
+                <span className="text-sm text-muted-foreground truncate">{token.name}</span>
               )}
             </div>
             <div className="text-sm text-muted-foreground">
@@ -107,20 +106,24 @@ const AssetItem: React.FC<{
 
         <div className="flex items-center space-x-4">
           <div className="text-right">
-            <div className="font-medium">
-              {formatCurrency(asset.value)}
-            </div>
-            <div className={`text-sm font-medium flex items-center justify-end space-x-1 ${
-              asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
-            }`}>
-              {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+            <div className="font-medium">{formatCurrency(asset.value)}</div>
+            <div
+              className={`text-sm font-medium flex items-center justify-end space-x-1 ${
+                asset.change24h >= 0 ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {asset.change24h >= 0 ? (
+                <ArrowUp className="w-3 h-3" />
+              ) : (
+                <ArrowDown className="w-3 h-3" />
+              )}
               <span>{formatPercent(asset.change24h)}</span>
             </div>
           </div>
           {!compact && (
             <ChevronDown
               className={`w-5 h-5 text-muted-foreground transition-transform duration-300
-                ${isExpanded ? 'rotate-180' : ''} group-hover:text-foreground`}
+                ${isExpanded ? "rotate-180" : ""} group-hover:text-foreground`}
             />
           )}
         </div>
@@ -130,29 +133,27 @@ const AssetItem: React.FC<{
       {!compact && (
         <div
           className={`overflow-hidden transition-all duration-300 ease-in-out
-            ${isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}
+            ${isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}`}
         >
           <div className="border-t border-border">
             <div className="p-4 bg-muted/50">
               {/* Token Charts Section */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">
-                    Price History
-                  </h3>
-                  <TimeframeSelector
-                    selected={timeframe}
-                    onChange={setTimeframe}
-                  />
+                  <h3 className="text-lg font-medium">Price History</h3>
+                  <TimeframeSelector selected={timeframe} onChange={setTimeframe} />
                 </div>
 
                 <div className="bg-card rounded-lg p-4">
-                  <PriceChart
-                    data={asset.priceHistory[timeframe]}
-                    color={asset.color}
-                  />
+                  <PriceChart data={asset.priceHistory[timeframe]} color={asset.color} />
                   <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                    <span>{timeframe === '24h' ? 'Past 24 Hours' : timeframe === '7d' ? 'Past Week' : 'Past Month'}</span>
+                    <span>
+                      {timeframe === "24h"
+                        ? "Past 24 Hours"
+                        : timeframe === "7d"
+                          ? "Past Week"
+                          : "Past Month"}
+                    </span>
                     <span>Current: ${asset.price.toLocaleString()}</span>
                   </div>
                 </div>
@@ -162,17 +163,21 @@ const AssetItem: React.FC<{
               <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                 <div className="bg-card rounded-lg p-4">
                   <div className="text-sm text-muted-foreground">Price</div>
-                  <div className="font-medium">
-                    ${asset.price.toLocaleString()}
-                  </div>
+                  <div className="font-medium">${asset.price.toLocaleString()}</div>
                 </div>
 
                 <div className="bg-card rounded-lg p-4">
                   <div className="text-sm text-muted-foreground">24h Change</div>
-                  <div className={`font-medium flex items-center ${
-                    asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
-                  }`}>
-                    {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3 mr-1" /> : <ArrowDown className="w-3 h-3 mr-1" />}
+                  <div
+                    className={`font-medium flex items-center ${
+                      asset.change24h >= 0 ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {asset.change24h >= 0 ? (
+                      <ArrowUp className="w-3 h-3 mr-1" />
+                    ) : (
+                      <ArrowDown className="w-3 h-3 mr-1" />
+                    )}
                     {asset.change24h.toFixed(2)}%
                   </div>
                 </div>
@@ -186,9 +191,7 @@ const AssetItem: React.FC<{
 
                 <div className="bg-card rounded-lg p-4">
                   <div className="text-sm text-muted-foreground">Value</div>
-                  <div className="font-medium">
-                    ${asset.value.toLocaleString()}
-                  </div>
+                  <div className="font-medium">${asset.value.toLocaleString()}</div>
                 </div>
               </div>
 
@@ -198,25 +201,21 @@ const AssetItem: React.FC<{
                   <div>
                     <div className="text-sm text-muted-foreground">Contract Address</div>
                     <div className="flex items-center justify-between">
-                      <code className="text-sm">
-                        {token.address}
-                      </code>
+                      <code className="text-sm">{token.address}</code>
                       <a
                         href={getExplorerUrl(token.address, token.chainId)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:text-primary/80 text-sm flex items-center space-x-1"
                       >
-                       <ExternalLink className="w-3 h-3" />
+                        <ExternalLink className="w-3 h-3" />
                       </a>
                     </div>
                   </div>
 
                   <div>
                     <div className="text-sm text-muted-foreground">Chain</div>
-                    <div className="text-sm">
-                      {getChainName(token.chainId)}
-                    </div>
+                    <div className="text-sm">{getChainName(token.chainId)}</div>
                   </div>
                 </div>
               </div>
@@ -233,9 +232,9 @@ const TimeframeSelector: React.FC<{
   onChange: (timeframe: Timeframe) => void;
 }> = ({ selected, onChange }) => {
   const timeframes = [
-    { value: '24h', label: '24H' },
-    { value: '7d', label: '7D' },
-    { value: '30d', label: '30D' }
+    { value: "24h", label: "24H" },
+    { value: "7d", label: "7D" },
+    { value: "30d", label: "30D" },
   ] as const;
 
   return (
@@ -243,10 +242,10 @@ const TimeframeSelector: React.FC<{
       {timeframes.map(({ value, label }) => (
         <Button
           key={value}
-          variant={selected === value ? 'secondary' : 'ghost'}
+          variant={selected === value ? "secondary" : "ghost"}
           size="sm"
           onClick={() => onChange(value)}
-          className={selected === value ? 'shadow-sm' : ''}
+          className={selected === value ? "shadow-sm" : ""}
         >
           {label}
         </Button>
@@ -266,34 +265,30 @@ const PortfolioDistributionChart: React.FC<{
   const activeAsset = activeIndex !== null ? assets[activeIndex] : null;
 
   const data = {
-    labels: assets.map(a => a.symbol),
+    labels: assets.map((a) => a.symbol),
     datasets: [
       {
-        data: assets.map(a => a.value),
-        backgroundColor: assets.map((a, i) =>
-          i === activeIndex ? a.color : `${a.color}80`
-        ),
-        borderColor: '#ffffff',
-        borderWidth: assets.map((_, i) =>
-          i === activeIndex ? 2 : 1
-        ),
+        data: assets.map((a) => a.value),
+        backgroundColor: assets.map((a, i) => (i === activeIndex ? a.color : `${a.color}80`)),
+        borderColor: "#ffffff",
+        borderWidth: assets.map((_, i) => (i === activeIndex ? 2 : 1)),
         hoverOffset: 15,
-      }
-    ]
+      },
+    ],
   };
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '70%',
+    cutout: "70%",
     plugins: {
       legend: {
-        display: false
+        display: false,
       },
       tooltip: {
-        enabled: false
-      }
-    }
+        enabled: false,
+      },
+    },
   };
 
   return (
@@ -309,24 +304,16 @@ const PortfolioDistributionChart: React.FC<{
           <div className="text-center bg-card rounded-full p-4 w-36 h-36 flex items-center justify-center shadow-inner">
             {activeAsset ? (
               <div>
-                <div className="text-sm font-medium">
-                  {activeAsset.symbol}
-                </div>
-                <div className="text-lg font-bold">
-                  ${activeAsset.value.toLocaleString()}
-                </div>
+                <div className="text-sm font-medium">{activeAsset.symbol}</div>
+                <div className="text-lg font-bold">${activeAsset.value.toLocaleString()}</div>
                 <div className="text-xs text-muted-foreground">
                   {((activeAsset.value / totalValue) * 100).toFixed(1)}%
                 </div>
               </div>
             ) : (
               <div>
-                <div className="text-sm text-muted-foreground">
-                  Total Value
-                </div>
-                <div className="text-lg font-bold">
-                  ${totalValue.toLocaleString()}
-                </div>
+                <div className="text-sm text-muted-foreground">Total Value</div>
+                <div className="text-lg font-bold">${totalValue.toLocaleString()}</div>
               </div>
             )}
           </div>
@@ -340,11 +327,11 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
   assets,
   totalValue,
   totalChange24h,
-  className = '',
-  variant = 'default',
-  onAssetClick
+  className = "",
+  variant = "default",
+  onAssetClick,
 }) => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('24h');
+  const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>("24h");
   const [expandedAsset, setExpandedAsset] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -355,147 +342,143 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
 
   const activeIndex = selectedIndex ?? hoveredIndex;
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <Card className={className}>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Portfolio</CardTitle>
-            <span className={`text-sm font-medium ${
-              totalChange24h >= 0 ? 'text-green-500' : 'text-red-500'
-            }`}>
+            <span
+              className={`text-sm font-medium ${
+                totalChange24h >= 0 ? "text-green-500" : "text-red-500"
+              }`}
+            >
               {formatPercent(totalChange24h)}
             </span>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold mb-4">
-            {formatCurrency(totalValue)}
-          </div>
+          <div className="text-2xl font-bold mb-4">{formatCurrency(totalValue)}</div>
 
           <div className="space-y-2">
             {assets.map((asset) => (
               <div key={asset.symbol} className="rounded-lg border border-border">
-              {/* Token Header */}
-              <div
-                onClick={() => handleExpand(asset.symbol)}
-                className="flex items-center justify-between p-3 cursor-pointer
+                {/* Token Header */}
+                <div
+                  onClick={() => handleExpand(asset.symbol)}
+                  className="flex items-center justify-between p-3 cursor-pointer
                   hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="relative w-8 h-8 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-muted" />
-                    <img
-                      src={asset.tokenConfig.logoURI}
-                      alt={asset.symbol}
-                      width={24}
-                      height={24}
-                      className="rounded-full relative z-10 transition-transform group-hover:scale-105"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="relative w-8 h-8 flex items-center justify-center">
+                      <div className="absolute inset-0 rounded-full bg-muted" />
+                      <img
+                        src={asset.tokenConfig.logoURI}
+                        alt={asset.symbol}
+                        width={24}
+                        height={24}
+                        className="rounded-full relative z-10 transition-transform group-hover:scale-105"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-medium">{asset.symbol}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {Number(asset.balance).toFixed(asset.tokenConfig.decimals)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <div className="text-right">
+                      <div className="font-medium">{formatCurrency(asset.value)}</div>
+                      <div
+                        className={`text-sm font-medium flex items-center justify-end ${
+                          asset.change24h >= 0 ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {asset.change24h >= 0 ? (
+                          <ArrowUp className="w-3 h-3" />
+                        ) : (
+                          <ArrowDown className="w-3 h-3" />
+                        )}
+                        <span>{formatPercent(asset.change24h)}</span>
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={`w-4 h-4 text-muted-foreground transition-transform duration-300
+                      ${expandedAsset === asset.symbol ? "rotate-180" : ""}`}
                     />
                   </div>
-                  <div>
-                    <div className="font-medium">
-                      {asset.symbol}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {Number(asset.balance).toFixed(asset.tokenConfig.decimals)}
-                    </div>
-                  </div>
                 </div>
 
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <div className="font-medium">
-                      {formatCurrency(asset.value)}
-                    </div>
-                    <div className={`text-sm font-medium flex items-center justify-end ${
-                      asset.change24h >= 0 ? 'text-green-500' : 'text-red-500'
-                    }`}>
-                      {asset.change24h >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                      <span>{formatPercent(asset.change24h)}</span>
-                    </div>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 text-muted-foreground transition-transform duration-300
-                      ${expandedAsset === asset.symbol ? 'rotate-180' : ''}`}
-                  />
-                </div>
-              </div>
+                {/* Expandable Content */}
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out
+                  ${expandedAsset === asset.symbol ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}`}
+                >
+                  <div className="p-3 bg-muted/50 border-t border-border">
+                    {/* Price Chart - Only render if priceHistory exists */}
+                    {asset.priceHistory && (
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-sm font-medium">Price History</div>
+                          <div className="flex items-center space-x-1">
+                            {(["24h", "7d", "30d"] as const).map((t) => (
+                              <Button
+                                key={t}
+                                variant={selectedTimeframe === t ? "default" : "ghost"}
+                                size="sm"
+                                className="h-6 px-2 text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedTimeframe(t);
+                                }}
+                              >
+                                {t.toUpperCase()}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-card rounded-lg p-2">
+                          {asset.priceHistory[selectedTimeframe] && (
+                            <PriceChart
+                              data={asset.priceHistory[selectedTimeframe]}
+                              color={asset.color}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
 
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out
-                  ${expandedAsset === asset.symbol ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}
-              >
-                <div className="p-3 bg-muted/50 border-t border-border">
-                  {/* Price Chart - Only render if priceHistory exists */}
-                  {asset.priceHistory && (
-                    <div className="mb-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="text-sm font-medium">
-                          Price History
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          {(['24h', '7d', '30d'] as const).map((t) => (
-                            <Button
-                              key={t}
-                              variant={selectedTimeframe === t ? 'default' : 'ghost'}
-                              size="sm"
-                              className="h-6 px-2 text-xs"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedTimeframe(t);
-                              }}
-                            >
-                              {t.toUpperCase()}
-                            </Button>
-                          ))}
-                        </div>
+                    {/* Token Stats */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-card rounded-lg p-2">
+                        <div className="text-xs text-muted-foreground">Price</div>
+                        <div className="text-sm font-medium">{formatCurrency(asset.price)}</div>
                       </div>
                       <div className="bg-card rounded-lg p-2">
-                        {asset.priceHistory[selectedTimeframe] && (
-                          <PriceChart
-                            data={asset.priceHistory[selectedTimeframe]}
-                            color={asset.color}
-                          />
-                        )}
+                        <div className="text-xs text-muted-foreground">Value</div>
+                        <div className="text-sm font-medium">{formatCurrency(asset.value)}</div>
                       </div>
                     </div>
-                  )}
 
-                  {/* Token Stats */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-card rounded-lg p-2">
-                      <div className="text-xs text-muted-foreground">Price</div>
-                      <div className="text-sm font-medium">
-                        {formatCurrency(asset.price)}
-                      </div>
+                    {/* Token Info */}
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <a
+                        href={getExplorerUrl(asset.tokenConfig.address, asset.tokenConfig.chainId)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-primary hover:text-primary/80 text-xs flex items-center space-x-1"
+                      >
+                        <span>View on Explorer</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     </div>
-                    <div className="bg-card rounded-lg p-2">
-                      <div className="text-xs text-muted-foreground">Value</div>
-                      <div className="text-sm font-medium">
-                        {formatCurrency(asset.value)}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Token Info */}
-                  <div className="mt-3 pt-3 border-t border-border">
-                    <a
-                      href={getExplorerUrl(asset.tokenConfig.address, asset.tokenConfig.chainId)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-primary hover:text-primary/80 text-xs flex items-center space-x-1"
-                    >
-                      <span>View on Explorer</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -510,13 +493,17 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
       <CardContent className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <div className="text-3xl font-bold mb-2">
-              {formatCurrency(totalValue)}
-            </div>
-            <div className={`flex items-center text-sm font-medium mb-4 ${
-              totalChange24h >= 0 ? 'text-green-500' : 'text-red-500'
-            }`}>
-              {totalChange24h >= 0 ? <ArrowUp className="w-4 h-4 mr-1" /> : <ArrowDown className="w-4 h-4 mr-1" />}
+            <div className="text-3xl font-bold mb-2">{formatCurrency(totalValue)}</div>
+            <div
+              className={`flex items-center text-sm font-medium mb-4 ${
+                totalChange24h >= 0 ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {totalChange24h >= 0 ? (
+                <ArrowUp className="w-4 h-4 mr-1" />
+              ) : (
+                <ArrowDown className="w-4 h-4 mr-1" />
+              )}
               {formatPercent(totalChange24h)}
             </div>
 
@@ -527,7 +514,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                   key={asset.symbol}
                   variant="ghost"
                   className={`w-full flex items-center justify-between p-3 h-auto ${
-                    i === activeIndex ? 'bg-muted shadow-sm' : ''
+                    i === activeIndex ? "bg-muted shadow-sm" : ""
                   }`}
                   onClick={() => setSelectedIndex(selectedIndex === i ? null : i)}
                   onMouseEnter={() => setHoveredIndex(i)}
@@ -538,16 +525,20 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                       className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: asset.color }}
                     />
-                    <span className={`text-sm ${
-                      i === activeIndex ? 'font-medium' : 'text-muted-foreground'
-                    }`}>
+                    <span
+                      className={`text-sm ${
+                        i === activeIndex ? "font-medium" : "text-muted-foreground"
+                      }`}
+                    >
                       {asset.symbol}
                     </span>
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className={`text-sm ${
-                      i === activeIndex ? 'font-medium' : 'text-muted-foreground'
-                    }`}>
+                    <span
+                      className={`text-sm ${
+                        i === activeIndex ? "font-medium" : "text-muted-foreground"
+                      }`}
+                    >
                       ${asset.value.toLocaleString()}
                     </span>
                     <span className="text-xs text-muted-foreground">

@@ -32,7 +32,12 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
   };
 
   return (
-    <div className={cn("rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        className,
+      )}
+    >
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
         <Zap className="h-4 w-4 text-amber-500" />
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Flash Loan</h3>
@@ -51,7 +56,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                   "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors duration-150",
                   selectedProtocol?.name === p.name
                     ? "border-gray-900 dark:border-white bg-gray-50 dark:bg-gray-900"
-                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900"
+                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900",
                 )}
               >
                 <TokenIcon symbol={p.name} logoURI={p.logoURI} size="sm" />
@@ -73,7 +78,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                   "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors duration-150",
                   selectedToken?.symbol === t.symbol
                     ? "border-gray-900 dark:border-white bg-gray-50 dark:bg-gray-900"
-                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900"
+                    : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900",
                 )}
               >
                 <TokenIcon symbol={t.symbol} logoURI={t.logoURI} size="sm" />
@@ -86,10 +91,19 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
         {/* Amount */}
         <div>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Amount</p>
-          <Input type="number" placeholder="0.00" value={amount} onChange={(e) => setAmount(e.target.value)} />
+          <Input
+            type="number"
+            placeholder="0.00"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
         </div>
 
-        <Button onClick={handleExecute} disabled={!selectedProtocol || !selectedToken || !amount || loading} className="w-full">
+        <Button
+          onClick={handleExecute}
+          disabled={!selectedProtocol || !selectedToken || !amount || loading}
+          className="w-full"
+        >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Execute Flash Loan"}
         </Button>
       </div>

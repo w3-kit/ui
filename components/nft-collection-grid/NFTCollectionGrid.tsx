@@ -20,7 +20,7 @@ export const NFTCollectionGrid: React.FC<NFTCollectionGridProps> = ({
       <div
         className={cn(
           "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
-          className
+          className,
         )}
       >
         {collectionName && (
@@ -33,7 +33,9 @@ export const NFTCollectionGrid: React.FC<NFTCollectionGridProps> = ({
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <ImageOff className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No NFTs found</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">This collection is empty or hasn&apos;t been loaded yet</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            This collection is empty or hasn&apos;t been loaded yet
+          </p>
         </div>
       </div>
     );
@@ -59,7 +61,7 @@ export const NFTCollectionGrid: React.FC<NFTCollectionGridProps> = ({
           "grid gap-4",
           nfts.length === 1 && "grid-cols-1 max-w-sm",
           nfts.length === 2 && "grid-cols-1 sm:grid-cols-2",
-          nfts.length >= 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          nfts.length >= 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
         )}
       >
         {nfts.map((nft) => (

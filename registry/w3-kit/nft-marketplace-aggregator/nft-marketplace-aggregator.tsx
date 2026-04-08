@@ -29,13 +29,7 @@ import {
   ProtocolRiskScannerProps,
   NFTMarketplaceAggregatorProps,
 } from "./types";
-import {
-  getRiskColor,
-  getRiskBgColor,
-  formatPrice,
-  formatUSD,
-  formatDate,
-} from "./utils";
+import { getRiskColor, getRiskBgColor, formatPrice, formatUSD, formatDate } from "./utils";
 
 const mockProtocolData: ProtocolRisk[] = [
   {
@@ -167,39 +161,28 @@ export function ProtocolRiskScanner({
           </div>
           <div>
             <h2 className="text-xl font-bold">Protocol Risk Scanner</h2>
-            <p className="text-sm text-muted-foreground">
-              Security analysis of NFT marketplaces
-            </p>
+            <p className="text-sm text-muted-foreground">Security analysis of NFT marketplaces</p>
           </div>
         </div>
 
         <div className="space-y-3">
           {protocols.map((protocol) => (
-            <Card
-              key={protocol.protocol}
-              className="border-border/50 overflow-hidden"
-            >
+            <Card key={protocol.protocol} className="border-border/50 overflow-hidden">
               <Button
                 variant="ghost"
                 onClick={() =>
                   setExpandedProtocol(
-                    expandedProtocol === protocol.protocol
-                      ? null
-                      : protocol.protocol
+                    expandedProtocol === protocol.protocol ? null : protocol.protocol,
                   )
                 }
                 className="w-full p-4 flex items-center justify-between hover:bg-accent h-auto"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                    <span className="text-lg font-bold">
-                      {protocol.protocol.charAt(0)}
-                    </span>
+                    <span className="text-lg font-bold">{protocol.protocol.charAt(0)}</span>
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold">
-                      {protocol.protocol}
-                    </h3>
+                    <h3 className="font-semibold">{protocol.protocol}</h3>
                     <p className="text-sm text-muted-foreground">
                       Last audit: {protocol.lastAudit}
                     </p>
@@ -209,9 +192,7 @@ export function ProtocolRiskScanner({
                   <div className="text-right">
                     <div className="flex items-center gap-2">
                       {getRiskIcon(protocol.riskLevel)}
-                      <span
-                        className={`font-semibold ${getRiskColor(protocol.riskLevel)}`}
-                      >
+                      <span className={`font-semibold ${getRiskColor(protocol.riskLevel)}`}>
                         {protocol.overallScore}/100
                       </span>
                     </div>
@@ -236,9 +217,7 @@ export function ProtocolRiskScanner({
                       <Card key={metric.name} className="bg-muted/50 border-border/50">
                         <CardContent className="p-3">
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm text-muted-foreground">
-                              {metric.name}
-                            </span>
+                            <span className="text-sm text-muted-foreground">{metric.name}</span>
                             <span className="text-sm font-semibold">
                               {metric.score}/{metric.maxScore}
                             </span>
@@ -257,9 +236,7 @@ export function ProtocolRiskScanner({
                               }}
                             />
                           </div>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {metric.description}
-                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
                         </CardContent>
                       </Card>
                     ))}
@@ -268,9 +245,7 @@ export function ProtocolRiskScanner({
                     <CardContent className="p-3">
                       <p className="text-sm text-muted-foreground">
                         Audited by:{" "}
-                        <span className="text-foreground font-medium">
-                          {protocol.auditor}
-                        </span>
+                        <span className="text-foreground font-medium">{protocol.auditor}</span>
                       </p>
                     </CardContent>
                   </Card>
@@ -423,7 +398,7 @@ export function NFTMarketplaceAggregator({
   const [isLoading, setIsLoading] = useState(false);
 
   const marketplaces = useMemo(() => {
-    const unique = [...new Set(allListings.map((l) => l.marketplace))];
+    const unique = Array.from(new Set(allListings.map((l) => l.marketplace)));
     return ["all", ...unique];
   }, []);
 
@@ -431,13 +406,11 @@ export function NFTMarketplaceAggregator({
     let filtered = listings.filter(
       (listing) =>
         listing.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        listing.collection.toLowerCase().includes(searchQuery.toLowerCase())
+        listing.collection.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
     if (selectedMarketplace !== "all") {
-      filtered = filtered.filter(
-        (l) => l.marketplace === selectedMarketplace
-      );
+      filtered = filtered.filter((l) => l.marketplace === selectedMarketplace);
     }
 
     return filtered.sort((a, b) => {
@@ -490,12 +463,8 @@ export function NFTMarketplaceAggregator({
               <Sparkles className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">
-                NFT Marketplace Aggregator
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Best prices across all marketplaces
-              </p>
+              <h2 className="text-xl font-bold">NFT Marketplace Aggregator</h2>
+              <p className="text-sm text-muted-foreground">Best prices across all marketplaces</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -503,7 +472,9 @@ export function NFTMarketplaceAggregator({
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="icon"
               onClick={() => setViewMode("grid")}
-              className={viewMode === "grid" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""}
+              className={
+                viewMode === "grid" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""
+              }
             >
               <Grid className="w-5 h-5" />
             </Button>
@@ -511,7 +482,9 @@ export function NFTMarketplaceAggregator({
               variant={viewMode === "list" ? "default" : "ghost"}
               size="icon"
               onClick={() => setViewMode("list")}
-              className={viewMode === "list" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""}
+              className={
+                viewMode === "list" ? "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" : ""
+              }
             >
               <List className="w-5 h-5" />
             </Button>
@@ -545,9 +518,7 @@ export function NFTMarketplaceAggregator({
           </div>
           <select
             value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value as "price" | "rarity" | "recent")
-            }
+            onChange={(e) => setSortBy(e.target.value as "price" | "rarity" | "recent")}
             className="px-4 py-2 bg-background border border-input rounded-lg text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value="price">Price: Low to High</option>
@@ -611,9 +582,7 @@ export function NFTMarketplaceAggregator({
               </div>
               <CardContent className={viewMode === "list" ? "flex-1 ml-4 p-3" : "p-4"}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-muted-foreground">
-                    {listing.collection}
-                  </span>
+                  <span className="text-xs text-muted-foreground">{listing.collection}</span>
                   <div className="flex items-center gap-1">
                     <img
                       src={listing.marketplaceLogo}
@@ -622,17 +591,13 @@ export function NFTMarketplaceAggregator({
                     />
                   </div>
                 </div>
-                <h3 className="font-semibold truncate">
-                  {listing.name}
-                </h3>
+                <h3 className="font-semibold truncate">{listing.name}</h3>
                 <div className="flex items-center justify-between mt-2">
                   <div>
                     <p className="text-lg font-bold">
                       {formatPrice(listing.price, listing.currency)}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatUSD(listing.usdPrice)}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{formatUSD(listing.usdPrice)}</p>
                   </div>
                   <div className="text-right">
                     <div className="flex items-center gap-1 text-xs">
@@ -643,21 +608,14 @@ export function NFTMarketplaceAggregator({
                       )}
                       <span
                         className={
-                          listing.price < listing.lastSale
-                            ? "text-green-400"
-                            : "text-red-400"
+                          listing.price < listing.lastSale ? "text-green-400" : "text-red-400"
                         }
                       >
-                        {(
-                          ((listing.price - listing.lastSale) / listing.lastSale) *
-                          100
-                        ).toFixed(1)}
+                        {(((listing.price - listing.lastSale) / listing.lastSale) * 100).toFixed(1)}
                         %
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Rank #{listing.rarity}
-                    </p>
+                    <p className="text-xs text-muted-foreground">Rank #{listing.rarity}</p>
                   </div>
                 </div>
               </CardContent>
@@ -697,12 +655,8 @@ export function NFTMarketplaceAggregator({
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedNFT.collection}
-                  </p>
-                  <h2 className="text-2xl font-bold">
-                    {selectedNFT.name}
-                  </h2>
+                  <p className="text-sm text-muted-foreground">{selectedNFT.collection}</p>
+                  <h2 className="text-2xl font-bold">{selectedNFT.name}</h2>
                 </div>
                 <div className="flex items-center gap-2">
                   <img
@@ -737,9 +691,7 @@ export function NFTMarketplaceAggregator({
                     >
                       {selectedNFT.price < selectedNFT.lastSale ? "▼" : "▲"}{" "}
                       {Math.abs(
-                        ((selectedNFT.price - selectedNFT.lastSale) /
-                          selectedNFT.lastSale) *
-                          100
+                        ((selectedNFT.price - selectedNFT.lastSale) / selectedNFT.lastSale) * 100,
                       ).toFixed(1)}
                       % from last
                     </p>
@@ -751,20 +703,11 @@ export function NFTMarketplaceAggregator({
                 <h3 className="text-lg font-semibold mb-3">Traits</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {selectedNFT.traits.map((trait) => (
-                    <Card
-                      key={trait.trait}
-                      className="border-border text-center"
-                    >
+                    <Card key={trait.trait} className="border-border text-center">
                       <CardContent className="p-3">
-                        <p className="text-xs text-purple-400 uppercase">
-                          {trait.trait}
-                        </p>
-                        <p className="text-sm font-semibold">
-                          {trait.value}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {trait.rarity}% have this
-                        </p>
+                        <p className="text-xs text-purple-400 uppercase">{trait.trait}</p>
+                        <p className="text-sm font-semibold">{trait.value}</p>
+                        <p className="text-xs text-muted-foreground">{trait.rarity}% have this</p>
                       </CardContent>
                     </Card>
                   ))}

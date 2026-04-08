@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from 'react';
-import Image from 'next/image';
+import React, { useState, useCallback } from "react";
 
 export interface AirdropInfo {
   id: string;
@@ -51,11 +50,11 @@ export function TokenAirdrop({ airdrops, onClaim }: TokenAirdropProps) {
 
   const formatDate = useCallback((timestamp: number) => {
     return new Date(timestamp).toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }, []);
 
@@ -80,39 +79,41 @@ export function TokenAirdrop({ airdrops, onClaim }: TokenAirdropProps) {
 
   const getStatus = useCallback((airdrop: AirdropInfo) => {
     const now = Date.now();
-    if (airdrop.claimed) return 'claimed';
-    if (now < airdrop.startTime) return 'upcoming';
-    if (now > airdrop.endTime) return 'expired';
-    return 'active';
+    if (airdrop.claimed) return "claimed";
+    if (now < airdrop.startTime) return "upcoming";
+    if (now > airdrop.endTime) return "expired";
+    return "active";
   }, []);
 
   const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
     const statusConfig = {
       active: {
-        bg: 'bg-green-100 dark:bg-green-900/30',
-        text: 'text-green-800 dark:text-green-400',
-        label: 'Active'
+        bg: "bg-green-100 dark:bg-green-900/30",
+        text: "text-green-800 dark:text-green-400",
+        label: "Active",
       },
       claimed: {
-        bg: 'bg-blue-100 dark:bg-blue-900/30',
-        text: 'text-blue-800 dark:text-blue-400',
-        label: 'Claimed'
+        bg: "bg-blue-100 dark:bg-blue-900/30",
+        text: "text-blue-800 dark:text-blue-400",
+        label: "Claimed",
       },
       expired: {
-        bg: 'bg-gray-100 dark:bg-gray-900/30',
-        text: 'text-gray-800 dark:text-gray-400',
-        label: 'Expired'
+        bg: "bg-gray-100 dark:bg-gray-900/30",
+        text: "text-gray-800 dark:text-gray-400",
+        label: "Expired",
       },
       upcoming: {
-        bg: 'bg-yellow-100 dark:bg-yellow-900/30',
-        text: 'text-yellow-800 dark:text-yellow-400',
-        label: 'Upcoming'
-      }
+        bg: "bg-yellow-100 dark:bg-yellow-900/30",
+        text: "text-yellow-800 dark:text-yellow-400",
+        label: "Upcoming",
+      },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig];
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+      >
         {config.label}
       </span>
     );
@@ -131,7 +132,8 @@ export function TokenAirdrop({ airdrops, onClaim }: TokenAirdropProps) {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               {airdrop.logoURI && (
-                <Image
+                <img
+                  loading="lazy"
                   src={airdrop.logoURI}
                   alt={airdrop.tokenSymbol}
                   width={32}
@@ -151,21 +153,31 @@ export function TokenAirdrop({ airdrops, onClaim }: TokenAirdropProps) {
             </div>
             <div className="flex items-center space-x-3">
               <StatusBadge status={getStatus(airdrop)} />
-              <button 
+              <button
                 className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 
                   focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform duration-200
-                  ${expandedId === airdrop.id ? 'rotate-180' : ''}`}
+                  ${expandedId === airdrop.id ? "rotate-180" : ""}`}
               >
-                <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <svg
+                  className="w-5 h-5 text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
             </div>
           </div>
 
-          <div 
+          <div
             className={`transition-all duration-300 ease-out overflow-hidden
-              ${expandedId === airdrop.id ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+              ${expandedId === airdrop.id ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
               <div className="space-y-2">

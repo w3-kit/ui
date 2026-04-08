@@ -2,11 +2,10 @@
 
 import React, { useState } from "react";
 import { ArrowUpDown, Check, Loader2, Info } from "lucide-react";
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Network, Token, BridgeWidgetProps } from './types';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Network, Token, BridgeWidgetProps } from "./types";
 import {
   DEFAULT_NETWORKS,
   DEFAULT_TOKENS,
@@ -14,7 +13,7 @@ import {
   buttonAnimation,
   switchAnimation,
   tooltipAnimation,
-} from './utils';
+} from "./utils";
 
 export function BridgeWidget({
   className = "",
@@ -85,7 +84,7 @@ export function BridgeWidget({
         });
       } else {
         // Simulate bridge processing if no handler provided
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
       setIsProcessing(false);
@@ -102,8 +101,8 @@ export function BridgeWidget({
   const isValid = fromNetwork && toNetwork && selectedToken && amount && Number(amount) > 0;
 
   const getEstimatedFee = () => {
-    if (!selectedToken) return '---';
-    return `${tokenFees[selectedToken.symbol] || '0'} ${selectedToken.symbol}`;
+    if (!selectedToken) return "---";
+    return `${tokenFees[selectedToken.symbol] || "0"} ${selectedToken.symbol}`;
   };
 
   return (
@@ -116,9 +115,7 @@ export function BridgeWidget({
       <CardContent className="space-y-3 xs:space-y-4 sm:space-y-6">
         {/* Networks grid */}
         <div className="space-y-2">
-          <label className="text-sm sm:text-base font-medium text-foreground">
-            From Network
-          </label>
+          <label className="text-sm sm:text-base font-medium text-foreground">From Network</label>
           <div className="grid grid-cols-2 gap-1.5 xs:gap-2 sm:gap-4 items-center">
             {networks.map((network) => (
               <Button
@@ -137,9 +134,7 @@ export function BridgeWidget({
                   height={32}
                   className="w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8"
                 />
-                <span className="text-xs sm:text-sm font-medium">
-                  {network.name}
-                </span>
+                <span className="text-xs sm:text-sm font-medium">{network.name}</span>
               </Button>
             ))}
           </div>
@@ -158,18 +153,14 @@ export function BridgeWidget({
             }}
           >
             <ArrowUpDown
-              className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                !fromNetwork || !toNetwork ? "opacity-50" : ""
-              }`}
+              className={`w-5 h-5 sm:w-6 sm:h-6 ${!fromNetwork || !toNetwork ? "opacity-50" : ""}`}
             />
           </Button>
         </div>
 
         {/* To Network */}
         <div className="space-y-2">
-          <label className="text-sm sm:text-base font-medium text-foreground">
-            To Network
-          </label>
+          <label className="text-sm sm:text-base font-medium text-foreground">To Network</label>
           <div className="grid grid-cols-2 gap-2 sm:gap-4 items-center">
             {networks.map((network) => (
               <Button
@@ -188,9 +179,7 @@ export function BridgeWidget({
                   height={32}
                   className="w-6 h-6 sm:w-8 sm:h-8"
                 />
-                <span className="text-xs sm:text-sm font-medium">
-                  {network.name}
-                </span>
+                <span className="text-xs sm:text-sm font-medium">{network.name}</span>
               </Button>
             ))}
           </div>
@@ -198,14 +187,14 @@ export function BridgeWidget({
 
         {/* Token and Amount Input */}
         <div className="space-y-2">
-          <label className="text-sm sm:text-base font-medium text-foreground">
-            Select Token
-          </label>
+          <label className="text-sm sm:text-base font-medium text-foreground">Select Token</label>
           <div className="grid grid-cols-3 gap-2 mb-4">
             {tokens.map((token) => (
               <Button
                 key={token.symbol}
-                onClick={() => setSelectedToken(selectedToken?.symbol === token.symbol ? null : token)}
+                onClick={() =>
+                  setSelectedToken(selectedToken?.symbol === token.symbol ? null : token)
+                }
                 variant={selectedToken?.symbol === token.symbol ? "default" : "outline"}
                 className={`p-2 sm:p-3 rounded-xl flex flex-col items-center space-y-1
                   ${buttonAnimation}
@@ -219,12 +208,8 @@ export function BridgeWidget({
                   className="w-6 h-6 sm:w-8 sm:h-8"
                 />
                 <div className="text-center">
-                  <div className="text-xs sm:text-sm font-medium">
-                    {token.symbol}
-                  </div>
-                  <div className="text-xs opacity-75">
-                    Balance: {token.balance}
-                  </div>
+                  <div className="text-xs sm:text-sm font-medium">{token.symbol}</div>
+                  <div className="text-xs opacity-75">Balance: {token.balance}</div>
                 </div>
               </Button>
             ))}
@@ -232,9 +217,7 @@ export function BridgeWidget({
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <label className="text-sm sm:text-base font-medium text-foreground">
-                Amount
-              </label>
+              <label className="text-sm sm:text-base font-medium text-foreground">Amount</label>
               <div className="relative">
                 <Button
                   variant="ghost"
@@ -247,14 +230,16 @@ export function BridgeWidget({
                   <Info className="w-4 h-4 text-muted-foreground hover:text-foreground" />
 
                   {/* Tooltip */}
-                  <div className={`absolute bottom-full left-0 mb-2 w-48 xs:w-56 sm:w-64
+                  <div
+                    className={`absolute bottom-full left-0 mb-2 w-48 xs:w-56 sm:w-64
                     bg-popover text-popover-foreground px-2 py-1.5 rounded-lg text-xs border shadow-md
                     ${tooltipAnimation} pointer-events-none
-                    ${showTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                    ${showTooltip ? "opacity-100 visible" : "opacity-0 invisible"}`}
                   >
-                    Enter the amount of {selectedToken?.symbol || 'tokens'} you want to bridge.
-                    Make sure you have enough balance including gas fees.
-                    <div className="absolute bottom-0 left-4 translate-y-1/2
+                    Enter the amount of {selectedToken?.symbol || "tokens"} you want to bridge. Make
+                    sure you have enough balance including gas fees.
+                    <div
+                      className="absolute bottom-0 left-4 translate-y-1/2
                       border-4 border-transparent border-t-popover"
                     />
                   </div>
@@ -284,7 +269,8 @@ export function BridgeWidget({
               placeholder="0.0"
             />
             {selectedToken && (
-              <div className="absolute right-12 top-1/2 -translate-y-1/2
+              <div
+                className="absolute right-12 top-1/2 -translate-y-1/2
                 text-muted-foreground text-sm xs:text-base"
               >
                 {selectedToken.symbol}
@@ -294,13 +280,12 @@ export function BridgeWidget({
         </div>
 
         {/* Estimated Info */}
-        <div className="bg-muted p-2.5 xs:p-3 sm:p-4 rounded-xl space-y-2
+        <div
+          className="bg-muted p-2.5 xs:p-3 sm:p-4 rounded-xl space-y-2
           text-xs xs:text-sm sm:text-base"
         >
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">
-              Estimated Time
-            </span>
+            <span className="text-muted-foreground">Estimated Time</span>
             <span className="font-medium">{estimatedTime} minutes</span>
           </div>
           <div className="flex justify-between items-center">
@@ -315,26 +300,29 @@ export function BridgeWidget({
           disabled={!isValid || isProcessing}
           className={`w-full py-2.5 xs:py-3 sm:py-4 px-4 rounded-xl font-medium
             transition-all duration-300 relative overflow-hidden
-            ${!isValid
-              ? 'opacity-50 cursor-not-allowed'
-              : isConfirming
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                : isProcessing
-                  ? 'cursor-wait'
-                  : isComplete
-                    ? 'bg-green-500 hover:bg-green-600 text-white'
-                    : 'active:scale-[0.98]'
+            ${
+              !isValid
+                ? "opacity-50 cursor-not-allowed"
+                : isConfirming
+                  ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+                  : isProcessing
+                    ? "cursor-wait"
+                    : isComplete
+                      ? "bg-green-500 hover:bg-green-600 text-white"
+                      : "active:scale-[0.98]"
             }`}
         >
-          <div className={`flex items-center justify-center gap-2
+          <div
+            className={`flex items-center justify-center gap-2
             transition-all duration-300
-            ${isProcessing ? 'opacity-0' : 'opacity-100'}`}
+            ${isProcessing ? "opacity-0" : "opacity-100"}`}
           >
             {isConfirming ? (
               <>
                 Confirm Bridge
                 <span className="text-sm opacity-75">
-                  ({Number(amount)} {selectedToken?.symbol} from {fromNetwork?.name} to {toNetwork?.name})
+                  ({Number(amount)} {selectedToken?.symbol} from {fromNetwork?.name} to{" "}
+                  {toNetwork?.name})
                 </span>
               </>
             ) : isComplete ? (
@@ -343,7 +331,7 @@ export function BridgeWidget({
                 Bridge Complete!
               </>
             ) : (
-              'Bridge Assets'
+              "Bridge Assets"
             )}
           </div>
 
@@ -355,19 +343,16 @@ export function BridgeWidget({
           )}
 
           {/* Progress Bar */}
-          <div className={`absolute bottom-0 left-0 h-1 bg-white/20
+          <div
+            className={`absolute bottom-0 left-0 h-1 bg-white/20
             transition-all duration-300 ease-in-out
-            ${isProcessing ? 'w-full' : 'w-0'}`}
+            ${isProcessing ? "w-full" : "w-0"}`}
           />
         </Button>
 
         {/* Cancel button when confirming */}
         {isConfirming && (
-          <Button
-            onClick={() => setIsConfirming(false)}
-            variant="outline"
-            className="mt-2 w-full"
-          >
+          <Button onClick={() => setIsConfirming(false)} variant="outline" className="mt-2 w-full">
             Cancel
           </Button>
         )}

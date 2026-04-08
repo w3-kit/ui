@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { CreditCard, Check, AlertCircle, Sparkles, Zap, Shield, Star } from "lucide-react";
-import Image from "next/image";
 
 export interface SubscriptionPlan {
   id: string;
@@ -36,23 +35,23 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
 
   // Ensure activeTab is always valid
   React.useEffect(() => {
-    if (plans.length > 0 && !plans.some(plan => plan.id === activeTab)) {
+    if (plans.length > 0 && !plans.some((plan) => plan.id === activeTab)) {
       setActiveTab(plans[0].id);
     }
   }, [plans, activeTab]);
 
   const handleSubscribe = async () => {
     if (!selectedPlan) return;
-    
+
     setIsSubscribing(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await onSubscribe?.(selectedPlan.id);
-      
+
       setShowSuccess(true);
       // Keep success state visible for longer
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setShowSuccess(false);
       setSelectedPlan(null);
     } finally {
@@ -71,7 +70,7 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
     }
   };
 
-  const currentPlan = plans.find(plan => plan.id === activeTab);
+  const currentPlan = plans.find((plan) => plan.id === activeTab);
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}>
@@ -129,7 +128,8 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Image
+                <img
+                  loading="lazy"
                   src={currentPlan.token.logoURI}
                   alt={currentPlan.token.symbol}
                   width={24}
@@ -160,23 +160,25 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
               onClick={handleSubscribe}
               disabled={isSubscribing || showSuccess}
               className={`group relative w-full px-4 py-3 bg-blue-500 text-white rounded-lg transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center overflow-hidden ${
-                (isSubscribing || showSuccess) ? "opacity-90 cursor-not-allowed" : "hover:bg-blue-600"
+                isSubscribing || showSuccess ? "opacity-90 cursor-not-allowed" : "hover:bg-blue-600"
               }`}
             >
               {/* Loading state background effect */}
               {isSubscribing && (
                 <div className="absolute inset-0 overflow-hidden">
-                  <div 
+                  <div
                     className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 bg-[length:200%_100%] animate-loading-shine"
-                    style={{ '--loading-shine': 'rgba(255, 255, 255, 0.1)' } as React.CSSProperties}
+                    style={{ "--loading-shine": "rgba(255, 255, 255, 0.1)" } as React.CSSProperties}
                   />
                 </div>
               )}
 
               {/* Button content with animations */}
-              <div className={`relative flex items-center justify-center space-x-2 transition-all duration-300 ${
-                isSubscribing ? "animate-loading-pulse" : ""
-              }`}>
+              <div
+                className={`relative flex items-center justify-center space-x-2 transition-all duration-300 ${
+                  isSubscribing ? "animate-loading-pulse" : ""
+                }`}
+              >
                 {isSubscribing ? (
                   <>
                     {/* Loading spinner */}
@@ -184,14 +186,23 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                       <div className="absolute inset-0 border-2 border-white/30 rounded-full" />
                       <div className="absolute inset-0 border-2 border-white border-t-transparent rounded-full animate-loading-spin" />
                     </div>
-                    
+
                     {/* Loading text with dots */}
                     <div className="flex items-center">
                       <span className="whitespace-nowrap mr-1">Subscribing</span>
                       <div className="flex space-x-1">
-                        <div className="w-1 h-1 bg-white rounded-full animate-loading-pulse" style={{ animationDelay: '0s' }} />
-                        <div className="w-1 h-1 bg-white rounded-full animate-loading-pulse" style={{ animationDelay: '0.2s' }} />
-                        <div className="w-1 h-1 bg-white rounded-full animate-loading-pulse" style={{ animationDelay: '0.4s' }} />
+                        <div
+                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
+                          style={{ animationDelay: "0s" }}
+                        />
+                        <div
+                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
+                          style={{ animationDelay: "0.2s" }}
+                        />
+                        <div
+                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
+                          style={{ animationDelay: "0.4s" }}
+                        />
                       </div>
                     </div>
                   </>
@@ -224,4 +235,4 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
       </div>
     </div>
   );
-}; 
+};

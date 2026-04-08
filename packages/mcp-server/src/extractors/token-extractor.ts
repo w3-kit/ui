@@ -1,8 +1,8 @@
-import { DesignTokens } from '../types.js';
-import { readFileSync } from 'node:fs';
+import { DesignTokens } from "../types.js";
+import { readFileSync } from "node:fs";
 
 export function extractTokensFromFile(filePath: string): DesignTokens {
-  const source = readFileSync(filePath, 'utf-8');
+  const source = readFileSync(filePath, "utf-8");
   return extractTokensFromSource(source);
 }
 

@@ -7,9 +7,17 @@ export function calculateProgress(schedule: VestingSchedule): number {
 }
 
 export function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  return new Date(timestamp).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 export function isClaimable(schedule: VestingSchedule): boolean {
-  return schedule.status === "active" && Date.now() >= schedule.cliffDate && parseFloat(schedule.vestedAmount) < parseFloat(schedule.totalAmount);
+  return (
+    schedule.status === "active" &&
+    Date.now() >= schedule.cliffDate &&
+    parseFloat(schedule.vestedAmount) < parseFloat(schedule.totalAmount)
+  );
 }

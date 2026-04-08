@@ -1,17 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { ChevronRight, Code, CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  TabType,
-  FunctionType,
-  ResultType,
-  ErrorState,
-  ContractInteractionProps,
-} from './types';
+import { useState, useCallback } from "react";
+import { ChevronRight, Code, CheckCircle, XCircle, AlertTriangle, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TabType, FunctionType, ResultType, ErrorState, ContractInteractionProps } from "./types";
 import {
   DEFAULT_FUNCTIONS,
   getFunctionDescription,
@@ -20,25 +14,28 @@ import {
   fadeInAnimation,
   slideInAnimation,
   buttonAnimation,
-} from './utils';
+} from "./utils";
 
 // Error message component
 const ErrorMessage = ({ error }: { error: ErrorState }) => (
-  <div className={`
+  <div
+    className={`
     mt-4 p-3 rounded-lg text-sm
     transition-all duration-300
     ${slideInAnimation}
-    ${error.type === 'error'
-      ? 'bg-destructive/10 text-destructive border border-destructive/20'
-      : error.type === 'warning'
-      ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20'
-      : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+    ${
+      error.type === "error"
+        ? "bg-destructive/10 text-destructive border border-destructive/20"
+        : error.type === "warning"
+          ? "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20"
+          : "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20"
     }
-  `}>
+  `}
+  >
     <div className="flex items-center space-x-2">
-      {error.type === 'error' ? (
+      {error.type === "error" ? (
         <XCircle className="w-4 h-4" />
-      ) : error.type === 'warning' ? (
+      ) : error.type === "warning" ? (
         <AlertTriangle className="w-4 h-4" />
       ) : (
         <Info className="w-4 h-4" />
@@ -49,139 +46,149 @@ const ErrorMessage = ({ error }: { error: ErrorState }) => (
 );
 
 export const ContractInteraction: React.FC<ContractInteractionProps> = ({
-  className = '',
-  contractAddress = '0x1234...5678',
+  className = "",
+  contractAddress = "0x1234...5678",
   functions = DEFAULT_FUNCTIONS,
   onExecute,
   resultsPerPage = 6,
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('read');
+  const [activeTab, setActiveTab] = useState<TabType>("read");
   const [selectedFunction, setSelectedFunction] = useState<FunctionType | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
   const [results, setResults] = useState<ResultType[]>([]);
   const [selectedResult, setSelectedResult] = useState<ResultType | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isExecuting, setIsExecuting] = useState(false);
   const [error, setError] = useState<ErrorState | null>(null);
 
-  const filteredFunctions = functions.filter(fn =>
-    activeTab === 'read' ? fn.type === 'view' : fn.type === 'write'
+  const filteredFunctions = functions.filter((fn) =>
+    activeTab === "read" ? fn.type === "view" : fn.type === "write",
   );
 
   const totalPages = Math.ceil(results.length / resultsPerPage);
   const paginatedResults = results.slice(
     (currentPage - 1) * resultsPerPage,
-    currentPage * resultsPerPage
+    currentPage * resultsPerPage,
   );
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedFunction) return;
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!selectedFunction) return;
 
-    setError(null);
+      setError(null);
 
-    try {
-      if (selectedFunction.inputs > 0 && !inputValue) {
-        throw {
-          message: 'Input value is required',
-          type: 'error',
-          field: 'input'
-        } as ErrorState;
-      }
-
-      if (selectedFunction.inputs > 0 && !validateAddress(inputValue)) {
-        throw {
-          message: 'Invalid Ethereum address format',
-          type: 'error',
-          field: 'input'
-        } as ErrorState;
-      }
-
-      setIsExecuting(true);
-
-      let mockValue = '';
-
-      if (onExecute) {
-        // Use custom execute handler if provided
-        mockValue = await onExecute(selectedFunction.name, inputValue ? [inputValue] : []);
-      } else {
-        // Simulate execution with mock data
-        if (Math.random() < 0.2) {
+      try {
+        if (selectedFunction.inputs > 0 && !inputValue) {
           throw {
-            message: 'Network error: Please try again',
-            type: 'error'
+            message: "Input value is required",
+            type: "error",
+            field: "input",
           } as ErrorState;
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        switch (selectedFunction.name) {
-          case 'balanceOf':
-            mockValue = (Math.random() * 1000).toFixed(2);
-            break;
-          case 'transfer':
-            if (Number(inputValue) > 1000) {
-              throw {
-                message: 'Insufficient balance for transfer',
-                type: 'error',
-                field: 'input'
-              } as ErrorState;
-            }
-            mockValue = inputValue || '100';
-            break;
-          case 'approve':
-            mockValue = inputValue || '1000';
-            break;
-          case 'allowance':
-            mockValue = (Math.random() * 500).toFixed(2);
-            break;
-          case 'totalSupply':
-            mockValue = '1000000';
-            break;
-          case 'name':
-            mockValue = 'Example Token';
-            break;
-          default:
-            mockValue = '0';
+        if (selectedFunction.inputs > 0 && !validateAddress(inputValue)) {
+          throw {
+            message: "Invalid Ethereum address format",
+            type: "error",
+            field: "input",
+          } as ErrorState;
         }
+
+        setIsExecuting(true);
+
+        let mockValue = "";
+
+        if (onExecute) {
+          // Use custom execute handler if provided
+          mockValue = await onExecute(selectedFunction.name, inputValue ? [inputValue] : []);
+        } else {
+          // Simulate execution with mock data
+          if (Math.random() < 0.2) {
+            throw {
+              message: "Network error: Please try again",
+              type: "error",
+            } as ErrorState;
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          switch (selectedFunction.name) {
+            case "balanceOf":
+              mockValue = (Math.random() * 1000).toFixed(2);
+              break;
+            case "transfer":
+              if (Number(inputValue) > 1000) {
+                throw {
+                  message: "Insufficient balance for transfer",
+                  type: "error",
+                  field: "input",
+                } as ErrorState;
+              }
+              mockValue = inputValue || "100";
+              break;
+            case "approve":
+              mockValue = inputValue || "1000";
+              break;
+            case "allowance":
+              mockValue = (Math.random() * 500).toFixed(2);
+              break;
+            case "totalSupply":
+              mockValue = "1000000";
+              break;
+            case "name":
+              mockValue = "Example Token";
+              break;
+            default:
+              mockValue = "0";
+          }
+        }
+
+        const mockResult: ResultType = {
+          id: `${Date.now()}-${selectedFunction.name}`,
+          function: {
+            name: selectedFunction.name,
+            type: selectedFunction.type,
+          },
+          result: mockValue,
+          time: new Date().toLocaleTimeString(),
+          hash:
+            selectedFunction.type === "write" ? "0x" + Math.random().toString(16).slice(2, 42) : "",
+          from:
+            selectedFunction.type === "write" ? "0x" + Math.random().toString(16).slice(2, 42) : "",
+          to:
+            selectedFunction.type === "write" ? "0x" + Math.random().toString(16).slice(2, 42) : "",
+          gasUsed:
+            selectedFunction.type === "write" ? Math.floor(Math.random() * 100000).toString() : "0",
+          status:
+            selectedFunction.type === "write"
+              ? Math.random() > 0.1
+                ? "success"
+                : "failed"
+              : "success",
+        };
+
+        if (mockResult.status === "failed") {
+          throw {
+            message: "Transaction failed: Out of gas",
+            type: "error",
+          } as ErrorState;
+        }
+
+        setResults((prev) => [mockResult, ...prev].slice(0, 18));
+        setInputValue("");
+        setCurrentPage(1);
+      } catch (err) {
+        const errorState = err as ErrorState;
+        setError(errorState);
+
+        setTimeout(() => setError(null), 5000);
+      } finally {
+        setIsExecuting(false);
       }
-
-      const mockResult: ResultType = {
-        id: `${Date.now()}-${selectedFunction.name}`,
-        function: {
-          name: selectedFunction.name,
-          type: selectedFunction.type
-        },
-        result: mockValue,
-        time: new Date().toLocaleTimeString(),
-        hash: selectedFunction.type === 'write' ? '0x' + Math.random().toString(16).slice(2, 42) : '',
-        from: selectedFunction.type === 'write' ? '0x' + Math.random().toString(16).slice(2, 42) : '',
-        to: selectedFunction.type === 'write' ? '0x' + Math.random().toString(16).slice(2, 42) : '',
-        gasUsed: selectedFunction.type === 'write' ? Math.floor(Math.random() * 100000).toString() : '0',
-        status: selectedFunction.type === 'write' ?
-          (Math.random() > 0.1 ? 'success' : 'failed') :
-          'success'
-      };
-
-      if (mockResult.status === 'failed') {
-        throw {
-          message: 'Transaction failed: Out of gas',
-          type: 'error'
-        } as ErrorState;
-      }
-
-      setResults(prev => [mockResult, ...prev].slice(0, 18));
-      setInputValue('');
-      setCurrentPage(1);
-    } catch (err) {
-      const errorState = err as ErrorState;
-      setError(errorState);
-
-      setTimeout(() => setError(null), 5000);
-    } finally {
-      setIsExecuting(false);
-    }
-  }, [selectedFunction, inputValue, onExecute]);
+    },
+    [selectedFunction, inputValue, onExecute],
+  );
 
   return (
     <Card className={`${fadeInAnimation} ${className}`}>
@@ -193,7 +200,8 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
             <div className="flex items-center mt-2 space-x-2">
               <span className="text-sm text-muted-foreground">Contract:</span>
               <div className="group cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
-                <code className="text-sm bg-muted px-2 py-1 rounded text-foreground
+                <code
+                  className="text-sm bg-muted px-2 py-1 rounded text-foreground
                   transition-colors duration-200
                   group-hover:bg-muted/80"
                 >
@@ -208,23 +216,24 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
       {/* Interactive Tabs */}
       <div className="border-b border-border">
         <div className="flex">
-          {(['read', 'write'] as TabType[]).map((tab) => (
+          {(["read", "write"] as TabType[]).map((tab) => (
             <Button
               key={tab}
               variant="ghost"
               onClick={() => {
                 setActiveTab(tab);
                 setSelectedFunction(null);
-                setInputValue('');
+                setInputValue("");
                 setError(null);
               }}
               className={`
                 flex-1 px-3 py-2 text-sm rounded-none
                 transition-all duration-200
                 active:scale-[0.98]
-                ${activeTab === tab
-                  ? 'border-b-2 border-primary font-medium'
-                  : 'text-muted-foreground'
+                ${
+                  activeTab === tab
+                    ? "border-b-2 border-primary font-medium"
+                    : "text-muted-foreground"
                 }
               `}
             >
@@ -244,7 +253,7 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
               onClick={() => {
                 setSelectedFunction(fn);
                 setError(null);
-                setInputValue('');
+                setInputValue("");
               }}
               className={`
                 p-3 text-left h-auto justify-start
@@ -253,23 +262,26 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                 hover:shadow-md
                 ${fadeInAnimation}
                 group
-                ${selectedFunction?.name === fn.name
-                  ? 'border-primary bg-muted'
-                  : ''
-                }
+                ${selectedFunction?.name === fn.name ? "border-primary bg-muted" : ""}
               `}
             >
               <div className="w-full">
-                <div className="font-medium group-hover:text-blue-600
-                  dark:group-hover:text-blue-400 transition-colors duration-200">
+                <div
+                  className="font-medium group-hover:text-blue-600
+                  dark:group-hover:text-blue-400 transition-colors duration-200"
+                >
                   {fn.name}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1
-                  group-hover:text-foreground/70 transition-colors duration-200">
+                <div
+                  className="text-xs text-muted-foreground mt-1
+                  group-hover:text-foreground/70 transition-colors duration-200"
+                >
                   {fn.inputs} input(s) • {fn.type}
                 </div>
-                <div className="text-xs text-muted-foreground mt-2
-                  group-hover:text-foreground/60 transition-colors duration-200">
+                <div
+                  className="text-xs text-muted-foreground mt-2
+                  group-hover:text-foreground/60 transition-colors duration-200"
+                >
                   {getFunctionDescription(fn)}
                 </div>
               </div>
@@ -298,18 +310,14 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder="Enter address"
-                      className={error?.field === 'input' ? 'border-destructive' : ''}
+                      className={error?.field === "input" ? "border-destructive" : ""}
                     />
                   </div>
                 )}
 
                 {error && <ErrorMessage error={error} />}
 
-                <Button
-                  type="submit"
-                  disabled={isExecuting || !!error}
-                  className="w-full"
-                >
+                <Button type="submit" disabled={isExecuting || !!error} className="w-full">
                   {isExecuting ? (
                     <>
                       <div className="animate-spin mr-2">
@@ -338,7 +346,7 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                   className="h-8 w-8"
                 >
@@ -350,7 +358,7 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   className="h-8 w-8"
                 >
@@ -364,26 +372,23 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                 <Button
                   key={result.id}
                   variant="outline"
-                  onClick={() => setSelectedResult(
-                    selectedResult?.id === result.id ? null : result
-                  )}
+                  onClick={() =>
+                    setSelectedResult(selectedResult?.id === result.id ? null : result)
+                  }
                   className={`
                     w-full p-3 h-auto
                     transition-all duration-200
                     text-left justify-start
                     group
-                    ${selectedResult?.id === result.id ?
-                      'border-primary ring-1 ring-primary' :
-                      ''
-                    }
+                    ${selectedResult?.id === result.id ? "border-primary ring-1 ring-primary" : ""}
                   `}
                 >
                   <div className="w-full">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-2">
-                        {result.status === 'success' ? (
+                        {result.status === "success" ? (
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                        ) : result.status === 'pending' ? (
+                        ) : result.status === "pending" ? (
                           <div className="w-4 h-4">
                             <Code className="w-4 h-4 text-yellow-500 animate-spin" />
                           </div>
@@ -392,27 +397,30 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                         )}
                         <span className="font-medium">{result.function.name}</span>
                       </div>
-                      <span className="text-xs text-muted-foreground">
-                        {result.time}
-                      </span>
+                      <span className="text-xs text-muted-foreground">{result.time}</span>
                     </div>
 
-                    <div className="mt-1 text-sm text-muted-foreground font-mono break-all
-                      transition-all duration-200 group-hover:text-foreground">
+                    <div
+                      className="mt-1 text-sm text-muted-foreground font-mono break-all
+                      transition-all duration-200 group-hover:text-foreground"
+                    >
                       {getResultMessage(result.function.name, result.result)}
                     </div>
 
                     {/* Expanded Details */}
-                    <div className={`
+                    <div
+                      className={`
                       mt-2 space-y-1 text-sm
                       transition-all duration-300 ease-in-out
-                      ${selectedResult?.id === result.id
-                        ? 'opacity-100 max-h-[200px]'
-                        : 'opacity-0 max-h-0 overflow-hidden'
+                      ${
+                        selectedResult?.id === result.id
+                          ? "opacity-100 max-h-[200px]"
+                          : "opacity-0 max-h-0 overflow-hidden"
                       }
-                    `}>
+                    `}
+                    >
                       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border">
-                        {result.function.type === 'write' ? (
+                        {result.function.type === "write" ? (
                           <>
                             <div key="hash">
                               <div className="text-xs text-muted-foreground">Hash</div>
@@ -435,16 +443,20 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({
                         <div key="type">
                           <div className="text-xs text-muted-foreground">Type</div>
                           <div className="font-medium text-foreground">
-                            {result.function.type === 'write' ? 'Transaction' : 'Read Call'}
+                            {result.function.type === "write" ? "Transaction" : "Read Call"}
                           </div>
                         </div>
                         <div key="status">
                           <div className="text-xs text-muted-foreground">Status</div>
-                          <div className={`font-medium ${
-                            result.status === 'success' ? 'text-green-500' :
-                            result.status === 'pending' ? 'text-yellow-500' :
-                            'text-destructive'
-                          }`}>
+                          <div
+                            className={`font-medium ${
+                              result.status === "success"
+                                ? "text-green-500"
+                                : result.status === "pending"
+                                  ? "text-yellow-500"
+                                  : "text-destructive"
+                            }`}
+                          >
                             {result.status.charAt(0).toUpperCase() + result.status.slice(1)}
                           </div>
                         </div>
