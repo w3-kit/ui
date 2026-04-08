@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { MetaMaskInpageProvider } from '@metamask/providers';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-import Image from 'next/image';
+
+interface EIP1193Provider {
+  isMetaMask?: boolean;
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+}
 
 interface CoinbaseWalletProvider {
   request: (args: { method: string }) => Promise<string[]>;
@@ -13,7 +15,7 @@ interface SolanaProvider {
 
 declare global {
   interface Window {
-    ethereum?: MetaMaskInpageProvider;
+    ethereum?: EIP1193Provider;
     coinbaseWalletExtension?: CoinbaseWalletProvider;
     solana?: SolanaProvider;
     phantom?: {
@@ -62,17 +64,10 @@ const variantStyles = {
   `,
 };
 
-const walletConnectConfig = {
-  rpc: {
-    1: 'https://mainnet.infura.io/v3/YOUR_INFURA_ID', // Replace with your Infura ID
-    4: 'https://rinkeby.infura.io/v3/YOUR_INFURA_ID',
-  },
-  bridge: 'https://bridge.walletconnect.org',
-};
 
 const WalletIcons = {
   metamask: (
-    <Image 
+    <img loading="lazy"
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
       alt="MetaMask"
       width={24}
@@ -171,18 +166,18 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     setError(null);
 
     try {
-      const connector = new WalletConnectConnector({
-        rpc: walletConnectConfig.rpc,
-        bridge: walletConnectConfig.bridge,
-        qrcode: true,
+      if (typeof window.ethereum === 'undefined') {
+        throw new Error('No EIP-1193 wallet found. Please install a browser wallet.');
+      }
+
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
       });
 
-      await connector.activate();
-      const account = await connector.getAccount();
-      if (account) {
-        onConnect?.(account);
+      if (accounts && Array.isArray(accounts) && accounts.length > 0) {
+        onConnect?.(accounts[0] as string);
       } else {
-        throw new Error('No account found');
+        throw new Error('No accounts found');
       }
     } catch (err) {
       const error = err as Error;

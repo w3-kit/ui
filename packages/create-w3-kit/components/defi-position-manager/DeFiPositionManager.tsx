@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TrendingUp, TrendingDown, AlertTriangle, ArrowUpRight, ArrowDownRight, ChevronRight, Wallet, Activity, Shield, Coins } from "lucide-react";
-import Image from "next/image";
+
 
 export interface PositionData {
   id: string;

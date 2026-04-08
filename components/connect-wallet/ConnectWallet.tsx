@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { MetaMaskInpageProvider } from "@metamask/providers";
 import { Wallet, Loader2 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
+
+interface EIP1193Provider {
+  isMetaMask?: boolean;
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+}
 
 interface CoinbaseWalletProvider {
   request: (args: { method: string }) => Promise<string[]>;
@@ -12,7 +16,7 @@ interface CoinbaseWalletProvider {
 
 declare global {
   interface Window {
-    ethereum?: MetaMaskInpageProvider;
+    ethereum?: EIP1193Provider;
     coinbaseWalletExtension?: CoinbaseWalletProvider;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ArrowUpDown, Check, Loader2, Info } from "lucide-react";
-import Image from "next/image";
+
 
 export interface Network {
   id: number;

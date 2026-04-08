@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { formatCurrency, formatNumber, formatPercentage } from './utils';
 import { LiquidityPoolStatsProps } from './types';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Info, Activity } from 'lucide-react';
-import Image from 'next/image';
+
 
 // Add Skeleton Component
 const Skeleton = ({ className = "" }: { className?: string }) => (

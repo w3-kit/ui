@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Image from 'next/image';
+
 
 export interface AirdropInfo {
   id: string;

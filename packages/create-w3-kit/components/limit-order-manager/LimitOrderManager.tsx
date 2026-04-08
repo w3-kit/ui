@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TrendingDown, TrendingUp, Check, Trash2 } from "lucide-react";
-import Image from "next/image";
+
 
 export interface OrderData {
   id: string;

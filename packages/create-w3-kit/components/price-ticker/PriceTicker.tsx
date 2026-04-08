@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PriceTickerProps, TokenPrice } from "./types";
-import Image from "next/image";
+
 
 // Define Token type since it's missing from the imports
 interface Token {

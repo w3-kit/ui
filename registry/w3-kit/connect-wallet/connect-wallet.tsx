@@ -102,21 +102,18 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     setError(null);
 
     try {
-      // Dynamic import to avoid bundling issues
-      const { WalletConnectConnector } = await import('@web3-react/walletconnect-connector');
+      if (typeof window.ethereum === 'undefined') {
+        throw new Error('No EIP-1193 wallet found. Please install a browser wallet.');
+      }
 
-      const connector = new WalletConnectConnector({
-        rpc: walletConnectConfig.rpc,
-        bridge: walletConnectConfig.bridge,
-        qrcode: true,
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
       });
 
-      await connector.activate();
-      const account = await connector.getAccount();
-      if (account) {
-        onConnect?.(account);
+      if (accounts && Array.isArray(accounts) && accounts.length > 0) {
+        onConnect?.(accounts[0] as string);
       } else {
-        throw new Error('No account found');
+        throw new Error('No accounts found');
       }
     } catch (err) {
       const error = err as Error;
@@ -125,7 +122,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [onConnect, onError, walletConnectConfig]);
+  }, [onConnect, onError]);
 
   const connectCoinbase = useCallback(async () => {
     setIsLoading(true);

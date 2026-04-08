@@ -41,33 +41,12 @@ function getDependencies(componentName: string) {
   const commonDeps = {
     'lucide-react': '^0.284.0',
     'tailwindcss': '^3.3.0',
-    '@ethersproject/abi': '^5.7.0',
-    '@ethersproject/bignumber': '^5.7.0',
-    '@ethersproject/contracts': '^5.7.0',
-    '@ethersproject/providers': '^5.7.2',
-    '@metamask/providers': '^11.1.0',
-    '@web3-react/core': '^8.2.3',
-    '@web3-react/walletconnect-connector': '^6.2.13',
     'chart.js': '^4.4.7',
     'react-chartjs-2': '^5.3.0'
   };
 
   const componentDeps: Record<string, Record<string, string>> = {
-    'nft-collection-grid': {
-      'next': '^13.0.0'
-    },
-    'token-swap': {
-      'next': '^13.0.0'
-    },
-    'price-ticker': {
-      'next': '^13.0.0'
-    },
-    'nft-card': {
-      'next': '^13.0.0'
-    },
-    'network-switcher': {
-      '@metamask/providers': '^11.1.0'
-    },
+    'network-switcher': {},
     'contract-interaction': {
       'ethers': '^6.7.1'
     }

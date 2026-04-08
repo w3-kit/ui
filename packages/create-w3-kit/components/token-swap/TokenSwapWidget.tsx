@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+
 import { TokenList } from "../token-list/TokenList";
 import { ArrowUpDown } from "lucide-react";
 import { TokenSymbol, TOKEN_CONFIGS } from "@/config/tokens";

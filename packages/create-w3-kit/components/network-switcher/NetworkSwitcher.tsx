@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NetworkSwitcherProps } from './types';
-import Image from 'next/image';
+
 
 export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({
   networks,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
+
 import { Token } from '../token-list/types';
 import { formatBalance, formatCurrency } from '../token-list/utils';
 import { 

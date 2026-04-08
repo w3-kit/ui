@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CreditCard, Check, AlertCircle, Sparkles, Zap, Shield, Star } from "lucide-react";
-import Image from "next/image";
+
 
 export interface SubscriptionPlan {
   id: string;

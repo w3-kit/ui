@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
+
 import { NFTCardProps } from './types';
 import { formatAddress, getChainName, getExplorerUrl } from './utils';
 

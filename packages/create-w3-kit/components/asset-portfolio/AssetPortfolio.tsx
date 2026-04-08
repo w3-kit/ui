@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+
 import { ArrowUp, ArrowDown, ChevronDown, ExternalLink } from 'lucide-react';
 import { TOKEN_CONFIGS } from '@/config/tokens';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';

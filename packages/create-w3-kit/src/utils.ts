@@ -64,35 +64,19 @@ function getDependencies(componentName: string) {
     'bridge': {
       'next': '^13.0.0'
     },
-    'connect-wallet': {
-      '@metamask/providers': '^11.1.0',
-      '@web3-react/walletconnect-connector': '^6.2.13'
-    },
+    'connect-wallet': {},
     'contract-interaction': {
-      'ethers': '^6.7.1',
-      '@ethersproject/abi': '^5.7.0',
-      '@ethersproject/bignumber': '^5.7.0'
+      'ethers': '^6.7.1'
     },
-    'gas-calculator': {
-      '@ethersproject/providers': '^5.7.2'
-    },
-    'network-switcher': {
-      '@metamask/providers': '^11.1.0'
-    },
-    'nft-card': {
-      'next': '^13.0.0'
-    },
+    'gas-calculator': {},
+    'network-switcher': {},
+    'nft-card': {},
     'price-ticker': {
-      'next': '^13.0.0',
       'chart.js': '^4.4.7',
       'react-chartjs-2': '^5.3.0'
     },
-    'token-list': {
-      'next': '^13.0.0'
-    },
-    'token-swap': {
-      'next': '^13.0.0'
-    }
+    'token-list': {},
+    'token-swap': {}
   };
 
   return {

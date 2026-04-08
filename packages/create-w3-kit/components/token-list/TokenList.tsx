@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from "react";
-import Image from "next/image";
+
 import { TokenListProps, SortField, SortDirection } from "./types";
 import { formatBalance, formatCurrency } from "./utils";
 import { TOKEN_CONFIGS } from "@/config/tokens";

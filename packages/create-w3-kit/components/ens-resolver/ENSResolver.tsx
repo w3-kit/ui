@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, ArrowRight, Copy, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
-import Image from 'next/image';
+
 
 interface ENSResolverProps {
   onResolve?: (result: {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Plus, Trash2, Edit2, Image as ImageIcon, AlertCircle, ChevronDown, ExternalLink } from 'lucide-react';
-import Image from 'next/image';
+
 
 interface AddressEntry {
   id: string;

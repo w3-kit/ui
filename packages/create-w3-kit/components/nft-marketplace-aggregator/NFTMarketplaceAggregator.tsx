@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { AlertTriangle, Shield, ShieldCheck, ShieldAlert, ExternalLink, Search, TrendingUp, Clock, Tag, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
-import Image from 'next/image';
+
 
 export enum RiskLevel {
   LOW = 'LOW',

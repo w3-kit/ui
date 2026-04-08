@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ArrowUpDown, Loader2, Check, AlertCircle } from "lucide-react";
-import Image from "next/image";
+
 
 export interface FlashLoanData {
   id: string;

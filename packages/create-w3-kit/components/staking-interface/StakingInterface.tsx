@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
+
 import { ArrowRight, Lock, Unlock, Info, ChevronDown, ChevronUp, AlertCircle, Check, Percent, Calendar, Coins, TrendingUp, Clock } from 'lucide-react';
 
 // Define CSS keyframes for animations

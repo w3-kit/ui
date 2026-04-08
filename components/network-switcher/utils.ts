@@ -1,9 +1,12 @@
 import { Network } from './types';
-import { MetaMaskInpageProvider } from '@metamask/providers';
+
+interface EIP1193Provider {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+}
 
 declare global {
   interface Window {
-    ethereum?: MetaMaskInpageProvider;
+    ethereum?: EIP1193Provider;
   }
 }
 
