@@ -298,7 +298,7 @@ export const LimitOrderManager: React.FC<LimitOrderManagerProps> = ({
           >
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <Image
+                <img loading="lazy"
                   src={order.token.logoURI}
                   alt={order.token.symbol}
                   width={32}

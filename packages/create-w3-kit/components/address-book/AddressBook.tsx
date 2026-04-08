@@ -420,7 +420,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
             <div className="flex items-center space-x-3">
               {newEntry.avatar ? (
                 <div className="relative">
-                  <Image
+                  <img loading="lazy"
                     src={newEntry.avatar}
                     alt="Avatar preview"
                     width={48}
@@ -532,7 +532,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
                 >
                   <div className="flex items-center space-x-3 min-w-0">
                     {entry.avatar ? (
-                      <Image
+                      <img loading="lazy"
                         src={entry.avatar}
                         alt={entry.name}
                         width={32}
@@ -698,7 +698,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
             <div className="flex items-center space-x-4">
               {newEntry.avatar ? (
                 <div className="relative">
-                  <Image
+                  <img loading="lazy"
                     src={newEntry.avatar}
                     alt="Avatar preview"
                     width={48}
@@ -807,7 +807,7 @@ export const AddressBook: React.FC<AddressBookProps> = ({
               >
                 <div className="flex items-center space-x-4 min-w-0">
                   {entry.avatar ? (
-                    <Image
+                    <img loading="lazy"
                       src={entry.avatar}
                       alt={entry.name}
                       width={40}

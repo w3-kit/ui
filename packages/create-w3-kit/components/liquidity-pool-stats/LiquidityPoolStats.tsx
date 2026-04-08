@@ -240,10 +240,9 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative w-10 h-10 flex-shrink-0 group">
-                <Image
+                <img loading="lazy"
                   src={poolData.token.logoURI}
                   alt={poolData.token.symbol}
-                  fill
                   sizes="40px"
                   className="rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
                 />
@@ -353,10 +352,9 @@ export const LiquidityPoolStats: React.FC<LiquidityPoolStatsProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="relative w-10 h-10 flex-shrink-0 group">
-              <Image
+              <img loading="lazy"
                 src={poolData.token.logoURI}
                 alt={poolData.token.symbol}
-                fill
                 sizes="40px"
                 className="rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
               />

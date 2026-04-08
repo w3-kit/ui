@@ -129,7 +129,7 @@ export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Image
+                <img loading="lazy"
                   src={currentPlan.token.logoURI}
                   alt={currentPlan.token.symbol}
                   width={24}

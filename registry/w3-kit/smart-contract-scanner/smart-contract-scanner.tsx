@@ -723,7 +723,6 @@ export const SmartContractScanner: React.FC<SmartContractScannerProps> = ({
                 </div>
               </div>
             )}
-          </div>
           </CardContent>
         </>
       )}

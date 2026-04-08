@@ -111,7 +111,7 @@ const AssetItem: React.FC<{
         <div className="flex items-center space-x-4 flex-1">
           <div className="relative w-10 h-10 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-gray-50 dark:bg-gray-700" />
-            <Image
+            <img loading="lazy"
               src={token.logoURI}
               alt={token.symbol}
               width={32}
@@ -437,7 +437,7 @@ export const AssetPortfolio: React.FC<AssetPortfolioProps> = ({
                 <div className="flex items-center space-x-3">
                   <div className="relative w-8 h-8 flex items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-gray-50 dark:bg-gray-700" />
-                    <Image
+                    <img loading="lazy"
                       src={TOKEN_CONFIGS[asset.symbol].logoURI}
                       alt={asset.symbol}
                       width={24}

@@ -4,22 +4,7 @@ import React, { useState, useCallback } from "react";
 import { Wallet, Loader2 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
-
-interface EIP1193Provider {
-  isMetaMask?: boolean;
-  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-}
-
-interface CoinbaseWalletProvider {
-  request: (args: { method: string }) => Promise<string[]>;
-}
-
-declare global {
-  interface Window {
-    ethereum?: EIP1193Provider;
-    coinbaseWalletExtension?: CoinbaseWalletProvider;
-  }
-}
+import "../../lib/ethereum";
 
 export interface ConnectWalletButtonProps {
   onConnect?: (address: string) => void;

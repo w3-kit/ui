@@ -102,10 +102,9 @@ export const NFTCard: React.FC<NFTCardProps> = ({
             )}
             {!imageError ? (
               <>
-                <Image
+                <img loading="lazy"
                   src={nft.image}
                   alt={nft.name}
-                  fill
                   sizes="(max-width: 640px) 100vw, 500px"
                   style={{ objectFit: 'cover' }}
                   onLoad={() => setIsImageLoaded(true)}
@@ -242,7 +241,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({
               rounded-lg overflow-hidden
               transform transition-all duration-300
               animate-scaleIn">
-              <Image
+              <img loading="lazy"
                 src={nft.image}
                 alt={nft.name}
                 width={1200}
@@ -278,10 +277,9 @@ export const NFTCard: React.FC<NFTCardProps> = ({
           <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 animate-pulse" />
         )}
         {!imageError ? (
-          <Image
+          <img loading="lazy"
             src={nft.image}
             alt={nft.name}
-            fill
             sizes="(max-width: 640px) 100vw, 500px"
             style={{ objectFit: 'cover' }}
             onLoad={() => setIsImageLoaded(true)}

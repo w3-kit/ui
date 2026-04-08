@@ -94,7 +94,7 @@ const TokenIcon = ({ symbol, size = "md" }: { symbol: string; size?: "sm" | "md"
   
   return (
     <div className={`${sizeClasses[size]} rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 relative`}>
-      <Image
+      <img loading="lazy"
         src={logoURI}
         alt={symbol}
         width={32}

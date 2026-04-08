@@ -131,7 +131,7 @@ export function TokenAirdrop({ airdrops, onClaim }: TokenAirdropProps) {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               {airdrop.logoURI && (
-                <Image
+                <img loading="lazy"
                   src={airdrop.logoURI}
                   alt={airdrop.tokenSymbol}
                   width={32}

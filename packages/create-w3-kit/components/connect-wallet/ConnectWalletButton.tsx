@@ -1,29 +1,5 @@
 import React, { useState, useCallback } from 'react';
-
-interface EIP1193Provider {
-  isMetaMask?: boolean;
-  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-}
-
-
-interface CoinbaseWalletProvider {
-  request: (args: { method: string }) => Promise<string[]>;
-}
-
-interface SolanaProvider {
-  connect(): Promise<{ publicKey: { toString(): string } }>;
-}
-
-declare global {
-  interface Window {
-    ethereum?: EIP1193Provider;
-    coinbaseWalletExtension?: CoinbaseWalletProvider;
-    solana?: SolanaProvider;
-    phantom?: {
-      solana?: SolanaProvider;
-    };
-  }
-}
+import '../../../../lib/ethereum';
 
 type ButtonVariant = 'ghost' | 'light' | 'dark';
 type WalletType = 'metamask' | 'walletconnect' | 'coinbase' | 'phantom';
@@ -68,7 +44,7 @@ const variantStyles = {
 
 const WalletIcons = {
   metamask: (
-    <Image 
+    <img loading="lazy" 
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
       alt="MetaMask"
       width={24}
@@ -127,48 +103,13 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     }
   };
 
-  const connectMetaMask = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // First check if MetaMask is actually installed
-      if (typeof window.ethereum === 'undefined') {
-        throw new Error('MetaMask is not installed');
-      }
-
-      // Check if the provider is actually MetaMask
-     
-      if (!window.ethereum.isMetaMask) {
-        throw new Error('Please switch to MetaMask');
-      }
-
-      // This is the actual connection request to MetaMask
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-      });
-
-      if (accounts && Array.isArray(accounts) && accounts.length > 0) {
-        onConnect?.(accounts[0] as string);
-      } else {
-        throw new Error('No accounts found');
-      }
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onError?.(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onConnect, onError]);
-
-  const connectWalletConnect = useCallback(async () => {
+  const connectEIP1193 = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     try {
       if (typeof window.ethereum === 'undefined') {
-        throw new Error('No EIP-1193 wallet found. Please install a browser wallet.');
+        throw new Error('No wallet found. Please install a browser wallet.');
       }
 
       const accounts = await window.ethereum.request({
@@ -241,17 +182,17 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   const handleConnect = useCallback(() => {
     switch (walletType) {
       case 'metamask':
-        return connectMetaMask();
+        return connectEIP1193();
       case 'walletconnect':
-        return connectWalletConnect();
+        return connectEIP1193();
       case 'coinbase':
         return connectCoinbase();
       case 'phantom':
         return connectPhantom();
       default:
-        return connectMetaMask();
+        return connectEIP1193();
     }
-  }, [walletType, connectMetaMask, connectWalletConnect, connectCoinbase, connectPhantom]);
+  }, [walletType, connectEIP1193, connectCoinbase, connectPhantom]);
 
   return (
     <div className="flex flex-col items-center">

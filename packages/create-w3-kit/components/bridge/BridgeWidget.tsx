@@ -170,7 +170,7 @@ export function BridgeWidget({ className = "" }: BridgeProps) {
                     : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                   }`}
               >
-                <Image
+                <img loading="lazy"
                   src={network.icon}
                   alt={network.name}
                   width={32}
@@ -227,7 +227,7 @@ export function BridgeWidget({ className = "" }: BridgeProps) {
                     : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                   }`}
               >
-                <Image
+                <img loading="lazy"
                   src={network.icon}
                   alt={network.name}
                   width={32}
@@ -259,7 +259,7 @@ export function BridgeWidget({ className = "" }: BridgeProps) {
                     : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
                   }`}
               >
-                <Image
+                <img loading="lazy"
                   src={token.icon}
                   alt={token.symbol}
                   width={32}

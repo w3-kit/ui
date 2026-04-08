@@ -208,7 +208,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                 >
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <div className="relative">
-                      <Image
+                      <img loading="lazy"
                         src={token.logoURI}
                         alt={token.symbol}
                         width={24}
@@ -430,7 +430,7 @@ export const WalletBalance: React.FC<WalletBalanceProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                       <div className="relative">
-                        <Image
+                        <img loading="lazy"
                           src={token.logoURI}
                           alt={token.symbol}
                           width={40}

@@ -105,7 +105,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 p-2 shadow-sm">
-                    <Image
+                    <img loading="lazy"
                       src={position.protocol.logoURI}
                       alt={position.protocol.name}
                       width={32}
@@ -241,7 +241,7 @@ export const DeFiPositionManager: React.FC<DeFiPositionManagerProps> = ({
                     placeholder="0.0"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Image
+                    <img loading="lazy"
                       src={selectedPosition.token.logoURI}
                       alt={selectedPosition.token.symbol}
                       width={24}

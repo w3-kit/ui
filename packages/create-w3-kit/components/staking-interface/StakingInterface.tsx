@@ -227,7 +227,7 @@ export const StakingInterface: React.FC<StakingInterfaceProps> = ({
         >
           <div className="flex items-center space-x-3 mb-3 sm:mb-0">
             <div className="relative flex-shrink-0">
-              <Image
+              <img loading="lazy"
                 src={pool.token.logoURI}
                 alt={pool.token.symbol}
                 width={iconSize}

@@ -152,10 +152,9 @@ export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({
               <div className="flex items-center space-x-3">
                 {network.logoURI && (
                   <div className="relative w-8 h-8">
-                    <Image
+                    <img loading="lazy"
                       src={network.logoURI}
                       alt={network.name}
-                      fill
                       className="rounded-full object-contain"
                     />
                   </div>

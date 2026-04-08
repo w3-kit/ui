@@ -61,9 +61,7 @@ function getDependencies(componentName: string) {
   };
 
   const componentDeps: Record<string, Record<string, string>> = {
-    'bridge': {
-      'next': '^13.0.0'
-    },
+    'bridge': {},
     'connect-wallet': {},
     'contract-interaction': {
       'ethers': '^6.7.1'

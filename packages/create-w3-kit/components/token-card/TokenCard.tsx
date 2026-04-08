@@ -163,10 +163,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         <div className="flex items-center space-x-3">
           <div className="relative flex-shrink-0">
             <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-sm">
-              <Image 
+              <img loading="lazy" 
                 src={logoURI} 
                 alt={token.symbol}
-                fill
                 className="object-cover"
               />
             </div>
@@ -454,7 +453,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
       >
         <div className="flex items-center space-x-2.5">
           <div className="relative">
-            <Image 
+            <img loading="lazy" 
               src={logoURI} 
               alt={token.symbol}
               width={30}
@@ -635,7 +634,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <Image 
+                <img loading="lazy" 
                   src={logoURI} 
                   alt={token.symbol}
                   width={30}
@@ -902,7 +901,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         onClick={() => onClick?.(token)}
       >
         <div className="relative">
-          <Image 
+          <img loading="lazy" 
             src={logoURI} 
             alt={token.symbol}
             width={18}

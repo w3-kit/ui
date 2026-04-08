@@ -291,7 +291,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                   onClick={() => handleTokenClick(token.symbol)}
                 >
                   {token.logoURI && (
-                    <Image
+                    <img loading="lazy"
                       src={token.logoURI}
                       alt={token.name}
                       width={16}
@@ -332,7 +332,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           {token.logoURI && (
-                            <Image
+                            <img loading="lazy"
                               src={token.logoURI}
                               alt={token.name}
                               width={24}
@@ -490,7 +490,7 @@ export const PriceTicker: React.FC<PriceTickerProps> = ({
                     {/* Token Info */}
                     <div className="w-full sm:w-2/5 flex items-center space-x-3 mb-2 sm:mb-0">
                       {token.logoURI && (
-                        <Image
+                        <img loading="lazy"
                           src={token.logoURI}
                           alt={token.name}
                           width={32}

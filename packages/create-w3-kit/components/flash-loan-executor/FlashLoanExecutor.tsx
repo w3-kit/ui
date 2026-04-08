@@ -133,7 +133,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                     : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
                 }`}
               >
-                <Image
+                <img loading="lazy"
                   src={protocol.logoURI}
                   alt={protocol.name}
                   width={24}
@@ -166,7 +166,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                     : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
                 }`}
               >
-                <Image
+                <img loading="lazy"
                   src={token.logoURI}
                   alt={token.symbol}
                   width={24}
@@ -199,7 +199,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               placeholder="0.0"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Image
+              <img loading="lazy"
                 src={selectedToken.logoURI}
                 alt={selectedToken.symbol}
                 width={20}

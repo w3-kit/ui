@@ -218,7 +218,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     flex items-center space-x-2 text-sm"
                 >
                   {search.result.avatar && (
-                    <Image 
+                    <img loading="lazy" 
                       src={search.result.avatar} 
                       alt="Avatar"
                       width={20}
@@ -247,7 +247,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {result.avatar && (
-                  <Image 
+                  <img loading="lazy" 
                     src={result.avatar as string} 
                     alt="Avatar"
                     width={32}
@@ -361,7 +361,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
                     flex items-center space-x-2"
                 >
                   {search.result.avatar && (
-                    <Image 
+                    <img loading="lazy" 
                       src={search.result.avatar} 
                       alt="Avatar"
                       width={24}
@@ -409,7 +409,7 @@ export const ENSResolver: React.FC<ENSResolverProps> = ({
           <div className="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg space-y-4 animate-slideIn">
             {result.avatar && (
               <div className="flex justify-center">
-                <Image 
+                <img loading="lazy" 
                   src={result.avatar as string} 
                   alt="ENS Avatar" 
                   width={64}
