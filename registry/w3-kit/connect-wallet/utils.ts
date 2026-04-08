@@ -1,4 +1,4 @@
-import { ButtonVariant, WalletType, WalletConnectConfig } from "./types";
+import { ButtonVariant, WalletType } from "./types";
 
 // Variant styles for button appearance
 export const variantStyles: Record<ButtonVariant, string> = {
@@ -27,15 +27,6 @@ export const variantStyles: Record<ButtonVariant, string> = {
     shadow-md hover:shadow-lg
     transition-all duration-200
   `,
-};
-
-// Default WalletConnect configuration
-export const DEFAULT_WALLETCONNECT_CONFIG: WalletConnectConfig = {
-  rpc: {
-    1: "https://mainnet.infura.io/v3/YOUR_INFURA_ID",
-    4: "https://rinkeby.infura.io/v3/YOUR_INFURA_ID",
-  },
-  bridge: "https://bridge.walletconnect.org",
 };
 
 // Wallet icon URLs

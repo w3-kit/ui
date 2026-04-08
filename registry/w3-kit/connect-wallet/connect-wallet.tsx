@@ -4,7 +4,6 @@ import React, { useState, useCallback } from "react";
 import { ConnectWalletButtonProps } from "./types";
 import {
   variantStyles,
-  DEFAULT_WALLETCONNECT_CONFIG,
   WALLET_ICONS,
   getDefaultLabel,
   buttonAnimation,
@@ -50,7 +49,6 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   customLabel,
   variant = "dark",
   walletType = "metamask",
-  walletConnectConfig: _walletConnectConfig = DEFAULT_WALLETCONNECT_CONFIG,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

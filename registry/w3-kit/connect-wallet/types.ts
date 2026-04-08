@@ -8,12 +8,6 @@ export interface ConnectWalletButtonProps {
   customLabel?: string;
   variant?: ButtonVariant;
   walletType?: WalletType;
-  walletConnectConfig?: WalletConnectConfig;
-}
-
-export interface WalletConnectConfig {
-  rpc: Record<number, string>;
-  bridge?: string;
 }
 
 export interface CoinbaseWalletProvider {
