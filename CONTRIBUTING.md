@@ -22,6 +22,20 @@ registry/w3-kit/your-component/
 └── .learn.md
 ```
 
+## Local development
+
+```bash
+git clone https://github.com/YOUR_USERNAME/ui.git
+cd ui
+npm install --legacy-peer-deps
+```
+
+### Run all CI checks locally
+
+```bash
+npm run typecheck && npm run lint && npm run format:check && npm run build
+```
+
 ## Guidelines
 
 - Follow shadcn conventions
