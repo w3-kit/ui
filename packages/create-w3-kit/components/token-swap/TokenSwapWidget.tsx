@@ -357,7 +357,7 @@ export function TokenSwapWidget({
 
   return (
     <>
-      <style jsx global>{animationStyles}</style>
+      <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
       <div
         className={`
           bg-white dark:bg-gray-800 text-gray-900 dark:text-white
