@@ -1,36 +1,19 @@
-export interface Token {
-  symbol: string;
-  logoURI: string;
-  liquidity: number;
-  price: number;
-  marketCap: number;
-  totalSupply: number;
-  circulatingSupply: number;
-}
-
-export interface PoolData {
-  token: Token;
-  fee: number;
+export interface PoolStats {
+  tokenPair: string; // e.g. "ETH / USDC"
+  fee: string; // e.g. "0.30%"
   tvl: number;
-  tvlChange24h: number;
+  tvlChange24h?: number;
   volume24h: number;
-  volumeChange24h: number;
+  volumeChange24h?: number;
   apr: number;
-  feesEarned24h: number;
-  uniqueHolders: number;
-  transactions24h: number;
+  feesEarned24h?: number;
+  transactions24h?: number;
+  holders?: number;
 }
 
 export interface LiquidityPoolStatsProps {
-  poolData: PoolData;
+  pool: PoolStats;
+  onAddLiquidity?: () => void;
+  onRemoveLiquidity?: () => void;
   className?: string;
-  onTokenClick?: (symbol: string) => void;
-  variant?: "default" | "compact";
-  isLoading?: boolean;
-}
-
-export interface TooltipContent {
-  title: string;
-  description: string;
-  stats: { label: string; value: string }[];
 }
