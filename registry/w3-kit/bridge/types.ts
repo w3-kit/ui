@@ -1,27 +1,51 @@
-export interface Network {
+export interface BridgeNetwork {
+  /** Chain ID (e.g. 1 for Ethereum) */
   id: number;
+  /** Display name */
   name: string;
-  icon: string;
+  /** Network icon URL */
+  icon?: string;
+  /** Brand color hex */
+  color?: string;
 }
 
-export interface Token {
+export interface BridgeToken {
+  /** Token ticker symbol */
   symbol: string;
+  /** Full token name */
   name: string;
-  icon: string;
-  balance: string;
-  decimals: number;
+  /** Token icon URL */
+  icon?: string;
+  /** Formatted user balance */
+  balance?: string;
 }
 
 export interface BridgeWidgetProps {
-  className?: string;
-  networks?: Network[];
-  tokens?: Token[];
-  tokenFees?: Record<string, string>;
-  estimatedTime?: string;
+  /** Available networks for bridging */
+  networks: BridgeNetwork[];
+  /** Available tokens */
+  tokens: BridgeToken[];
+  /** Currently selected source network */
+  fromNetwork?: BridgeNetwork;
+  /** Currently selected destination network */
+  toNetwork?: BridgeNetwork;
+  /** Currently selected token */
+  selectedToken?: BridgeToken;
+  /** Called when user clicks the bridge button */
   onBridge?: (params: {
-    fromNetwork: Network;
-    toNetwork: Network;
-    token: Token;
+    from: BridgeNetwork;
+    to: BridgeNetwork;
+    token: BridgeToken;
     amount: string;
-  }) => Promise<void>;
+  }) => void;
+  /** Called when user changes the source network */
+  onFromNetworkChange?: (network: BridgeNetwork) => void;
+  /** Called when user changes the destination network */
+  onToNetworkChange?: (network: BridgeNetwork) => void;
+  /** Called when user changes the token */
+  onTokenChange?: (token: BridgeToken) => void;
+  /** Show loading state on the bridge button */
+  loading?: boolean;
+  /** Additional CSS classes */
+  className?: string;
 }
