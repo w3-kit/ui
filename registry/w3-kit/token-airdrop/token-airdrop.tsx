@@ -1,229 +1,93 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { TokenAirdropProps, AirdropStatus } from "./types";
-import {
-  formatDate,
-  isAirdropActive,
-  getAirdropStatus,
-  statusConfig,
-  animationStyles,
-} from "./utils";
+import React from "react";
+import { Gift, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { TokenAirdropProps } from "./types";
+import { statusColor } from "./utils";
 
-const SuccessCheckmark: React.FC = () => (
-  <div className="flex justify-center items-center">
-    <div className="relative w-6 h-6">
-      <div className="animate-success-circle absolute inset-0 rounded-full border-2 border-white" />
-      <svg
-        className="w-6 h-6 text-white"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          className="animate-success-check"
-          d="M6 12l4 4 8-8"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <div className="absolute inset-0 rounded-full animate-success-fill" />
-    </div>
-  </div>
-);
-
-const StatusBadge: React.FC<{ status: AirdropStatus }> = ({ status }) => {
-  const config = statusConfig[status];
+export function TokenAirdrop({
+  airdrops,
+  onClaim,
+  claimingId,
+  className,
+}: TokenAirdropProps) {
   return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+    <div
+      className={cn(
+        "w-full max-w-sm rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
+      )}
     >
-      {config.label}
-    </span>
-  );
-};
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-4">
+        <Gift className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          Airdrops
+        </h3>
+        <span className="ml-auto rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+          {airdrops.length}
+        </span>
+      </div>
 
-export const TokenAirdrop: React.FC<TokenAirdropProps> = ({ airdrops, onClaim }) => {
-  const [claimingId, setClaimingId] = useState<string | null>(null);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState<string | null>(null);
+      {/* Airdrop list */}
+      <div className="space-y-1.5 px-4 pb-4">
+        {airdrops.length === 0 && (
+          <p className="py-6 text-center text-sm text-gray-400 dark:text-gray-500">
+            No airdrops available
+          </p>
+        )}
 
-  useEffect(() => {
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = animationStyles;
-    document.head.appendChild(styleTag);
+        {airdrops.map((airdrop) => {
+          const isClaiming = claimingId === airdrop.id;
+          const isActive = airdrop.status === "active";
 
-    return () => {
-      document.head.removeChild(styleTag);
-    };
-  }, []);
-
-  const handleClaim = async (e: React.MouseEvent, airdropId: string) => {
-    e.stopPropagation();
-    try {
-      setClaimingId(airdropId);
-      await onClaim(airdropId);
-      setShowSuccess(airdropId);
-      setTimeout(() => {
-        setShowSuccess(null);
-      }, 2000);
-    } finally {
-      setClaimingId(null);
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      {airdrops.map((airdrop) => (
-        <div
-          key={airdrop.id}
-          className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200
-            dark:border-gray-700 p-5 cursor-pointer transition-all duration-200 ease-out
-            hover:shadow-md"
-          onClick={() => setExpandedId(expandedId === airdrop.id ? null : airdrop.id)}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              {airdrop.logoURI && (
-                <img
-                  src={airdrop.logoURI}
-                  alt={airdrop.tokenSymbol}
-                  width={32}
-                  height={32}
-                  className="rounded-full bg-white dark:bg-gray-700"
-                  style={{ width: 32, height: 32 }}
-                />
-              )}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
-                  <span>{airdrop.tokenName}</span>
-                  <span className="text-sm text-gray-500">({airdrop.tokenSymbol})</span>
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Amount: {airdrop.amount} {airdrop.tokenSymbol}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <StatusBadge status={getAirdropStatus(airdrop)} />
-              <button
-                className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform duration-200
-                  ${expandedId === airdrop.id ? "rotate-180" : ""}`}
-              >
-                <svg
-                  className="w-5 h-5 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div
-            className={`transition-all duration-300 ease-out overflow-hidden
-              ${expandedId === airdrop.id ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-              <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Start Time</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatDate(airdrop.startTime)}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">End Time</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatDate(airdrop.endTime)}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Token Address</p>
-                <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
-                  {airdrop.tokenAddress}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Merkle Root</p>
-                <p className="font-medium text-gray-900 dark:text-white font-mono text-sm truncate">
-                  {airdrop.merkleRoot}
-                </p>
-              </div>
-            </div>
-
-            {isAirdropActive(airdrop) && (
-              <button
-                onClick={(e) => handleClaim(e, airdrop.id)}
-                disabled={claimingId === airdrop.id}
-                className="w-full mt-4 inline-flex justify-center items-center px-4 py-2.5
-                  border border-transparent text-sm font-medium rounded-lg text-white
-                  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2
-                  focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50
-                  disabled:cursor-not-allowed transition-all duration-200 ease-out
-                  dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-gray-800
-                  active:translate-y-0.5"
-              >
-                {showSuccess === airdrop.id ? (
-                  <SuccessCheckmark />
-                ) : claimingId === airdrop.id ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
+          return (
+            <div
+              key={airdrop.id}
+              className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900"
+            >
+              <div className="flex items-center justify-between">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {airdrop.amount} {airdrop.token}
+                    </p>
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize",
+                        statusColor(airdrop.status),
+                      )}
                     >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Claiming Airdrop...
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      className="mr-2 h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    Claim Airdrop
-                  </>
+                      {airdrop.status}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    {airdrop.startDate} - {airdrop.endDate}
+                  </p>
+                </div>
+
+                {isActive && (
+                  <button
+                    onClick={() => onClaim?.(airdrop.id)}
+                    disabled={isClaiming}
+                    className={cn(
+                      "ml-3 flex shrink-0 items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200",
+                      isClaiming && "cursor-not-allowed opacity-60",
+                    )}
+                  >
+                    {isClaiming ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      "Claim"
+                    )}
+                  </button>
                 )}
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
-};
-
-export default TokenAirdrop;
+}
