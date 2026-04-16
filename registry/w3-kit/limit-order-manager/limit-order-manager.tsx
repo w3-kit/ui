@@ -97,7 +97,6 @@ export function LimitOrderManager({
                 className="flex items-center justify-between gap-3 py-3"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  {/* Token icon or fallback */}
                   {order.tokenIcon ? (
                     <img
                       src={order.tokenIcon}
@@ -127,13 +126,12 @@ export function LimitOrderManager({
                       </span>
                     </div>
                     <span className="text-xs text-gray-500 tabular-nums dark:text-gray-400">
-                      @ ${order.price} &middot; {formatTime(order.timestamp)}
+                      @ ${order.price} · {formatTime(order.timestamp)}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-2">
-                  {/* Status badge */}
                   <span
                     className={cn(
                       "rounded-full px-2 py-0.5 text-[10px] font-medium capitalize",
@@ -148,7 +146,6 @@ export function LimitOrderManager({
                     {order.status}
                   </span>
 
-                  {/* Cancel button */}
                   {order.status === "active" && onCancel && (
                     <button
                       onClick={() => onCancel(order.id)}
