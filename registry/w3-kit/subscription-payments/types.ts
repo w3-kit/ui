@@ -1,21 +1,16 @@
-export interface SubscriptionPlan {
+export interface Plan {
   id: string;
   name: string;
   price: string;
-  token: {
-    symbol: string;
-    logoURI: string;
-    decimals: number;
-  };
-  interval: "daily" | "weekly" | "monthly" | "yearly";
+  token: string;
+  interval: string;
   features: string[];
-  description: string;
-  icon: "sparkles" | "zap" | "shield";
-  isPopular?: boolean;
+  popular?: boolean;
 }
 
 export interface SubscriptionPaymentsProps {
-  plans: SubscriptionPlan[];
+  plans: Plan[];
   onSubscribe?: (planId: string) => void;
+  subscribingId?: string;
   className?: string;
 }

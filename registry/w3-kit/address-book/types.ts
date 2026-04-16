@@ -1,38 +1,27 @@
 export interface AddressEntry {
+  /** Unique identifier */
   id: string;
+  /** Display name (e.g. "Vitalik") */
   name: string;
+  /** Ethereum/Solana address */
   address: string;
+  /** ENS name if resolved */
   ensName?: string;
-  avatar?: string;
+  /** Optional notes */
   notes?: string;
 }
 
-export interface NewEntry {
-  name: string;
-  address: string;
-  notes: string;
-  avatar?: string;
-}
-
 export interface AddressBookProps {
+  /** List of saved addresses */
   entries: AddressEntry[];
+  /** Called when user adds a new address */
   onAdd?: (entry: Omit<AddressEntry, "id">) => void;
-  onEdit?: (entry: AddressEntry) => void;
+  /** Called when user deletes an address */
   onDelete?: (id: string) => void;
+  /** Called when user clicks an address row */
+  onSelect?: (entry: AddressEntry) => void;
+  /** Show search input */
+  searchable?: boolean;
+  /** Additional CSS classes */
   className?: string;
-  variant?: "default" | "compact";
-}
-
-export interface DeleteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  name: string;
-}
-
-export interface EditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  name: string;
 }
