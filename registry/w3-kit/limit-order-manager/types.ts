@@ -1,27 +1,18 @@
-export interface OrderData {
+export interface LimitOrder {
   id: string;
-  type: "limit" | "stop-loss";
-  token: {
-    symbol: string;
-    logoURI: string;
-    price: number;
-  };
+  type: "buy" | "sell";
+  token: string;
+  tokenIcon?: string;
   amount: string;
   price: string;
-  status: "active" | "executed" | "cancelled";
+  status: "active" | "filled" | "cancelled";
   timestamp: number;
-  expiry?: number;
 }
 
 export interface LimitOrderManagerProps {
-  orders: OrderData[];
-  onOrderCreate?: (order: Omit<OrderData, "id" | "timestamp">) => void;
-  onOrderCancel?: (orderId: string) => void;
+  orders: LimitOrder[];
+  onCancel?: (orderId: string) => void;
+  onCreateOrder?: () => void;
+  cancellingId?: string;
   className?: string;
-}
-
-export interface FormErrors {
-  amount?: string;
-  price?: string;
-  expiry?: string;
 }

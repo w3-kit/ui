@@ -1,213 +1,188 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArrowUpDown, Loader2, Check, AlertCircle } from "lucide-react";
-import { Protocol, Token, FlashLoanData, FlashLoanExecutorProps, FormErrors } from "./types";
-import { getRiskColor, buttonAnimation, selectionAnimation } from "./utils";
+import React, { useState, useMemo } from "react";
+import { Zap, Loader2, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { FlashLoanProtocol, FlashLoanToken, FlashLoanExecutorProps } from "./types";
 
 export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
   protocols,
   tokens,
+  selectedProtocol: controlledProtocol,
+  selectedToken: controlledToken,
   onExecute,
-  className = "",
-  estimatedProfit = "0.05",
-  riskLevel = "medium",
+  onProtocolChange,
+  onTokenChange,
+  loading = false,
+  className,
 }) => {
-  const [selectedProtocol, setSelectedProtocol] = useState<Protocol>(protocols[0]);
-  const [selectedToken, setSelectedToken] = useState<Token>(tokens[0]);
+  const [internalProtocol, setInternalProtocol] = useState<FlashLoanProtocol>(protocols[0]);
+  const [internalToken, setInternalToken] = useState<FlashLoanToken>(tokens[0]);
   const [amount, setAmount] = useState("");
-  const [isExecuting, setIsExecuting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [showTokenDropdown, setShowTokenDropdown] = useState(false);
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+  const protocol = controlledProtocol ?? internalProtocol;
+  const token = controlledToken ?? internalToken;
 
-    if (!amount || parseFloat(amount) <= 0) {
-      newErrors.amount = "Amount must be greater than 0";
-    }
+  const fee = useMemo(() => {
+    const val = parseFloat(amount || "0");
+    return val > 0 ? (val * protocol.fee).toFixed(4) : "0.00";
+  }, [amount, protocol.fee]);
 
-    if (!selectedProtocol) {
-      newErrors.protocol = "Please select a protocol";
-    }
-
-    if (!selectedToken) {
-      newErrors.token = "Please select a token";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleProtocol = (p: FlashLoanProtocol) => {
+    setInternalProtocol(p);
+    onProtocolChange?.(p);
   };
 
-  const handleExecute = async () => {
-    if (!validateForm()) return;
+  const handleToken = (t: FlashLoanToken) => {
+    setInternalToken(t);
+    onTokenChange?.(t);
+    setShowTokenDropdown(false);
+  };
 
-    setIsExecuting(true);
-    try {
-      // Simulate flash loan execution if no handler provided
-      if (!onExecute) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-
-      const flashLoanData: Omit<FlashLoanData, "id" | "timestamp"> = {
-        protocol: selectedProtocol,
-        token: selectedToken,
-        amount,
-        profit: estimatedProfit,
-        risk: riskLevel,
-        status: "completed",
-      };
-
-      await onExecute?.(flashLoanData);
-
-      // Show success animation
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        setAmount("");
-      }, 1500);
-    } finally {
-      setIsExecuting(false);
-    }
+  const handleExecute = () => {
+    if (!amount || parseFloat(amount) <= 0) return;
+    onExecute?.({ protocol, token, amount });
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}>
-      <div className="space-y-4">
+    <div
+      className={cn(
+        "w-full max-w-md rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+        <Zap className="h-4 w-4 text-amber-500" />
+        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          Flash Loan
+        </span>
+      </div>
+
+      <div className="space-y-4 p-4">
+        {/* Protocol selector */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="mb-1.5 block text-xs font-medium text-gray-500 dark:text-gray-400">
             Protocol
           </label>
-          <div className="flex flex-wrap gap-2">
-            {protocols.map((protocol) => (
+          <div className="flex gap-2">
+            {protocols.map((p) => (
               <button
-                key={protocol.address}
-                onClick={() => setSelectedProtocol(protocol)}
-                className={`flex items-center space-x-2 p-2 rounded-lg border ${selectionAnimation} flex-1 min-w-[120px] ${
-                  selectedProtocol?.address === protocol.address
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                    : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
-                }`}
+                key={p.id}
+                onClick={() => handleProtocol(p)}
+                className={cn(
+                  "flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
+                  protocol.id === p.id
+                    ? "border-gray-900 bg-gray-50 text-gray-900 dark:border-gray-100 dark:bg-gray-900 dark:text-gray-100"
+                    : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-800 dark:text-gray-400 dark:hover:border-gray-700",
+                )}
               >
-                <img
-                  src={protocol.logoURI}
-                  alt={protocol.name}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  {protocol.name}
+                {p.icon && (
+                  <img src={p.icon} alt={p.name} className="h-5 w-5 rounded-full" />
+                )}
+                {p.name}
+                <span className="text-xs text-gray-400 dark:text-gray-500">
+                  {(p.fee * 100).toFixed(2)}%
                 </span>
               </button>
             ))}
           </div>
-          {errors.protocol && <p className="mt-1 text-sm text-red-500">{errors.protocol}</p>}
         </div>
 
+        {/* Token selector + amount */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Token
+          <label className="mb-1.5 block text-xs font-medium text-gray-500 dark:text-gray-400">
+            Token & Amount
           </label>
-          <div className="flex flex-wrap gap-2">
-            {tokens.map((token) => (
-              <button
-                key={token.address}
-                onClick={() => setSelectedToken(token)}
-                className={`flex items-center space-x-2 p-2 rounded-lg border ${selectionAnimation} flex-1 min-w-[120px] ${
-                  selectedToken?.address === token.address
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                    : "border-gray-200 dark:border-gray-700 hover:border-blue-500"
-                }`}
-              >
-                <img
-                  src={token.logoURI}
-                  alt={token.symbol}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="rounded-lg border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center gap-2 p-3">
+              <input
+                type="text"
+                inputMode="decimal"
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) =>
+                  /^\d*\.?\d*$/.test(e.target.value) && setAmount(e.target.value)
+                }
+                className="min-w-0 flex-1 bg-transparent text-base font-medium text-gray-900 placeholder-gray-400 outline-none tabular-nums dark:text-gray-100 dark:placeholder-gray-600"
+              />
+              <div className="relative">
+                <button
+                  onClick={() => setShowTokenDropdown(!showTokenDropdown)}
+                  className="flex items-center gap-1.5 rounded-md bg-gray-100 px-2.5 py-1.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+                >
+                  {token.icon && (
+                    <img src={token.icon} alt={token.symbol} className="h-4 w-4 rounded-full" />
+                  )}
                   {token.symbol}
-                </span>
-              </button>
-            ))}
-          </div>
-          {errors.token && <p className="mt-1 text-sm text-red-500">{errors.token}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Amount
-          </label>
-          <div className="relative">
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 ${
-                errors.amount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-              }`}
-              placeholder="0.0"
-            />
-            {selectedToken && (
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <img
-                  src={selectedToken.logoURI}
-                  alt={selectedToken.symbol}
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                />
+                  <ChevronDown className="h-3 w-3 text-gray-400" />
+                </button>
+                {showTokenDropdown && (
+                  <div className="absolute right-0 top-full z-10 mt-1 min-w-[140px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-800 dark:bg-gray-950">
+                    {tokens.map((t) => (
+                      <button
+                        key={t.symbol}
+                        onClick={() => handleToken(t)}
+                        className={cn(
+                          "flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-900",
+                          token.symbol === t.symbol && "bg-gray-50 dark:bg-gray-900",
+                        )}
+                      >
+                        {t.icon && (
+                          <img src={t.icon} alt={t.symbol} className="h-4 w-4 rounded-full" />
+                        )}
+                        <span className="font-medium text-gray-900 dark:text-gray-100">
+                          {t.symbol}
+                        </span>
+                        <span className="text-xs text-gray-500">{t.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {errors.amount && <p className="mt-1 text-sm text-red-500">{errors.amount}</p>}
-        </div>
+            </div>
 
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Estimated Profit</span>
-            <span className="text-sm font-medium text-green-500">+{estimatedProfit} ETH</span>
-          </div>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Risk Level</span>
-            <span className={`text-sm font-medium ${getRiskColor(riskLevel)}`}>
-              {riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)}
-            </span>
+            {/* Fee display */}
+            <div className="flex items-center justify-between border-t border-gray-100 px-3 py-2 dark:border-gray-800/50">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                Fee ({(protocol.fee * 100).toFixed(2)}%)
+              </span>
+              <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
+                {fee} {token.symbol}
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* Execute button */}
         <button
           onClick={handleExecute}
-          disabled={isExecuting || showSuccess}
-          className={`w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${buttonAnimation} flex items-center justify-center ${
-            isExecuting || showSuccess ? "opacity-75 cursor-not-allowed" : ""
-          }`}
-        >
-          {isExecuting ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              <span className="whitespace-nowrap">Executing Flash Loan...</span>
-            </>
-          ) : showSuccess ? (
-            <>
-              <Check className="w-4 h-4 mr-2" />
-              <span className="whitespace-nowrap">Flash Loan Executed!</span>
-            </>
-          ) : (
-            <>
-              <ArrowUpDown className="w-4 h-4 mr-2" />
-              <span className="whitespace-nowrap">Execute Flash Loan</span>
-            </>
+          disabled={loading || !amount || parseFloat(amount) <= 0}
+          className={cn(
+            "flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium text-white transition-colors",
+            loading || !amount || parseFloat(amount) <= 0
+              ? "cursor-not-allowed bg-gray-300 dark:bg-gray-700"
+              : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200",
           )}
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Zap className="h-4 w-4" />
+          )}
+          {loading ? "Executing..." : "Execute Flash Loan"}
         </button>
+      </div>
 
-        <div className="flex flex-wrap items-center text-sm text-yellow-600 dark:text-yellow-400 gap-2">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>Make sure you have enough collateral to cover the flash loan fee</span>
-        </div>
+      {/* Footer */}
+      <div className="border-t border-gray-200 px-4 py-2.5 text-center dark:border-gray-800">
+        <span className="text-xs text-gray-400 dark:text-gray-500">
+          Loan is repaid within the same transaction
+        </span>
       </div>
     </div>
   );
 };
+
+export default FlashLoanExecutor;
