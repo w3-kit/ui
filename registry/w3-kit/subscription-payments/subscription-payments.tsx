@@ -1,233 +1,107 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { CreditCard, Check, AlertCircle, Sparkles, Zap, Shield, Star } from "lucide-react";
-import { SubscriptionPlan, SubscriptionPaymentsProps } from "./types";
-import { animationStyles } from "./utils";
+import React from "react";
+import { CreditCard, Check, Loader2, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { SubscriptionPaymentsProps } from "./types";
+import { formatInterval } from "./utils";
 
-export const SubscriptionPayments: React.FC<SubscriptionPaymentsProps> = ({
+export function SubscriptionPayments({
   plans,
   onSubscribe,
-  className = "",
-}) => {
-  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState(plans[0]?.id || "");
-
-  useEffect(() => {
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = animationStyles;
-    document.head.appendChild(styleTag);
-
-    return () => {
-      document.head.removeChild(styleTag);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (plans.length > 0 && !plans.some((plan) => plan.id === activeTab)) {
-      setActiveTab(plans[0].id);
-    }
-  }, [plans, activeTab]);
-
-  const handleSubscribe = async () => {
-    if (!selectedPlan) return;
-
-    setIsSubscribing(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      await onSubscribe?.(selectedPlan.id);
-
-      setShowSuccess(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setShowSuccess(false);
-      setSelectedPlan(null);
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
-
-  const getIcon = (icon: SubscriptionPlan["icon"]) => {
-    switch (icon) {
-      case "sparkles":
-        return <Sparkles className="w-6 h-6" />;
-      case "zap":
-        return <Zap className="w-6 h-6" />;
-      case "shield":
-        return <Shield className="w-6 h-6" />;
-    }
-  };
-
-  const currentPlan = plans.find((plan) => plan.id === activeTab);
-
+  subscribingId,
+  className,
+}: SubscriptionPaymentsProps) {
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 ${className}`}>
-      <div className="space-y-6">
-        {/* Plan Tabs */}
-        <div className="flex flex-wrap w-full gap-2 border-b border-gray-200 dark:border-gray-700 pb-2">
-          {plans.map((plan) => (
-            <button
+    <div
+      className={cn(
+        "w-full max-w-md rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-4">
+        <CreditCard className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          Plans
+        </h3>
+      </div>
+
+      {/* Plan cards */}
+      <div className="space-y-2 px-4 pb-4">
+        {plans.map((plan) => {
+          const isSubscribing = subscribingId === plan.id;
+
+          return (
+            <div
               key={plan.id}
-              onClick={() => setActiveTab(plan.id)}
-              className={`relative flex-1 min-w-[140px] sm:min-w-[150px] flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 ${
-                activeTab === plan.id
-                  ? plan.isPopular
-                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
-                    : "bg-blue-500 text-white shadow-md"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                {getIcon(plan.icon)}
-                <span className="font-medium text-sm sm:text-base">{plan.name}</span>
-              </div>
-              {plan.isPopular && (
-                <span className="absolute -top-3 -right-2 bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
-                  <Star className="w-3 h-3 mr-1" />
-                  Popular
-                </span>
+              className={cn(
+                "rounded-xl px-3 py-3 transition-colors",
+                plan.popular
+                  ? "border border-gray-900 bg-gray-50 dark:border-white dark:bg-gray-900"
+                  : "bg-gray-50 dark:bg-gray-900",
               )}
-            </button>
-          ))}
-        </div>
-
-        {/* Plan Content */}
-        {currentPlan && (
-          <div className="space-y-6">
-            {/* Plan Header */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center space-x-3">
-                {getIcon(currentPlan.icon)}
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-                      {currentPlan.name}
-                    </h3>
-                    {currentPlan.isPopular && (
-                      <span className="bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded-full flex items-center shadow-sm">
-                        <Star className="w-3 h-3 mr-1" />
-                        Popular
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-                    {currentPlan.description}
+            >
+              {/* Plan header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {plan.name}
                   </p>
+                  {plan.popular && (
+                    <span className="flex items-center gap-0.5 rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400">
+                      <Star className="h-3 w-3" />
+                      Popular
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">
+                    {plan.price}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {plan.token}{formatInterval(plan.interval)}
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <img
-                  src={currentPlan.token.logoURI}
-                  alt={currentPlan.token.symbol}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                  style={{ width: 24, height: 24 }}
-                />
-                <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-                  {currentPlan.price}
-                </span>
-                <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-                  /{currentPlan.interval}
-                </span>
-              </div>
-            </div>
 
-            {/* Features */}
-            <div className="grid grid-cols-1 gap-4">
-              {currentPlan.features.map((feature, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-600 dark:text-gray-300">{feature}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Subscribe Button */}
-            <button
-              onClick={handleSubscribe}
-              disabled={isSubscribing || showSuccess}
-              className={`group relative w-full px-4 py-3 bg-blue-500 text-white rounded-lg transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center overflow-hidden ${
-                isSubscribing || showSuccess ? "opacity-90 cursor-not-allowed" : "hover:bg-blue-600"
-              }`}
-            >
-              {/* Loading state background effect */}
-              {isSubscribing && (
-                <div className="absolute inset-0 overflow-hidden">
-                  <div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 bg-[length:200%_100%] animate-loading-shine"
-                    style={
-                      {
-                        "--loading-shine": "rgba(255, 255, 255, 0.1)",
-                      } as React.CSSProperties
-                    }
-                  />
-                </div>
+              {/* Features */}
+              {plan.features.length > 0 && (
+                <ul className="mt-2 space-y-1">
+                  {plan.features.map((feature, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400"
+                    >
+                      <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               )}
 
-              {/* Button content with animations */}
-              <div
-                className={`relative flex items-center justify-center space-x-2 transition-all duration-300 ${
-                  isSubscribing ? "animate-loading-pulse" : ""
-                }`}
+              {/* Subscribe button */}
+              <button
+                onClick={() => onSubscribe?.(plan.id)}
+                disabled={isSubscribing}
+                className={cn(
+                  "mt-3 flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  plan.popular
+                    ? "bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+                    : "bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700",
+                  isSubscribing && "cursor-not-allowed opacity-60",
+                )}
               >
                 {isSubscribing ? (
-                  <>
-                    {/* Loading spinner */}
-                    <div className="relative w-5 h-5">
-                      <div className="absolute inset-0 border-2 border-white/30 rounded-full" />
-                      <div className="absolute inset-0 border-2 border-white border-t-transparent rounded-full animate-loading-spin" />
-                    </div>
-
-                    {/* Loading text with dots */}
-                    <div className="flex items-center">
-                      <span className="whitespace-nowrap mr-1">Subscribing</span>
-                      <div className="flex space-x-1">
-                        <div
-                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
-                          style={{ animationDelay: "0s" }}
-                        />
-                        <div
-                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
-                          style={{ animationDelay: "0.2s" }}
-                        />
-                        <div
-                          className="w-1 h-1 bg-white rounded-full animate-loading-pulse"
-                          style={{ animationDelay: "0.4s" }}
-                        />
-                      </div>
-                    </div>
-                  </>
-                ) : showSuccess ? (
-                  <div className="flex items-center animate-slide-in">
-                    <Check className="w-5 h-5 mr-2 animate-bounce" />
-                    <span className="whitespace-nowrap">Subscribed!</span>
-                  </div>
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <CreditCard className="w-5 h-5 transition-transform duration-200 group-hover:rotate-3" />
-                    <span className="whitespace-nowrap">Subscribe Now</span>
-                  </>
+                  "Subscribe"
                 )}
-              </div>
-
-              {/* Hover effect */}
-              <div className="absolute inset-0 w-full h-full transition-opacity group-hover:opacity-100 opacity-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-loading-shine" />
-              </div>
-            </button>
-
-            {/* Warning Message */}
-            <div className="flex flex-wrap items-center text-sm text-yellow-600 dark:text-yellow-400">
-              <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span>Subscriptions will automatically renew unless cancelled</span>
+              </button>
             </div>
-          </div>
-        )}
+          );
+        })}
       </div>
     </div>
   );
-};
-
-export default SubscriptionPayments;
+}

@@ -1,399 +1,113 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, X, Filter, ChevronDown, Eye, ExternalLink, Copy, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React from "react";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { TransactionHistoryProps, Transaction } from "./types";
-import { formatAddress, formatTimestamp, formatEther, getStatusBadgeVariant } from "./utils";
+  History,
+  ArrowUpRight,
+  ArrowDownLeft,
+  ArrowLeftRight,
+  FileCode,
+  ShieldCheck,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { Transaction, TransactionHistoryProps } from "./types";
+import { truncateHash, relativeTime } from "./utils";
 
-export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
-  transactions,
-  onTransactionClick,
-  className = "",
-  itemsPerPage = 10,
-}) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [expandedTransaction, setExpandedTransaction] = useState<string | null>(null);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    status: "",
-    from: "",
-    to: "",
-  });
-
-  const applyFilters = (tx: Transaction) => {
-    if (filters.status && tx.status.toLowerCase() !== filters.status.toLowerCase()) {
-      return false;
-    }
-    if (filters.from && !tx.from.toLowerCase().includes(filters.from.toLowerCase())) {
-      return false;
-    }
-    if (filters.to && !tx.to.toLowerCase().includes(filters.to.toLowerCase())) {
-      return false;
-    }
-    return true;
-  };
-
-  const filteredTransactions = transactions.filter((tx) => {
-    const matchesSearch =
-      tx.hash.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tx.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tx.to.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch && applyFilters(tx);
-  });
-
-  const resetFilters = () => {
-    setFilters({ status: "", from: "", to: "" });
-  };
-
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-    setCurrentPage(1);
-  };
-
-  const uniqueStatuses = Array.from(new Set(transactions.map((tx) => tx.status)));
-
-  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    setExpandedTransaction(null);
-  };
-
-  const toggleTransactionDetails = (txHash: string) => {
-    setExpandedTransaction(expandedTransaction === txHash ? null : txHash);
-  };
-
-  const copyToClipboard = (text: string, field: string) => {
-    if (typeof navigator !== "undefined") {
-      navigator.clipboard.writeText(text).then(() => {
-        setCopiedField(field);
-        setTimeout(() => setCopiedField(null), 2000);
-      });
-    }
-  };
-
-  const viewOnExplorer = (txHash: string) => {
-    if (typeof window !== "undefined") {
-      window.open(`https://etherscan.io/tx/${txHash}`, "_blank");
-    }
-  };
-
-  const hasActiveFilters = Object.values(filters).some((value) => value !== "");
-
-  return (
-    <div className={cn("w-full", className)}>
-      {/* Search and Filter Controls */}
-      <div className="mb-4 space-y-2">
-        <div className="relative flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search by hash or address..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-9"
-            />
-            {searchTerm && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSearchTerm("")}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-          <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="gap-2">
-            <Filter className="h-4 w-4" />
-            Filters
-            {hasActiveFilters && <span className="w-2 h-2 bg-primary rounded-full" />}
-          </Button>
-        </div>
-
-        {/* Filters Panel */}
-        {showFilters && (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">
-                    Status
-                  </label>
-                  <Select
-                    value={filters.status}
-                    onValueChange={(value) => handleFilterChange("status", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="All Statuses" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All Statuses</SelectItem>
-                      {uniqueStatuses.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {status}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">
-                    From Address
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Filter by sender"
-                    value={filters.from}
-                    onChange={(e) => handleFilterChange("from", e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">
-                    To Address
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Filter by recipient"
-                    value={filters.to}
-                    onChange={(e) => handleFilterChange("to", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-4 gap-2">
-                <Button variant="outline" onClick={resetFilters}>
-                  Reset Filters
-                </Button>
-                <Button onClick={() => setShowFilters(false)}>Apply Filters</Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Transaction List */}
-      <Card>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-border">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Transaction Hash
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  From
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  To
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Value (ETH)
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Timestamp
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-card divide-y divide-border">
-              {paginatedTransactions.map((tx) => (
-                <React.Fragment key={tx.hash}>
-                  <tr
-                    className={cn(
-                      "hover:bg-muted/50 transition-colors cursor-pointer",
-                      expandedTransaction === tx.hash && "bg-muted/50",
-                    )}
-                    onClick={() => toggleTransactionDetails(tx.hash)}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          copyToClipboard(tx.hash, `hash-${tx.hash}`);
-                        }}
-                        className="text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-                      >
-                        {formatAddress(tx.hash)}
-                        {copiedField === `hash-${tx.hash}` ? (
-                          <Check className="h-3 w-3 text-green-500" />
-                        ) : (
-                          <Copy className="h-3 w-3 opacity-50" />
-                        )}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Badge variant={getStatusBadgeVariant(tx.status)}>{tx.status}</Badge>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          copyToClipboard(tx.from, `from-${tx.hash}`);
-                        }}
-                        className="hover:text-foreground transition-colors flex items-center gap-1"
-                      >
-                        {formatAddress(tx.from)}
-                        {copiedField === `from-${tx.hash}` && (
-                          <Check className="h-3 w-3 text-green-500" />
-                        )}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          copyToClipboard(tx.to, `to-${tx.hash}`);
-                        }}
-                        className="hover:text-foreground transition-colors flex items-center gap-1"
-                      >
-                        {formatAddress(tx.to)}
-                        {copiedField === `to-${tx.hash}` && (
-                          <Check className="h-3 w-3 text-green-500" />
-                        )}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{formatEther(tx.value)}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {formatTimestamp(tx.timestamp)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <div className="flex gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleTransactionDetails(tx.hash);
-                          }}
-                          className="h-8 w-8"
-                        >
-                          <ChevronDown
-                            className={cn(
-                              "h-4 w-4 transition-transform",
-                              expandedTransaction === tx.hash && "rotate-180",
-                            )}
-                          />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onTransactionClick?.(tx);
-                          }}
-                          className="h-8 w-8"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                  {expandedTransaction === tx.hash && (
-                    <tr>
-                      <td colSpan={7} className="px-0 py-0 border-0">
-                        <div className="bg-muted/30 px-6 py-3 border-t">
-                          <div className="flex flex-wrap gap-4 items-center justify-between">
-                            <div>
-                              <h4 className="text-xs font-medium mb-1.5">Transaction Details</h4>
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                                <span className="text-muted-foreground">Block:</span>
-                                <span>{tx.blockNumber || "Pending"}</span>
-                                <span className="text-muted-foreground">Gas:</span>
-                                <span>{tx.gasUsed || "N/A"}</span>
-                              </div>
-                            </div>
-                            <Button
-                              size="sm"
-                              variant="secondary"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                viewOnExplorer(tx.hash);
-                              }}
-                              className="gap-1"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              View on Explorer
-                            </Button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-              {paginatedTransactions.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-muted-foreground">
-                    {searchTerm
-                      ? "No transactions found matching your search."
-                      : "No transactions available."}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-4 gap-2">
-          <Button
-            variant="outline"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-            const page = i + 1;
-            return (
-              <Button
-                key={page}
-                variant={currentPage === page ? "default" : "outline"}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </Button>
-            );
-          })}
-          {totalPages > 5 && <span className="px-2 py-2">...</span>}
-          <Button
-            variant="outline"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      )}
-    </div>
-  );
+const TYPE_CONFIG: Record<
+  Transaction["type"],
+  { icon: React.ElementType; bg: string; text: string; label: string }
+> = {
+  send: { icon: ArrowUpRight, bg: "bg-red-100 dark:bg-red-900/30", text: "text-red-600 dark:text-red-400", label: "Sent" },
+  receive: { icon: ArrowDownLeft, bg: "bg-green-100 dark:bg-green-900/30", text: "text-green-600 dark:text-green-400", label: "Received" },
+  swap: { icon: ArrowLeftRight, bg: "bg-blue-100 dark:bg-blue-900/30", text: "text-blue-600 dark:text-blue-400", label: "Swapped" },
+  approve: { icon: ShieldCheck, bg: "bg-amber-100 dark:bg-amber-900/30", text: "text-amber-600 dark:text-amber-400", label: "Approved" },
+  contract: { icon: FileCode, bg: "bg-gray-100 dark:bg-gray-800", text: "text-gray-600 dark:text-gray-400", label: "Contract" },
 };
 
-export default TransactionHistory;
+const STATUS_STYLES: Record<Transaction["status"], string> = {
+  success: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  pending: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  failed: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+};
+
+export function TransactionHistory({
+  transactions,
+  onTransactionClick,
+  className,
+}: TransactionHistoryProps) {
+  return (
+    <div
+      className={cn(
+        "w-full max-w-md rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+        <History className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Transactions</h3>
+      </div>
+
+      {/* Transaction rows */}
+      <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+        {transactions.map((tx) => {
+          const config = TYPE_CONFIG[tx.type];
+          const Icon = config.icon;
+
+          return (
+            <li
+              key={tx.hash}
+              className={cn(
+                "flex items-center gap-3 px-4 py-3 transition-colors",
+                onTransactionClick && "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900",
+              )}
+              onClick={() => onTransactionClick?.(tx)}
+            >
+              {/* Type icon */}
+              <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-full", config.bg)}>
+                <Icon className={cn("h-4 w-4", config.text)} />
+              </div>
+
+              {/* Description + hash */}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {config.label}
+                </p>
+                <p className="font-mono text-xs text-gray-500 dark:text-gray-400">
+                  {truncateHash(tx.hash)}
+                </p>
+              </div>
+
+              {/* Value */}
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {tx.value} {tx.tokenSymbol ?? ""}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {relativeTime(tx.timestamp)}
+                </p>
+              </div>
+
+              {/* Status badge */}
+              <span
+                className={cn(
+                  "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium capitalize",
+                  STATUS_STYLES[tx.status],
+                )}
+              >
+                {tx.status}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Footer */}
+      <div className="border-t border-gray-200 px-4 py-2.5 dark:border-gray-800">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {transactions.length} transaction{transactions.length !== 1 ? "s" : ""}
+        </p>
+      </div>
+    </div>
+  );
+}

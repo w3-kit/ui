@@ -1,20 +1,15 @@
-export interface AirdropInfo {
+export interface Airdrop {
   id: string;
-  tokenSymbol: string;
-  tokenName: string;
-  tokenAddress: string;
+  token: string;
   amount: string;
-  merkleRoot: string;
-  merkleProof: string[];
-  startTime: number;
-  endTime: number;
-  claimed: boolean;
-  logoURI?: string;
+  status: "active" | "claimed" | "expired";
+  startDate: string;
+  endDate: string;
 }
 
 export interface TokenAirdropProps {
-  airdrops: AirdropInfo[];
-  onClaim: (airdropId: string) => Promise<void>;
+  airdrops: Airdrop[];
+  onClaim?: (airdropId: string) => void;
+  claimingId?: string;
+  className?: string;
 }
-
-export type AirdropStatus = "active" | "claimed" | "expired" | "upcoming";
