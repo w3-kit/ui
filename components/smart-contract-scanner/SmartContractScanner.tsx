@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Shield,
-  ShieldCheck,
-  ShieldAlert,
-  ShieldX,
-  Search,
-  Loader2,
-} from "lucide-react";
+import { Shield, ShieldCheck, ShieldAlert, ShieldX, Search, Loader2 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { SmartContractScannerProps, SecurityCheck } from "./types";
 import { truncateAddress } from "./utils";
@@ -64,9 +57,7 @@ export function SmartContractScanner({
       {/* Header */}
       <div className="flex items-center gap-2 px-4 pt-4 pb-3">
         <Shield className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-        <span className="text-sm font-medium text-gray-900 dark:text-white">
-          Scanner
-        </span>
+        <span className="text-sm font-medium text-gray-900 dark:text-white">Scanner</span>
         {address && (
           <span className="ml-auto rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
             {truncateAddress(address)}
@@ -123,13 +114,8 @@ export function SmartContractScanner({
               {checks.map((check: SecurityCheck) => {
                 const Icon = statusIcon[check.status];
                 return (
-                  <li
-                    key={check.name}
-                    className="flex items-start gap-2.5 rounded-lg px-2 py-2"
-                  >
-                    <Icon
-                      className={cn("mt-0.5 h-4 w-4 shrink-0", statusColor[check.status])}
-                    />
+                  <li key={check.name} className="flex items-start gap-2.5 rounded-lg px-2 py-2">
+                    <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", statusColor[check.status])} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-gray-900 dark:text-white">
