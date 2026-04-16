@@ -1,31 +1,15 @@
-export interface NFT {
+export interface NFTItem {
   id: string;
   name: string;
-  description?: string;
-  image: string;
-  owner: string;
-  collection?: string;
-  tokenId: string;
-  contractAddress: string;
-  chainId: number;
-  attributes?: {
-    trait_type: string;
-    value: string | number;
-  }[];
-}
-
-export interface GridColumns {
-  default: number;
-  sm?: number;
-  md?: number;
-  lg?: number;
+  image?: string;
+  price?: string;
+  currency?: string;
 }
 
 export interface NFTCollectionGridProps {
-  nfts: NFT[];
-  onNFTClick?: (nft: NFT) => void;
-  onOwnerClick?: (owner: string) => void;
+  items: NFTItem[];
+  collectionName?: string;
+  onItemClick?: (item: NFTItem) => void;
+  columns?: 2 | 3 | 4;
   className?: string;
-  variant?: "default" | "expanded";
-  columns?: GridColumns;
 }

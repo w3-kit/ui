@@ -1,37 +1,13 @@
-export type TabType = "read" | "write";
-
-export interface FunctionType {
+export interface ContractFunction {
   name: string;
-  inputs: number;
-  type: "view" | "write";
-  description?: string;
-}
-
-export interface ResultType {
-  id: string;
-  function: {
-    name: string;
-    type: "view" | "write";
-  };
-  result: string;
-  time: string;
-  hash: string;
-  from: string;
-  to: string;
-  gasUsed: string;
-  status: "success" | "pending" | "failed";
-}
-
-export interface ErrorState {
-  message: string;
-  type: "error" | "warning" | "info";
-  field?: string;
+  type: "read" | "write";
+  inputs: string[];
 }
 
 export interface ContractInteractionProps {
+  address?: string;
+  functions: ContractFunction[];
+  onExecute?: (fn: ContractFunction, values: string[]) => void;
+  executingFn?: string;
   className?: string;
-  contractAddress?: string;
-  functions?: FunctionType[];
-  onExecute?: (functionName: string, inputs: string[]) => Promise<string>;
-  resultsPerPage?: number;
 }

@@ -1,23 +1,19 @@
 export interface StakingPool {
   id: string;
   name: string;
-  token: {
-    symbol: string;
-    logoURI: string;
-    decimals: number;
-  };
-  apr: number;
-  minStake: string;
-  lockPeriod: number; // in days
-  totalStaked: string;
-  isStaked?: boolean; // Track if user has staked this token
+  token: string; // symbol e.g. "ETH"
+  icon?: string; // logo URL
+  apr: number; // percentage
+  lockPeriod: number; // days
+  totalStaked: string; // formatted amount
+  userStaked?: string; // user's staked amount
+  minStake?: string; // minimum stake
 }
 
 export interface StakingInterfaceProps {
   pools: StakingPool[];
-  userBalance?: string;
   onStake?: (poolId: string, amount: string) => void;
   onUnstake?: (poolId: string, amount: string) => void;
+  stakingPoolId?: string; // pool currently being staked to (loading)
   className?: string;
-  variant?: "default" | "compact";
 }

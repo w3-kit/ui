@@ -1,25 +1,13 @@
-export interface Token {
-  address: string;
+export interface ListToken {
   symbol: string;
   name: string;
-  decimals: number;
+  balance: number;
+  price: number;
   logoURI?: string;
-  balance?: string;
-  price?: number;
-  value?: number;
-  chainId: number;
 }
 
 export interface TokenListProps {
-  tokens: Token[];
-  onTokenSelect?: (token: Token) => void;
+  tokens: ListToken[];
+  onTokenSelect?: (token: ListToken) => void;
   className?: string;
-  showBalances?: boolean;
-  showPrices?: boolean;
-  showValue?: boolean;
-  variant?: "table" | "grid" | "list";
-  selectedToken?: string;
 }
-
-export type SortField = "name" | "balance" | "value" | "symbol";
-export type SortDirection = "asc" | "desc";

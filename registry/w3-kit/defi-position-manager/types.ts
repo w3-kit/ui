@@ -1,32 +1,18 @@
-export interface PositionData {
+export interface Position {
   id: string;
-  protocol: {
-    name: string;
-    logoURI: string;
-    type: "lending" | "borrowing" | "farming";
-  };
-  token: {
-    symbol: string;
-    logoURI: string;
-    price: number;
-  };
+  protocol: string;
+  protocolIcon?: string;
+  token: string;
+  tokenIcon?: string;
   amount: string;
-  value: number;
-  healthFactor: number;
+  value: string;
+  healthFactor?: number;
   apy: number;
-  rewards: {
-    token: string;
-    amount: string;
-    value: number;
-  }[];
   risk: "low" | "medium" | "high";
-  lastUpdate: number;
 }
 
-export type AdjustAction = "deposit" | "withdraw" | "borrow" | "repay";
-
 export interface DeFiPositionManagerProps {
-  positions: PositionData[];
-  onAdjustPosition?: (positionId: string, action: AdjustAction) => void | Promise<void>;
+  positions: Position[];
+  onPositionClick?: (position: Position) => void;
   className?: string;
 }

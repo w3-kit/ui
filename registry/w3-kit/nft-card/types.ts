@@ -1,23 +1,17 @@
 export interface NFT {
   id: string;
   name: string;
-  description?: string;
-  image: string;
-  owner: string;
+  image?: string;
   collection?: string;
-  tokenId: string;
-  contractAddress: string;
-  chainId: number;
-  attributes?: {
-    trait_type: string;
-    value: string | number;
-  }[];
+  tokenId?: string;
+  price?: string;
+  currency?: string;
+  owner?: string;
+  attributes?: { trait: string; value: string }[];
 }
 
 export interface NFTCardProps {
   nft: NFT;
-  onOwnerClick?: (owner: string) => void;
-  onNFTClick?: (nft: NFT) => void;
+  onClick?: (nft: NFT) => void;
   className?: string;
-  variant?: "default" | "expanded";
 }
