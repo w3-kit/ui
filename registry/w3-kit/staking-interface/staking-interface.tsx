@@ -1,565 +1,187 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import {
-  ArrowRight,
-  Lock,
-  Unlock,
-  Info,
-  ChevronDown,
-  ChevronUp,
-  AlertCircle,
-  Check,
-  Percent,
-  Calendar,
-  Coins,
-  TrendingUp,
-  Clock,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import { Coins, Lock, ChevronDown, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { StakingPool, StakingInterfaceProps } from "./types";
-import { formatNumber, getAPRColorClass, keyframes } from "./utils";
+import { formatNumber } from "./utils";
 
-export const StakingInterface: React.FC<StakingInterfaceProps> = ({
+export function StakingInterface({
   pools,
-  userBalance = "0",
   onStake,
   onUnstake,
-  className = "",
-  variant = "default",
-}) => {
-  const [selectedPool, setSelectedPool] = useState<StakingPool | null>(null);
-  const [amount, setAmount] = useState("");
+  stakingPoolId,
+  className,
+}: StakingInterfaceProps) {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isStaking, setIsStaking] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [expandedPoolId, setExpandedPoolId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showAllCompactPools, setShowAllCompactPools] = useState(false);
-  const [compactStakingView, setCompactStakingView] = useState<string | null>(null);
+  const [amount, setAmount] = useState("");
 
-  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
-  useEffect(() => {
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = keyframes;
-    document.head.appendChild(styleTag);
-
-    return () => {
-      document.head.removeChild(styleTag);
-    };
-  }, []);
-
-  useEffect(() => {
-    setError(null);
-  }, [amount, selectedPool, isStaking]);
-
-  const togglePoolExpansion = (poolId: string) => {
-    setExpandedPoolId(expandedPoolId === poolId ? null : poolId);
+  const toggle = (id: string) => {
+    const next = expandedId === id ? null : id;
+    setExpandedId(next);
+    setIsStaking(true);
+    setAmount("");
   };
 
-  const toggleCompactStakingView = (poolId: string) => {
-    setCompactStakingView(compactStakingView === poolId ? null : poolId);
-    if (compactStakingView !== poolId) {
-      setSelectedPool(pools.find((p) => p.id === poolId) || null);
-      setIsStaking(true);
-      setAmount("");
-    }
-  };
-
-  const validateAmount = (): boolean => {
-    if (!selectedPool) return false;
-
-    const amountNum = parseFloat(amount);
-    if (isNaN(amountNum) || amountNum <= 0) {
-      setError("Please enter a valid amount");
-      return false;
-    }
-
+  const handleAction = (pool: StakingPool) => {
+    if (!amount || Number(amount) <= 0) return;
     if (isStaking) {
-      const minStakeNum = parseFloat(selectedPool.minStake);
-      const balanceNum = parseFloat(userBalance);
-
-      if (amountNum < minStakeNum) {
-        setError(
-          `Minimum stake amount is ${formatNumber(selectedPool.minStake)} ${selectedPool.token.symbol}`,
-        );
-        return false;
-      }
-
-      if (amountNum > balanceNum) {
-        setError("Insufficient balance");
-        return false;
-      }
+      onStake?.(pool.id, amount);
+    } else {
+      onUnstake?.(pool.id, amount);
     }
-
-    return true;
+    setAmount("");
   };
-
-  const handleAction = async () => {
-    if (!selectedPool || !amount) return;
-
-    if (!validateAmount()) return;
-
-    setIsLoading(true);
-
-    try {
-      if (isStaking) {
-        onStake?.(selectedPool.id, amount);
-        setSuccess(`Successfully staked ${formatNumber(amount)} ${selectedPool.token.symbol}`);
-      } else {
-        onUnstake?.(selectedPool.id, amount);
-        setSuccess(`Successfully unstaked ${formatNumber(amount)} ${selectedPool.token.symbol}`);
-      }
-      setAmount("");
-
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
-    } catch {
-      setError("Transaction failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getStatusIcon = (pool: StakingPool, size: "small" | "medium") => {
-    const iconSize = size === "small" ? "w-2.5 h-2.5" : "w-3 h-3";
-    const bgSize = size === "small" ? "w-4 h-4" : "w-5 h-5";
-
-    if (pool.isStaked) {
-      return (
-        <div
-          className={`absolute -top-1 -right-1 ${bgSize} bg-green-500 rounded-full flex items-center justify-center`}
-        >
-          <Check className={`${iconSize} text-white`} />
-        </div>
-      );
-    } else if (pool.lockPeriod > 0) {
-      return (
-        <div
-          className={`absolute -top-1 -right-1 ${bgSize} bg-amber-500 rounded-full flex items-center justify-center`}
-        >
-          <Clock className={`${iconSize} text-white`} />
-        </div>
-      );
-    }
-
-    return null;
-  };
-
-  const renderPoolItem = (pool: StakingPool, isCompact: boolean = false) => {
-    const isExpanded = isCompact ? compactStakingView === pool.id : expandedPoolId === pool.id;
-    const toggleFunction = isCompact ? toggleCompactStakingView : togglePoolExpansion;
-    const iconSize = isCompact ? 24 : 28;
-
-    return (
-      <div
-        key={pool.id}
-        className={`border rounded-lg transition-all duration-300 overflow-hidden ${
-          selectedPool?.id === pool.id && !isCompact
-            ? "border-primary ring-1 ring-primary"
-            : "border-border hover:border-primary/50 hover:shadow-md"
-        }`}
-      >
-        <div
-          className="p-3 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between"
-          onClick={() => {
-            if (!isCompact) setSelectedPool(pool);
-            toggleFunction(pool.id);
-          }}
-        >
-          <div className="flex items-center space-x-3 mb-3 sm:mb-0">
-            <div className="relative flex-shrink-0">
-              <img
-                src={pool.token.logoURI}
-                alt={pool.token.symbol}
-                width={iconSize}
-                height={iconSize}
-                className="rounded-full transition-transform duration-300 hover:scale-110"
-                style={{ width: iconSize, height: iconSize }}
-              />
-              {getStatusIcon(pool, isCompact ? "small" : "medium")}
-            </div>
-            <div>
-              <h3 className={`font-medium text-foreground ${isCompact ? "text-sm" : ""}`}>
-                {pool.name}
-              </h3>
-              <p
-                className={`${isCompact ? "text-xs" : "text-sm"} text-muted-foreground flex items-center`}
-              >
-                <Percent className={`${isCompact ? "w-3 h-3 mr-1" : "w-3.5 h-3.5 mr-1"}`} />
-                <span className={getAPRColorClass(pool.apr)}>{formatNumber(pool.apr)}% APR</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto sm:space-x-6">
-            <div className="flex flex-col items-end">
-              <span
-                className={`${isCompact ? "text-xs" : "text-sm"} font-medium ${getAPRColorClass(pool.apr)}`}
-              >
-                {formatNumber(pool.apr)}%
-              </span>
-              <span className={`${isCompact ? "text-xs" : "text-xs"} text-muted-foreground`}>
-                APR
-              </span>
-            </div>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-1 h-auto rounded-full"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFunction(pool.id);
-              }}
-              aria-expanded={isExpanded}
-              aria-label={isExpanded ? "Collapse details" : "Expand details"}
-            >
-              <div
-                className={`transform transition-transform duration-300 ${isExpanded ? "rotate-180" : "rotate-0"}`}
-              >
-                <ChevronDown
-                  className={`${isCompact ? "w-4 h-4" : "w-5 h-5"} text-muted-foreground`}
-                />
-              </div>
-            </Button>
-          </div>
-        </div>
-
-        <div
-          className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            isExpanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-          ref={(el) => {
-            if (el) {
-              dropdownRefs.current[pool.id] = el;
-            }
-          }}
-        >
-          <div className="px-3 pb-3 pt-0 border-t border-border">
-            {isCompact ? (
-              <>
-                <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
-                  <div className="flex items-center justify-between bg-muted p-2 rounded">
-                    <span className="text-muted-foreground">Lock Period:</span>
-                    <span className="font-medium text-foreground">{pool.lockPeriod} days</span>
-                  </div>
-                  <div className="flex items-center justify-between bg-muted p-2 rounded">
-                    <span className="text-muted-foreground">Min Stake:</span>
-                    <span className="font-medium text-foreground">
-                      {formatNumber(pool.minStake)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-3 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Your Balance:</span>
-                    <span className="font-medium text-foreground">
-                      {formatNumber(userBalance)} {pool.token.symbol}
-                    </span>
-                  </div>
-
-                  <div className="relative">
-                    <Input
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="Enter amount to stake"
-                      className={`pr-14 text-xs ${error ? "border-destructive" : ""}`}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setAmount(userBalance)}
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-auto px-1.5 py-0.5 text-xs text-primary hover:text-primary/80"
-                    >
-                      MAX
-                    </Button>
-                  </div>
-
-                  {error && (
-                    <div className="flex items-center space-x-1 text-destructive text-xs animate-[fadeIn_0.3s_ease-in-out]">
-                      <AlertCircle className="w-3 h-3 flex-shrink-0" />
-                      <span>{error}</span>
-                    </div>
-                  )}
-
-                  <Button
-                    onClick={handleAction}
-                    disabled={!amount || Number(amount) <= 0 || isLoading}
-                    className="w-full text-xs"
-                    size="sm"
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center justify-center space-x-2">
-                        <div className="animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
-                        <span>Processing...</span>
-                      </div>
-                    ) : (
-                      <>
-                        {pool.isStaked ? (
-                          <>
-                            <Unlock className="w-3 h-3 mr-1.5 inline-block" /> Unstake
-                          </>
-                        ) : (
-                          <>
-                            <Lock className="w-3 h-3 mr-1.5 inline-block" /> Stake
-                          </>
-                        )}{" "}
-                        {pool.token.symbol}
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-3">
-                  <div className="flex flex-col">
-                    <div className="flex items-center text-muted-foreground text-xs mb-1">
-                      <Calendar className="w-3.5 h-3.5 mr-1" />
-                      Lock Period
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      {pool.lockPeriod} days
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <div className="flex items-center text-muted-foreground text-xs mb-1">
-                      <ArrowRight className="w-3.5 h-3.5 mr-1" />
-                      Min. Stake
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      {formatNumber(pool.minStake)} {pool.token.symbol}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col col-span-2 sm:col-span-1">
-                    <div className="flex items-center text-muted-foreground text-xs mb-1">
-                      <TrendingUp className="w-3.5 h-3.5 mr-1" />
-                      Total Staked
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      {formatNumber(pool.totalStaked)} {pool.token.symbol}
-                    </span>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedPool(pool);
-                    setIsStaking(!pool.isStaked);
-                    document
-                      .getElementById("staking-action-section")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className={`w-full mt-4 ${
-                    pool.isStaked ? "bg-amber-500 hover:bg-amber-600" : ""
-                  }`}
-                  variant={pool.isStaked ? "default" : "default"}
-                >
-                  {pool.isStaked ? (
-                    <>
-                      <Unlock className="w-4 h-4 mr-2" /> Unstake {pool.token.symbol}
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="w-4 h-4 mr-2" /> Stake {pool.token.symbol}
-                    </>
-                  )}
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  if (variant === "compact") {
-    const displayPools = showAllCompactPools ? pools : pools.slice(0, 3);
-
-    return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center">
-            <Coins className="w-5 h-5 mr-2 text-primary" />
-            Staking Pools
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {success && (
-            <div
-              className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800
-            rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
-            >
-              <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
-            </div>
-          )}
-
-          <div className="space-y-3">
-            {displayPools.map((pool) => renderPoolItem(pool, true))}
-
-            {pools.length > 3 && (
-              <Button
-                variant="outline"
-                className="w-full text-sm"
-                onClick={() => setShowAllCompactPools(!showAllCompactPools)}
-              >
-                {showAllCompactPools ? (
-                  <span className="flex items-center justify-center">
-                    Show Less{" "}
-                    <ChevronUp className="w-4 h-4 ml-1 transition-transform duration-300" />
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center">
-                    View {pools.length - 3} More Pools{" "}
-                    <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-300" />
-                  </span>
-                )}
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
-    <Card className={className}>
-      <CardHeader className="border-b">
-        <CardTitle className="text-xl flex items-center">
-          <Coins className="w-5 h-5 mr-2 text-primary" />
-          Staking Pools
-        </CardTitle>
-
-        {success && (
-          <div
-            className="mt-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800
-            rounded-lg flex items-start space-x-2 animate-[fadeIn_0.3s_ease-in-out]"
-          >
-            <Check className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
-          </div>
-        )}
-      </CardHeader>
-
-      <CardContent className="p-4 sm:p-6">
-        <div className="space-y-3">{pools.map((pool) => renderPoolItem(pool))}</div>
-      </CardContent>
-
-      {selectedPool && (
-        <CardContent
-          id="staking-action-section"
-          className="animate-[fadeIn_0.3s_ease-in-out] border-t"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
-            <div className="flex items-center space-x-2">
-              <Button
-                onClick={() => setIsStaking(true)}
-                variant={isStaking ? "default" : "ghost"}
-                size="sm"
-                className={isStaking ? "shadow-md" : ""}
-              >
-                <Lock className="w-4 h-4 mr-2" />
-                Stake
-              </Button>
-              <Button
-                onClick={() => setIsStaking(false)}
-                variant={!isStaking ? "default" : "ghost"}
-                size="sm"
-                className={!isStaking ? "shadow-md" : ""}
-              >
-                <Unlock className="w-4 h-4 mr-2" />
-                Unstake
-              </Button>
-            </div>
-            <div className="flex items-center text-sm text-muted-foreground bg-muted px-3 py-1.5 rounded-lg">
-              <Coins className="w-4 h-4 mr-2" />
-              Balance:{" "}
-              <span className="font-medium ml-1">
-                {formatNumber(userBalance)} {selectedPool.token.symbol}
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="relative">
-              <Input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder={`Enter amount to ${isStaking ? "stake" : "unstake"}`}
-                className={`pr-16 ${error ? "border-destructive" : ""}`}
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setAmount(userBalance)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-auto px-2 py-1 text-xs text-primary hover:text-primary/80"
-              >
-                MAX
-              </Button>
-            </div>
-
-            {error && (
-              <div className="flex items-center space-x-2 text-destructive text-sm animate-[fadeIn_0.3s_ease-in-out]">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-              <div className="flex items-center">
-                <Info className="w-3.5 h-3.5 mr-1" />
-                <span>
-                  {isStaking
-                    ? `Min. stake: ${formatNumber(selectedPool.minStake)} ${selectedPool.token.symbol}`
-                    : "Unstaking may have withdrawal fees"}
-                </span>
-              </div>
-              <div>Lock period: {selectedPool.lockPeriod} days</div>
-            </div>
-
-            <Button
-              onClick={handleAction}
-              disabled={!amount || Number(amount) <= 0 || isLoading}
-              className={`w-full ${isStaking ? "" : "bg-amber-500 hover:bg-amber-600"}`}
-              variant={isStaking ? "default" : "default"}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
-                  <span>Processing...</span>
-                </div>
-              ) : (
-                <>
-                  {isStaking ? (
-                    <>
-                      <Lock className="w-4 h-4 mr-2" /> Stake
-                    </>
-                  ) : (
-                    <>
-                      <Unlock className="w-4 h-4 mr-2" /> Unstake
-                    </>
-                  )}{" "}
-                  {selectedPool.token.symbol}
-                </>
-              )}
-            </Button>
-          </div>
-        </CardContent>
+    <div
+      className={cn(
+        "rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
       )}
-    </Card>
+    >
+      {/* Header */}
+      <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+        <Coins className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+          Staking Pools
+        </h2>
+        <span className="ml-auto text-xs text-gray-500">{pools.length} pools</span>
+      </div>
+
+      {/* Pool list */}
+      <div className="divide-y divide-gray-100 dark:divide-gray-800/60">
+        {pools.map((pool) => {
+          const expanded = expandedId === pool.id;
+          const loading = stakingPoolId === pool.id;
+
+          return (
+            <div key={pool.id}>
+              {/* Pool row */}
+              <button
+                type="button"
+                onClick={() => toggle(pool.id)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-900"
+              >
+                {pool.icon ? (
+                  <img
+                    src={pool.icon}
+                    alt={pool.token}
+                    className="h-8 w-8 rounded-full"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                    {pool.token.slice(0, 2)}
+                  </div>
+                )}
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {pool.name}
+                  </p>
+                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <span className="font-medium text-green-600 dark:text-green-400">
+                      {pool.apr}% APR
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Lock className="h-3 w-3" />
+                      {pool.lockPeriod}d
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <p className="text-xs text-gray-500">
+                    {formatNumber(pool.totalStaked)} {pool.token}
+                  </p>
+                  {pool.userStaked && (
+                    <p className="text-xs font-medium text-gray-900 dark:text-gray-100">
+                      {formatNumber(pool.userStaked)} staked
+                    </p>
+                  )}
+                </div>
+
+                <ChevronDown
+                  className={cn(
+                    "h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200",
+                    expanded && "rotate-180",
+                  )}
+                />
+              </button>
+
+              {/* Expanded panel */}
+              {expanded && (
+                <div className="border-t border-gray-100 bg-gray-50/50 px-4 py-3 dark:border-gray-800 dark:bg-gray-900/40">
+                  {/* Stake / Unstake toggle */}
+                  <div className="mb-3 flex gap-1 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-800">
+                    {(["Stake", "Unstake"] as const).map((label) => {
+                      const active =
+                        (label === "Stake" && isStaking) ||
+                        (label === "Unstake" && !isStaking);
+                      return (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => setIsStaking(label === "Stake")}
+                          className={cn(
+                            "flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+                            active
+                              ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-gray-100"
+                              : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300",
+                          )}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Amount input */}
+                  <div className="mb-3 flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900">
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="0.00"
+                      value={amount}
+                      onChange={(e) =>
+                        /^\d*\.?\d*$/.test(e.target.value) && setAmount(e.target.value)
+                      }
+                      className="min-w-0 flex-1 bg-transparent text-sm font-medium text-gray-900 outline-none placeholder:text-gray-400 dark:text-gray-100"
+                    />
+                    <span className="text-xs font-medium text-gray-500">{pool.token}</span>
+                  </div>
+
+                  {pool.minStake && (
+                    <p className="mb-3 text-xs text-gray-500">
+                      Min: {formatNumber(pool.minStake)} {pool.token}
+                    </p>
+                  )}
+
+                  {/* Action button */}
+                  <button
+                    type="button"
+                    disabled={!amount || Number(amount) <= 0 || loading}
+                    onClick={() => handleAction(pool)}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>{isStaking ? "Stake" : "Unstake"} {pool.token}</>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
-};
+}
 
 export default StakingInterface;
