@@ -1,11 +1,16 @@
+export type CheckStatus = "safe" | "warning" | "danger";
+
 export interface SecurityCheck {
-  id: string;
   name: string;
-  status: "safe" | "warning" | "danger";
-  description: string;
+  status: CheckStatus;
+  description?: string;
 }
 
 export interface SmartContractScannerProps {
-  className?: string;
+  address?: string;
+  score?: number;
+  checks?: SecurityCheck[];
   onScan?: (address: string) => void;
+  loading?: boolean;
+  className?: string;
 }
