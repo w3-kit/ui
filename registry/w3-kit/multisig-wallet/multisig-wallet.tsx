@@ -1,856 +1,205 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { MultisigWalletProps, Transaction, FormErrors } from "./types";
-import { formatAddress, formatTimestamp, isValidAddress, isValidHexData } from "./utils";
+import React, { useState } from "react";
+import { Shield, Check, X, Plus, Copy, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { MultisigWalletProps, Transaction } from "./types";
+import { formatAddress, timeAgo } from "./utils";
+
+const STATUS_STYLES = {
+  pending: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+  executed: "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400",
+  rejected: "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400",
+} as const;
 
 export function MultisigWallet({
   walletAddress,
   signers,
   transactions,
   requiredApprovals,
-  onPropose,
   onApprove,
   onReject,
-  className = "",
+  onPropose,
+  approvingId,
+  className,
 }: MultisigWalletProps) {
-  const [isProposing, setIsProposing] = useState(false);
-  const [activeTab, setActiveTab] = useState<"pending" | "executed" | "all">("pending");
-  const [expandedTx, setExpandedTx] = useState<string | null>(null);
-  const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
-  const [newTransactions, setNewTransactions] = useState<Set<string>>(new Set());
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const lastTransactionRef = useRef<HTMLDivElement>(null);
-  const [newTx, setNewTx] = useState({
-    description: "",
-    to: "",
-    value: "",
-    data: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isApproving, setIsApproving] = useState<string | null>(null);
-  const [isRejecting, setIsRejecting] = useState<string | null>(null);
-  const [localTransactions, setLocalTransactions] = useState(transactions);
+  const [copied, setCopied] = useState(false);
+  const [tab, setTab] = useState<"pending" | "executed" | "all">("pending");
 
-  useEffect(() => {
-    setLocalTransactions(transactions);
-  }, [transactions]);
+  const filtered = transactions
+    .filter((tx) => tab === "all" || tx.status === tab)
+    .sort((a, b) => b.timestamp - a.timestamp);
 
-  useEffect(() => {
-    if (transactions.length > 0) {
-      const latestTx = transactions[0];
-      if (latestTx && !newTransactions.has(latestTx.id)) {
-        setNewTransactions((prev) => new Set(Array.from(prev).concat(latestTx.id)));
-      }
-    }
-  }, [transactions, newTransactions]);
+  const pendingCount = transactions.filter((t) => t.status === "pending").length;
 
-  const validateForm = () => {
-    const errors: FormErrors = {};
-
-    if (!newTx.description.trim()) {
-      errors.description = "Description is required";
-    }
-
-    if (!newTx.to) {
-      errors.to = "Address is required";
-    } else if (!isValidAddress(newTx.to)) {
-      errors.to = "Invalid Ethereum address";
-    }
-
-    if (!newTx.value) {
-      errors.value = "Value is required";
-    } else if (isNaN(Number(newTx.value)) || Number(newTx.value) < 0) {
-      errors.value = "Invalid value";
-    }
-
-    if (!isValidHexData(newTx.data)) {
-      errors.data = "Invalid hex data";
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(walletAddress).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
-
-  const handlePropose = async () => {
-    try {
-      if (!validateForm()) {
-        return;
-      }
-
-      setIsSubmitting(true);
-
-      const newTxId = `tx-${Date.now()}`;
-      const transaction = {
-        ...newTx,
-        id: newTxId,
-        proposer: signers[0]?.address || "",
-        approvals: 0,
-        status: "pending" as const,
-        timestamp: Date.now(),
-        requiredApprovals,
-        signers: signers.map((s) => ({ ...s, hasApproved: false })),
-      };
-
-      await onPropose?.(transaction);
-      setIsProposing(false);
-      setNewTx({ description: "", to: "", value: "", data: "" });
-      setFormErrors({});
-
-      if (activeTab === "executed") {
-        setActiveTab("pending");
-      }
-    } catch (error) {
-      console.error("Error creating transaction:", error);
-      setFormErrors((prev) => ({
-        ...prev,
-        submit: "Failed to create transaction. Please try again.",
-      }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCopyAddress = async (address: string) => {
-    try {
-      await navigator.clipboard.writeText(address);
-      setCopiedAddress(address);
-      setTimeout(() => setCopiedAddress(null), 2000);
-    } catch (error) {
-      console.error("Failed to copy address:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (lastTransactionRef.current) {
-      lastTransactionRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, [transactions.length]);
-
-  const handleApprove = async (txId: string) => {
-    try {
-      setIsApproving(txId);
-
-      const tx = localTransactions.find((t) => t.id === txId);
-      if (!tx) return;
-
-      const currentSigner = signers[0]?.address;
-      const hasAlreadyApproved = tx.signers.find((s) => s.address === currentSigner)?.hasApproved;
-
-      if (hasAlreadyApproved) {
-        return;
-      }
-
-      const updatedTransactions = localTransactions.map((tx) => {
-        if (tx.id === txId) {
-          const newApprovals = tx.approvals + 1;
-          const newStatus =
-            newApprovals >= tx.requiredApprovals ? ("executed" as const) : ("pending" as const);
-
-          return {
-            ...tx,
-            approvals: newApprovals,
-            status: newStatus,
-            signers: tx.signers.map((s) =>
-              s.address === currentSigner ? { ...s, hasApproved: true } : s,
-            ),
-          };
-        }
-        return tx;
-      });
-
-      setLocalTransactions(updatedTransactions);
-      await onApprove?.(txId);
-      setExpandedTx(null);
-    } catch (error) {
-      console.error("Error approving transaction:", error);
-    } finally {
-      setIsApproving(null);
-    }
-  };
-
-  const handleReject = async (txId: string) => {
-    try {
-      setIsRejecting(txId);
-
-      const tx = localTransactions.find((t) => t.id === txId);
-      if (!tx) return;
-
-      const hasAlreadyRejected = tx.status === "rejected";
-
-      if (hasAlreadyRejected) {
-        return;
-      }
-
-      const updatedTransactions = localTransactions.map((tx) => {
-        if (tx.id === txId) {
-          return {
-            ...tx,
-            status: "rejected" as const,
-            approvals: 0,
-            signers: tx.signers.map((s) => ({
-              ...s,
-              hasApproved: false,
-            })),
-          };
-        }
-        return tx;
-      });
-
-      setLocalTransactions(updatedTransactions);
-      await onReject?.(txId);
-      setExpandedTx(null);
-    } catch (error) {
-      console.error("Error rejecting transaction:", error);
-    } finally {
-      setIsRejecting(null);
-    }
-  };
-
-  const filteredTransactions = localTransactions
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .filter((tx) => activeTab === "all" || tx.status === activeTab);
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700
-      shadow-sm transition-all duration-300 hover:shadow-lg ${className}`}
+      className={cn(
+        "w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+        className,
+      )}
     >
       {/* Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Multi-Signature Wallet
-            </h2>
-            <div className="flex items-center mt-2 space-x-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Address:</span>
-              <div className="group relative">
-                <code
-                  onClick={() => handleCopyAddress(walletAddress)}
-                  className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-900
-                    dark:text-white cursor-pointer transition-colors duration-200 hover:bg-gray-200
-                    dark:hover:bg-gray-600"
-                >
-                  {formatAddress(walletAddress)}
-                </code>
-                <span
-                  className="invisible group-hover:visible absolute -top-8 left-1/2 transform
-                  -translate-x-1/2 px-2 py-1 text-xs bg-gray-900 dark:bg-gray-100 text-white
-                  dark:text-gray-900 rounded shadow-lg whitespace-nowrap transition-all duration-200"
-                >
-                  {copiedAddress === walletAddress ? "Copied!" : "Click to copy"}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm text-gray-500 dark:text-gray-400">Required Approvals</div>
-            <div className="text-2xl font-semibold text-gray-900 dark:text-white">
-              {requiredApprovals}/{signers.length}
-            </div>
-          </div>
+      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+        <div className="flex items-center gap-2.5">
+          <Shield size={18} className="text-gray-900 dark:text-gray-100" />
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            Multisig
+          </span>
+          <span className="rounded-lg bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+            {requiredApprovals}/{signers.length}
+          </span>
         </div>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 rounded-lg px-2 py-1 font-mono text-xs text-gray-500 transition-colors hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+        >
+          {formatAddress(walletAddress)}
+          {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
+        </button>
       </div>
 
       {/* Signers */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-white">Signers</h3>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            {signers.length} signer{signers.length !== 1 ? "s" : ""}
-          </span>
-        </div>
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {signers.map((signer) => (
-            <div
-              key={signer.address}
-              className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg
-                border border-gray-200 dark:border-gray-700 transition-all duration-200
-                hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 group"
-            >
+      <div className="border-b border-gray-100 px-5 py-3 dark:border-gray-800">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            Signers
+          </p>
+          <div className="flex -space-x-2">
+            {signers.map((s) => (
               <div
-                className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center
-                justify-center transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
+                key={s.address}
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 ring-2 ring-white dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-950"
+                title={s.name || formatAddress(s.address)}
               >
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  {signer.name?.[0] || "S"}
+                {(s.name?.[0] || "S").toUpperCase()}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs + Propose */}
+      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-2.5 dark:border-gray-800">
+        <div className="flex gap-1">
+          {(["pending", "executed", "all"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={cn(
+                "rounded-lg px-2.5 py-1.5 text-xs font-medium capitalize transition-colors",
+                tab === t
+                  ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
+                  : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800",
+              )}
+            >
+              {t}
+              {t === "pending" && pendingCount > 0 && (
+                <span className="ml-1 rounded-full bg-white/20 px-1.5 text-[10px]">
+                  {pendingCount}
                 </span>
-              </div>
-              <div className="min-w-0 flex-1">
-                {signer.name && (
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {signer.name}
-                  </p>
-                )}
-                <div className="flex items-center gap-2">
-                  <code
-                    className="text-xs text-gray-500 dark:text-gray-400 truncate
-                    group-hover:text-blue-500 transition-colors cursor-pointer"
-                    onClick={() => handleCopyAddress(signer.address)}
-                  >
-                    {formatAddress(signer.address)}
-                  </code>
-                  {copiedAddress === signer.address && (
-                    <span className="text-xs text-green-500">Copied!</span>
-                  )}
-                </div>
-              </div>
-            </div>
+              )}
+            </button>
           ))}
         </div>
+        {onPropose && (
+          <button
+            onClick={onPropose}
+            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 dark:hover:bg-gray-800"
+          >
+            <Plus size={16} />
+          </button>
+        )}
       </div>
 
       {/* Transactions */}
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-            {(["pending", "executed", "all"] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200
-                  ${
-                    activeTab === tab
-                      ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-sm"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                  }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setIsProposing(true)}
-            className="inline-flex items-center px-3 py-1.5 bg-gray-900 dark:bg-gray-100
-              text-white dark:text-gray-900 rounded hover:bg-gray-800 dark:hover:bg-gray-200
-              transition-all duration-200 text-sm hover:shadow-md active:scale-95"
-          >
-            <svg
-              className="w-4 h-4 mr-2 transition-transform duration-200 group-hover:scale-110"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            New Transaction
-          </button>
-        </div>
-
-        <div
-          className="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin
-          scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700
-          scrollbar-track-transparent"
-        >
-          {filteredTransactions.map((tx, index) => (
-            <TransactionCard
-              key={tx.id}
-              tx={tx}
-              index={index}
-              lastTransactionRef={lastTransactionRef}
-              newTransactions={newTransactions}
-              expandedTx={expandedTx}
-              setExpandedTx={setExpandedTx}
-              signers={signers}
-              isApproving={isApproving}
-              isRejecting={isRejecting}
-              copiedAddress={copiedAddress}
-              handleCopyAddress={handleCopyAddress}
-              handleApprove={handleApprove}
-              handleReject={handleReject}
-            />
-          ))}
-          {filteredTransactions.length === 0 && (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              {activeTab === "pending"
-                ? "No pending transactions"
-                : activeTab === "executed"
-                  ? "No executed transactions"
-                  : "No transactions found"}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Modal */}
-      {isProposing && (
-        <div
-          className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center
-            justify-center z-50"
-          onClick={() => setIsProposing(false)}
-        >
+      <div className="flex flex-col gap-0.5 p-2">
+        {filtered.map((tx) => (
           <div
-            className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md mx-4 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+            key={tx.id}
+            className="rounded-xl px-3 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"
           >
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                New Transaction
-              </h3>
-              <button
-                onClick={() => setIsProposing(false)}
-                className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  value={newTx.description}
-                  onChange={(e) => {
-                    setNewTx({ ...newTx, description: e.target.value });
-                    setFormErrors((prev) => ({
-                      ...prev,
-                      description: undefined,
-                    }));
-                  }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${
-                      formErrors.description
-                        ? "border-red-500"
-                        : "border-gray-200 dark:border-gray-700"
-                    }`}
-                  placeholder="Enter transaction description"
-                />
-                {formErrors.description && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.description}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {tx.description}
+                </p>
+                <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                  {tx.value} ETH → {formatAddress(tx.to)} · {timeAgo(tx.timestamp)}
+                </p>
+              </div>
+              <span
+                className={cn(
+                  "shrink-0 rounded-md px-2 py-0.5 text-[10px] font-medium capitalize",
+                  STATUS_STYLES[tx.status],
                 )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
-                  To Address
-                </label>
-                <input
-                  type="text"
-                  value={newTx.to}
-                  onChange={(e) => {
-                    setNewTx({ ...newTx, to: e.target.value });
-                    setFormErrors((prev) => ({ ...prev, to: undefined }));
-                  }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${formErrors.to ? "border-red-500" : "border-gray-200 dark:border-gray-700"}`}
-                  placeholder="0x..."
-                />
-                {formErrors.to && <p className="text-xs text-red-500 mt-1">{formErrors.to}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
-                  Value (ETH)
-                </label>
-                <input
-                  type="number"
-                  value={newTx.value}
-                  onChange={(e) => {
-                    setNewTx({ ...newTx, value: e.target.value });
-                    setFormErrors((prev) => ({ ...prev, value: undefined }));
-                  }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${
-                      formErrors.value ? "border-red-500" : "border-gray-200 dark:border-gray-700"
-                    }`}
-                  placeholder="0.0"
-                  step="0.0001"
-                  min="0"
-                />
-                {formErrors.value && (
-                  <p className="text-xs text-red-500 mt-1">{formErrors.value}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-900 dark:text-white">
-                  Data (hex)
-                </label>
-                <input
-                  type="text"
-                  value={newTx.data}
-                  onChange={(e) => {
-                    setNewTx({ ...newTx, data: e.target.value });
-                    setFormErrors((prev) => ({ ...prev, data: undefined }));
-                  }}
-                  className={`w-full px-3 py-2 text-sm border rounded-md font-mono bg-white dark:bg-gray-800
-                    text-gray-900 dark:text-white
-                    focus:outline-none focus:ring-1 focus:ring-gray-900 dark:focus:ring-gray-100
-                    ${formErrors.data ? "border-red-500" : "border-gray-200 dark:border-gray-700"}`}
-                  placeholder="0x"
-                />
-                {formErrors.data && <p className="text-xs text-red-500 mt-1">{formErrors.data}</p>}
-              </div>
-            </div>
-
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex space-x-3">
-              <button
-                onClick={handlePropose}
-                disabled={isSubmitting}
-                className="flex-1 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white
-                  dark:text-gray-900 rounded-lg text-sm hover:bg-gray-800 dark:hover:bg-white
-                  transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-                  transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center"
               >
-                {isSubmitting ? (
-                  <div
-                    className="w-5 h-5 border-2 border-white dark:border-gray-900
-                    border-t-transparent rounded-full animate-spin"
-                  />
-                ) : (
-                  "Confirm"
-                )}
-              </button>
-              <button
-                onClick={() => setIsProposing(false)}
-                disabled={isSubmitting}
-                className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700
-                  rounded-lg text-sm text-gray-900 dark:text-white hover:bg-gray-50
-                  dark:hover:bg-gray-700 transition-all duration-200 transform
-                  hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-interface TransactionCardProps {
-  tx: Transaction;
-  index: number;
-  lastTransactionRef: React.RefObject<HTMLDivElement>;
-  newTransactions: Set<string>;
-  expandedTx: string | null;
-  setExpandedTx: (id: string | null) => void;
-  signers: { address: string; name?: string; hasApproved: boolean }[];
-  isApproving: string | null;
-  isRejecting: string | null;
-  copiedAddress: string | null;
-  handleCopyAddress: (address: string) => void;
-  handleApprove: (txId: string) => void;
-  handleReject: (txId: string) => void;
-}
-
-function TransactionCard({
-  tx,
-  index,
-  lastTransactionRef,
-  newTransactions,
-  expandedTx,
-  setExpandedTx,
-  signers,
-  isApproving,
-  isRejecting,
-  handleCopyAddress,
-  handleApprove,
-  handleReject,
-}: TransactionCardProps) {
-  return (
-    <div
-      ref={index === 0 ? lastTransactionRef : null}
-      className={`group border border-gray-200 dark:border-gray-700 rounded-lg
-        bg-white dark:bg-gray-800 overflow-hidden transition-all duration-300
-        hover:-translate-y-0.5 hover:shadow-md
-        ${newTransactions.has(tx.id) ? "" : ""}`}
-      onClick={() => setExpandedTx(expandedTx === tx.id ? null : tx.id)}
-    >
-      <div className="p-4 cursor-pointer">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-          <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-gray-900 dark:text-white flex items-center">
-              <span className="truncate">{tx.description}</span>
-              <svg
-                className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform duration-200
-                  ${expandedTx === tx.id ? "rotate-180" : ""}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </h4>
-            <div
-              className="flex flex-col sm:flex-row sm:items-center mt-1 space-y-2
-              sm:space-y-0 sm:space-x-4"
-            >
-              <div className="group">
-                <code
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCopyAddress(tx.to);
-                  }}
-                  className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer
-                    hover:text-blue-500 transition-colors truncate block"
-                >
-                  To: {formatAddress(tx.to)}
-                </code>
-              </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                Value: {Number(tx.value).toLocaleString()} ETH
+                {tx.status}
               </span>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-2 py-1 text-xs rounded-full whitespace-nowrap
-              ${
-                tx.status === "executed"
-                  ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                  : tx.status === "rejected"
-                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-              }`}
-            >
-              {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
-            </span>
-          </div>
-        </div>
 
-        {/* Progress Bar */}
-        <div
-          className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 mb-3
-          overflow-hidden"
-        >
-          <div
-            className="bg-gray-900 dark:bg-gray-100 h-1.5 rounded-full transition-all
-              duration-700 ease-out"
-            style={{
-              width: `${(tx.approvals / tx.requiredApprovals) * 100}%`,
-            }}
-          />
-        </div>
-
-        <div
-          className="flex flex-col sm:flex-row sm:items-center justify-between
-          text-sm text-gray-500 dark:text-gray-400 gap-2"
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
-              {tx.signers
-                .filter((s) => s.hasApproved)
-                .map((signer) => (
-                  <div
-                    key={signer.address}
-                    className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700
-                      flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
-                    title={signer.name || formatAddress(signer.address)}
-                  >
-                    <span className="text-xs font-medium">{signer.name?.[0] || "S"}</span>
-                  </div>
-                ))}
+            {/* Progress */}
+            <div className="mt-2.5 flex items-center gap-3">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                <div
+                  className="h-full rounded-full bg-gray-900 transition-all dark:bg-gray-100"
+                  style={{ width: `${Math.min((tx.approvals / tx.requiredApprovals) * 100, 100)}%` }}
+                />
+              </div>
+              <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                {tx.approvals}/{tx.requiredApprovals}
+              </span>
             </div>
-            <span>
-              {tx.approvals} of {tx.requiredApprovals} approvals
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-right">Proposed {formatTimestamp(tx.timestamp)}</span>
-            {tx.status === "pending" && (
-              <div className="flex gap-2">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleApprove(tx.id);
-                  }}
-                  disabled={
-                    isApproving === tx.id ||
-                    isRejecting === tx.id ||
-                    tx.signers.find((s) => s.address === signers[0]?.address)?.hasApproved ||
-                    (tx.status as string) !== "pending"
-                  }
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Approve"
-                >
-                  {isApproving === tx.id ? (
-                    <div
-                      className="w-4 h-4 border-2 border-green-500
-                      border-t-transparent rounded-full animate-spin"
-                    />
-                  ) : (
-                    <svg
-                      className="w-4 h-4 text-green-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  )}
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleReject(tx.id);
-                  }}
-                  disabled={
-                    isApproving === tx.id || isRejecting === tx.id || tx.status !== "pending"
-                  }
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
-                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Reject"
-                >
-                  {isRejecting === tx.id ? (
-                    <div
-                      className="w-4 h-4 border-2 border-red-500
-                      border-t-transparent rounded-full animate-spin"
-                    />
-                  ) : (
-                    <svg
-                      className="w-4 h-4 text-red-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  )}
-                </button>
+
+            {/* Actions */}
+            {tx.status === "pending" && (onApprove || onReject) && (
+              <div className="mt-2.5 flex gap-2">
+                {onApprove && (
+                  <button
+                    onClick={() => onApprove(tx.id)}
+                    disabled={approvingId === tx.id}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gray-900 py-2 text-xs font-medium text-white transition-colors hover:bg-gray-800 disabled:opacity-50 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                  >
+                    {approvingId === tx.id ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : (
+                      <Check size={12} />
+                    )}
+                    Approve
+                  </button>
+                )}
+                {onReject && (
+                  <button
+                    onClick={() => onReject(tx.id)}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-200 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                  >
+                    <X size={12} />
+                    Reject
+                  </button>
+                )}
               </div>
             )}
           </div>
-        </div>
+        ))}
+
+        {filtered.length === 0 && (
+          <div className="py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+            No {tab === "all" ? "" : tab} transactions
+          </div>
+        )}
       </div>
 
-      <div
-        className={`transition-all duration-300 ease-out overflow-hidden
-          ${expandedTx === tx.id ? "max-h-96" : "max-h-0"}`}
-      >
-        <div className="px-4 pb-4">
-          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-            <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">Approvals</h5>
-            <div className="space-y-2">
-              {tx.signers.map((signer) => (
-                <div key={signer.address} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center space-x-2">
-                    <div
-                      className={`w-4 h-4 rounded-full flex items-center justify-center
-                      transition-colors duration-200
-                      ${
-                        signer.hasApproved
-                          ? "bg-green-100 dark:bg-green-900/30"
-                          : "bg-gray-100 dark:bg-gray-700"
-                      }`}
-                    >
-                      {signer.hasApproved && (
-                        <svg
-                          className="w-3 h-3 text-green-700 dark:text-green-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                    <span
-                      className={`text-sm transition-colors duration-200
-                      ${
-                        tx.status === "rejected"
-                          ? "text-red-700 dark:text-red-400"
-                          : signer.hasApproved
-                            ? "text-green-700 dark:text-green-400"
-                            : "text-gray-500 dark:text-gray-400"
-                      }`}
-                    >
-                      {tx.status === "rejected"
-                        ? "Rejected"
-                        : signer.hasApproved
-                          ? "Approved"
-                          : "Pending"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 flex space-x-2">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleApprove(tx.id);
-              }}
-              disabled={
-                isApproving === tx.id ||
-                isRejecting === tx.id ||
-                tx.signers.find((s) => s.address === signers[0]?.address)?.hasApproved ||
-                !["pending"].includes(tx.status)
-              }
-              className="flex-1 px-3 py-1.5 bg-gray-900 dark:bg-gray-100 text-white
-                dark:text-gray-900 rounded text-sm hover:bg-gray-800 dark:hover:bg-gray-200
-                transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isApproving === tx.id ? "Approving..." : "Approve"}
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleReject(tx.id);
-              }}
-              disabled={isApproving === tx.id || isRejecting === tx.id || tx.status !== "pending"}
-              className="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700
-                rounded text-sm text-gray-900 dark:text-white hover:bg-gray-50
-                dark:hover:bg-gray-700 transition-all duration-200"
-            >
-              {isRejecting === tx.id ? "Rejecting..." : "Reject"}
-            </button>
-          </div>
-        </div>
+      {/* Footer */}
+      <div className="border-t border-gray-100 px-5 py-3 text-center dark:border-gray-800">
+        <span className="text-xs text-gray-400 dark:text-gray-500">
+          {transactions.length} transaction{transactions.length !== 1 ? "s" : ""} · {requiredApprovals} of {signers.length} required
+        </span>
       </div>
     </div>
   );

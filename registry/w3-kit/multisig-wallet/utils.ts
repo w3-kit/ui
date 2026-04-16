@@ -1,20 +1,15 @@
 export function formatAddress(address: string): string {
-  if (!address) return "";
+  if (!address || address.length <= 13) return address;
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-export function formatEther(value: string): string {
-  return (Number(value) / 1e18).toFixed(4);
-}
-
-export function formatTimestamp(timestamp: number): string {
-  return new Date(timestamp).toLocaleString();
-}
-
-export function isValidAddress(address: string): boolean {
-  return /^0x[a-fA-F0-9]{40}$/.test(address);
-}
-
-export function isValidHexData(data: string): boolean {
-  return !data || /^0x[a-fA-F0-9]*$/.test(data);
+export function timeAgo(timestamp: number): string {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000);
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
