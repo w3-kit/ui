@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { RefreshCw, Send, ArrowLeftRight, Wallet } from "lucide-react";
+import { RefreshCw, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { WalletBalanceProps, Token } from "./types";
 import {
@@ -44,8 +44,8 @@ function TokenLogo({ token, size = 32 }: { token: Token; size?: number }) {
 export function WalletBalance({
   tokens,
   onTokenClick,
-  onSend,
-  onSwap,
+  onSend: _onSend,
+  onSwap: _onSwap,
   onRefresh,
   showAllocation = true,
   className,
@@ -141,7 +141,6 @@ export function WalletBalance({
       <div className="flex flex-col gap-0.5 px-3 pb-3">
         {sorted.map((token, i) => {
           const value = tokenValue(token);
-          const pct = total > 0 ? (value / total) * 100 : 0;
           const isHovered = hoveredIndex === i;
 
           return (

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BarChart3, Shield, TrendingUp, AlertTriangle } from "lucide-react";
+import { BarChart3, Shield, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Position, DeFiPositionManagerProps } from "./types";
 

@@ -3,7 +3,7 @@
 import React from "react";
 import { TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { TickerToken, PriceTickerProps } from "./types";
+import type { PriceTickerProps } from "./types";
 import { formatCurrency, formatPercent, formatMarketCap } from "./utils";
 
 export function PriceTicker({ tokens, onTokenClick, className }: PriceTickerProps) {

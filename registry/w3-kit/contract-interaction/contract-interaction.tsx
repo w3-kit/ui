@@ -15,7 +15,7 @@ export function ContractInteraction({
 }: ContractInteractionProps) {
   const [tab, setTab] = useState<"read" | "write">("read");
   const [inputValues, setInputValues] = useState<Record<string, string[]>>({});
-  const [results, setResults] = useState<Record<string, string>>({});
+  const [results] = useState<Record<string, string>>({});
 
   const filtered = functions.filter((fn) => fn.type === tab);
 

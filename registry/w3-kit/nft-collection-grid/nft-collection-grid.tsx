@@ -3,7 +3,7 @@
 import React from "react";
 import { Grid3X3, ImageOff } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NFTItem, NFTCollectionGridProps } from "./types";
+import { NFTCollectionGridProps } from "./types";
 
 const columnClasses = {
   2: "grid-cols-1 sm:grid-cols-2",

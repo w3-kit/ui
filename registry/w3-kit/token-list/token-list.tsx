@@ -3,7 +3,7 @@
 import React from "react";
 import { List } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { ListToken, TokenListProps } from "./types";
+import type { TokenListProps } from "./types";
 import { formatCurrency } from "./utils";
 
 export function TokenList({ tokens, onTokenSelect, className }: TokenListProps) {

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Shield, Check, X, Plus, Copy, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MultisigWalletProps, Transaction } from "./types";
+import type { MultisigWalletProps } from "./types";
 import { formatAddress, timeAgo } from "./utils";
 
 const STATUS_STYLES = {

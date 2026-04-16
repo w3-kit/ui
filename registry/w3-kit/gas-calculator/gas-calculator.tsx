@@ -3,7 +3,7 @@
 import React from "react";
 import { Fuel, Clock, Zap, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { GasCalculatorProps, GasSpeed } from "./types";
+import type { GasCalculatorProps } from "./types";
 import { formatUsd } from "./utils";
 
 const speedIcons: Record<string, React.ElementType> = {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import type { TokenCardData, TokenCardProps } from "./types";
+import type { TokenCardProps } from "./types";
 import { formatCurrency, formatPercent } from "./utils";
 
 export function TokenCard({ token, onClick, className }: TokenCardProps) {

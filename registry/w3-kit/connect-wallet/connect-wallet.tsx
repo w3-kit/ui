@@ -85,7 +85,6 @@ export function ConnectWallet({
       )}
 
       {wallets.map((w) => {
-        const isActive = loading && connectedAccount === null;
         return (
           <button
             key={w.id}
