@@ -17,11 +17,36 @@ const TYPE_CONFIG: Record<
   Transaction["type"],
   { icon: React.ElementType; bg: string; text: string; label: string }
 > = {
-  send: { icon: ArrowUpRight, bg: "bg-red-100 dark:bg-red-900/30", text: "text-red-600 dark:text-red-400", label: "Sent" },
-  receive: { icon: ArrowDownLeft, bg: "bg-green-100 dark:bg-green-900/30", text: "text-green-600 dark:text-green-400", label: "Received" },
-  swap: { icon: ArrowLeftRight, bg: "bg-blue-100 dark:bg-blue-900/30", text: "text-blue-600 dark:text-blue-400", label: "Swapped" },
-  approve: { icon: ShieldCheck, bg: "bg-amber-100 dark:bg-amber-900/30", text: "text-amber-600 dark:text-amber-400", label: "Approved" },
-  contract: { icon: FileCode, bg: "bg-gray-100 dark:bg-gray-800", text: "text-gray-600 dark:text-gray-400", label: "Contract" },
+  send: {
+    icon: ArrowUpRight,
+    bg: "bg-red-100 dark:bg-red-900/30",
+    text: "text-red-600 dark:text-red-400",
+    label: "Sent",
+  },
+  receive: {
+    icon: ArrowDownLeft,
+    bg: "bg-green-100 dark:bg-green-900/30",
+    text: "text-green-600 dark:text-green-400",
+    label: "Received",
+  },
+  swap: {
+    icon: ArrowLeftRight,
+    bg: "bg-blue-100 dark:bg-blue-900/30",
+    text: "text-blue-600 dark:text-blue-400",
+    label: "Swapped",
+  },
+  approve: {
+    icon: ShieldCheck,
+    bg: "bg-amber-100 dark:bg-amber-900/30",
+    text: "text-amber-600 dark:text-amber-400",
+    label: "Approved",
+  },
+  contract: {
+    icon: FileCode,
+    bg: "bg-gray-100 dark:bg-gray-800",
+    text: "text-gray-600 dark:text-gray-400",
+    label: "Contract",
+  },
 };
 
 const STATUS_STYLES: Record<Transaction["status"], string> = {
@@ -64,7 +89,12 @@ export function TransactionHistory({
               onClick={() => onTransactionClick?.(tx)}
             >
               {/* Type icon */}
-              <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-full", config.bg)}>
+              <div
+                className={cn(
+                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
+                  config.bg,
+                )}
+              >
                 <Icon className={cn("h-4 w-4", config.text)} />
               </div>
 

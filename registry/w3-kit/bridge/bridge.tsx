@@ -7,7 +7,13 @@ import type { BridgeWidgetProps, BridgeNetwork, BridgeToken } from "./types";
 
 function NetIcon({ net, size = 20 }: { net: BridgeNetwork; size?: number }) {
   return net.icon ? (
-    <img src={net.icon} alt={net.name} width={size} height={size} className="shrink-0 rounded-full" />
+    <img
+      src={net.icon}
+      alt={net.name}
+      width={size}
+      height={size}
+      className="shrink-0 rounded-full"
+    />
   ) : (
     <span
       className="flex shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
@@ -20,7 +26,13 @@ function NetIcon({ net, size = 20 }: { net: BridgeNetwork; size?: number }) {
 
 function TokIcon({ tok, size = 22 }: { tok: BridgeToken; size?: number }) {
   return tok.icon ? (
-    <img src={tok.icon} alt={tok.symbol} width={size} height={size} className="shrink-0 rounded-full" />
+    <img
+      src={tok.icon}
+      alt={tok.symbol}
+      width={size}
+      height={size}
+      className="shrink-0 rounded-full"
+    />
   ) : (
     <span
       className="flex shrink-0 items-center justify-center rounded-full bg-gray-200 text-[10px] font-bold text-gray-600 dark:bg-gray-700 dark:text-gray-300"

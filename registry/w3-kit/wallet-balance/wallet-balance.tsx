@@ -78,9 +78,7 @@ export function WalletBalance({
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
         <div className="flex items-center gap-2.5">
           <Wallet size={18} className="text-gray-900 dark:text-gray-100" />
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-            Balance
-          </span>
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Balance</span>
         </div>
         {onRefresh && (
           <button
@@ -106,10 +104,13 @@ export function WalletBalance({
             <span
               className={cn(
                 "text-sm font-medium",
-                change24h > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400",
+                change24h > 0
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-500 dark:text-red-400",
               )}
             >
-              {change24h > 0 ? "+" : ""}{change24h.toFixed(2)}%
+              {change24h > 0 ? "+" : ""}
+              {change24h.toFixed(2)}%
             </span>
           )}
         </div>
@@ -165,24 +166,23 @@ export function WalletBalance({
                     <span
                       className={cn(
                         "text-xs font-medium",
-                        token.priceChange24h > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400",
+                        token.priceChange24h > 0
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-500 dark:text-red-400",
                       )}
                     >
-                      {token.priceChange24h > 0 ? "+" : ""}{token.priceChange24h.toFixed(1)}%
+                      {token.priceChange24h > 0 ? "+" : ""}
+                      {token.priceChange24h.toFixed(1)}%
                     </span>
                   )}
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {token.name}
-                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{token.name}</span>
               </div>
               <div className="text-right shrink-0">
                 <p className="text-[15px] font-medium text-gray-900 dark:text-gray-100">
                   {formatBalance(token.balance)}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {formatCurrency(value)}
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(value)}</p>
               </div>
             </button>
           );

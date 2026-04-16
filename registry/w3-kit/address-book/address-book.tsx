@@ -72,9 +72,7 @@ export function AddressBook({
           <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
             Address Book
           </span>
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            {entries.length}
-          </span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">{entries.length}</span>
         </div>
         {onAdd && (
           <button
@@ -138,9 +136,7 @@ export function AddressBook({
                     : "border-gray-200 focus:border-gray-300 dark:border-gray-700",
                 )}
               />
-              {addressError && (
-                <p className="mt-1 text-xs text-red-500">{addressError}</p>
-              )}
+              {addressError && <p className="mt-1 text-xs text-red-500">{addressError}</p>}
             </div>
             <div className="flex justify-end gap-2">
               <button

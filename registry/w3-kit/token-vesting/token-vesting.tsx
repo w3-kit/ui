@@ -12,12 +12,7 @@ const statusColor: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
 };
 
-export function TokenVesting({
-  schedules,
-  onClaim,
-  claimingId,
-  className,
-}: TokenVestingProps) {
+export function TokenVesting({ schedules, onClaim, claimingId, className }: TokenVestingProps) {
   return (
     <div
       className={cn(
@@ -28,9 +23,7 @@ export function TokenVesting({
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4">
         <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-          Vesting
-        </h3>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Vesting</h3>
       </div>
 
       {/* Schedule list */}
@@ -47,10 +40,7 @@ export function TokenVesting({
           const isClaimable = schedule.status === "active" && pct < 100;
 
           return (
-            <div
-              key={schedule.id}
-              className="rounded-xl bg-gray-50 px-3 py-3 dark:bg-gray-900"
-            >
+            <div key={schedule.id} className="rounded-xl bg-gray-50 px-3 py-3 dark:bg-gray-900">
               {/* Top row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -95,11 +85,7 @@ export function TokenVesting({
                     isClaiming && "cursor-not-allowed opacity-60",
                   )}
                 >
-                  {isClaiming ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Claim"
-                  )}
+                  {isClaiming ? <Loader2 className="h-4 w-4 animate-spin" /> : "Claim"}
                 </button>
               )}
             </div>

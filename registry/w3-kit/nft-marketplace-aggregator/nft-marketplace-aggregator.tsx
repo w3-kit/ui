@@ -32,9 +32,7 @@ export function NFTMarketplaceAggregator({
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-4">
           <ImageOff className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
-          <p className="text-[15px] font-medium text-gray-900 dark:text-white">
-            No listings found
-          </p>
+          <p className="text-[15px] font-medium text-gray-900 dark:text-white">No listings found</p>
           <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-1">
             NFT listings will appear here when available
           </p>
@@ -66,8 +64,7 @@ export function NFTMarketplaceAggregator({
       {/* Listing rows */}
       <div className="divide-y divide-gray-100 dark:divide-gray-800">
         {listings.map((listing) => {
-          const isBest =
-            bestListing?.id === listing.id && listings.length > 1;
+          const isBest = bestListing?.id === listing.id && listings.length > 1;
           const isBuying = buyingId === listing.id;
 
           return (
@@ -108,11 +105,7 @@ export function NFTMarketplaceAggregator({
                   )}
                   <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
                     {listing.marketplaceIcon && (
-                      <img
-                        src={listing.marketplaceIcon}
-                        alt=""
-                        className="h-3 w-3 rounded-full"
-                      />
+                      <img src={listing.marketplaceIcon} alt="" className="h-3 w-3 rounded-full" />
                     )}
                     {listing.marketplace}
                   </span>

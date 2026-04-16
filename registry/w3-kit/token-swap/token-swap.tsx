@@ -27,7 +27,11 @@ function TokenSelector({
         className="flex items-center gap-2 rounded-xl bg-gray-100 px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
         {token?.icon && (
-          <img src={token.icon} alt={token.symbol} className="h-5 w-5 rounded-full object-contain" />
+          <img
+            src={token.icon}
+            alt={token.symbol}
+            className="h-5 w-5 rounded-full object-contain"
+          />
         )}
         <span>{token?.symbol ?? "Select"}</span>
         <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />

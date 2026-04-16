@@ -21,9 +21,7 @@ export function TokenList({ tokens, onTokenSelect, className }: TokenListProps) 
       <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
         <List className="h-4 w-4 text-gray-500 dark:text-gray-400" />
         <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Tokens</h3>
-        <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-          {sorted.length}
-        </span>
+        <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">{sorted.length}</span>
       </div>
 
       {/* Token rows */}

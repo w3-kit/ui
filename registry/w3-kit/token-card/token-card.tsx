@@ -70,19 +70,12 @@ export function TokenCard({ token, onClick, className }: TokenCardProps) {
           </div>
         )}
 
-        <div
-          className={cn(
-            "bg-white px-4 py-3 dark:bg-gray-950",
-            !hasBalance && "col-span-2",
-          )}
-        >
+        <div className={cn("bg-white px-4 py-3 dark:bg-gray-950", !hasBalance && "col-span-2")}>
           <p className="text-xs text-gray-500 dark:text-gray-400">24h Change</p>
           <p
             className={cn(
               "text-sm font-medium",
-              change >= 0
-                ? "text-green-600 dark:text-green-400"
-                : "text-red-600 dark:text-red-400",
+              change >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400",
             )}
           >
             {formatPercent(change)}

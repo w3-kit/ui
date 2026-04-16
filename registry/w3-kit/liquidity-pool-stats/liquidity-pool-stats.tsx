@@ -21,15 +21,7 @@ function ChangeIndicator({ value }: { value: number }) {
   );
 }
 
-function StatCell({
-  label,
-  value,
-  change,
-}: {
-  label: string;
-  value: string;
-  change?: number;
-}) {
+function StatCell({ label, value, change }: { label: string; value: string; change?: number }) {
   return (
     <div className="rounded-lg bg-gray-50 px-3 py-2.5 dark:bg-gray-900">
       <p className="text-[11px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -88,10 +80,23 @@ export function LiquidityPoolStats({
       {/* Stat grid — 2x3 */}
       <div className="grid grid-cols-2 gap-2 p-3">
         <StatCell label="TVL" value={formatCurrency(pool.tvl)} change={pool.tvlChange24h} />
-        <StatCell label="Volume (24h)" value={formatCurrency(pool.volume24h)} change={pool.volumeChange24h} />
-        <StatCell label="Fees (24h)" value={pool.feesEarned24h != null ? formatCurrency(pool.feesEarned24h) : "--"} />
-        <StatCell label="Transactions" value={pool.transactions24h != null ? formatNumber(pool.transactions24h) : "--"} />
-        <StatCell label="Holders" value={pool.holders != null ? formatNumber(pool.holders) : "--"} />
+        <StatCell
+          label="Volume (24h)"
+          value={formatCurrency(pool.volume24h)}
+          change={pool.volumeChange24h}
+        />
+        <StatCell
+          label="Fees (24h)"
+          value={pool.feesEarned24h != null ? formatCurrency(pool.feesEarned24h) : "--"}
+        />
+        <StatCell
+          label="Transactions"
+          value={pool.transactions24h != null ? formatNumber(pool.transactions24h) : "--"}
+        />
+        <StatCell
+          label="Holders"
+          value={pool.holders != null ? formatNumber(pool.holders) : "--"}
+        />
         <StatCell label="APR" value={formatPercentage(pool.apr)} />
       </div>
 

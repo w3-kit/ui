@@ -22,9 +22,7 @@ export function SubscriptionPayments({
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4">
         <CreditCard className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-          Plans
-        </h3>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Plans</h3>
       </div>
 
       {/* Plan cards */}
@@ -45,9 +43,7 @@ export function SubscriptionPayments({
               {/* Plan header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {plan.name}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{plan.name}</p>
                   {plan.popular && (
                     <span className="flex items-center gap-0.5 rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400">
                       <Star className="h-3 w-3" />
@@ -60,7 +56,8 @@ export function SubscriptionPayments({
                     {plan.price}
                   </span>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {plan.token}{formatInterval(plan.interval)}
+                    {plan.token}
+                    {formatInterval(plan.interval)}
                   </span>
                 </div>
               </div>
@@ -92,11 +89,7 @@ export function SubscriptionPayments({
                   isSubscribing && "cursor-not-allowed opacity-60",
                 )}
               >
-                {isSubscribing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Subscribe"
-                )}
+                {isSubscribing ? <Loader2 className="h-4 w-4 animate-spin" /> : "Subscribe"}
               </button>
             </div>
           );

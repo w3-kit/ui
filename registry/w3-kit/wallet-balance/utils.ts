@@ -42,8 +42,16 @@ export function formatBalance(balance: string, maxDecimals = 4): string {
 
 /** Deterministic colors for allocation bar when token.color is not set */
 const PALETTE = [
-  "#627EEA", "#2775CA", "#F7931A", "#8247E5", "#28A0F0",
-  "#FF0420", "#0052FF", "#E84142", "#2A5ADA", "#14F195",
+  "#627EEA",
+  "#2775CA",
+  "#F7931A",
+  "#8247E5",
+  "#28A0F0",
+  "#FF0420",
+  "#0052FF",
+  "#E84142",
+  "#2A5ADA",
+  "#14F195",
 ];
 
 export function getAllocationColor(index: number, token: Token): string {

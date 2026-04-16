@@ -44,9 +44,7 @@ export function StakingInterface({
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
         <Coins className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
-          Staking Pools
-        </h2>
+        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">Staking Pools</h2>
         <span className="ml-auto text-xs text-gray-500">{pools.length} pools</span>
       </div>
 
@@ -65,11 +63,7 @@ export function StakingInterface({
                 className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-900"
               >
                 {pool.icon ? (
-                  <img
-                    src={pool.icon}
-                    alt={pool.token}
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img src={pool.icon} alt={pool.token} className="h-8 w-8 rounded-full" />
                 ) : (
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
                     {pool.token.slice(0, 2)}
@@ -117,8 +111,7 @@ export function StakingInterface({
                   <div className="mb-3 flex gap-1 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-800">
                     {(["Stake", "Unstake"] as const).map((label) => {
                       const active =
-                        (label === "Stake" && isStaking) ||
-                        (label === "Unstake" && !isStaking);
+                        (label === "Stake" && isStaking) || (label === "Unstake" && !isStaking);
                       return (
                         <button
                           key={label}
@@ -171,7 +164,9 @@ export function StakingInterface({
                         Processing...
                       </>
                     ) : (
-                      <>{isStaking ? "Stake" : "Unstake"} {pool.token}</>
+                      <>
+                        {isStaking ? "Stake" : "Unstake"} {pool.token}
+                      </>
                     )}
                   </button>
                 </div>

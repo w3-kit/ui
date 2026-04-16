@@ -52,9 +52,7 @@ export function GasCalculator({
               <Icon
                 className={cn(
                   "h-5 w-5 shrink-0",
-                  isSelected
-                    ? "text-white dark:text-gray-900"
-                    : "text-gray-400 dark:text-gray-500",
+                  isSelected ? "text-white dark:text-gray-900" : "text-gray-400 dark:text-gray-500",
                 )}
               />
 
@@ -62,9 +60,7 @@ export function GasCalculator({
                 <p
                   className={cn(
                     "text-sm font-medium",
-                    isSelected
-                      ? "text-white dark:text-gray-900"
-                      : "text-gray-900 dark:text-white",
+                    isSelected ? "text-white dark:text-gray-900" : "text-gray-900 dark:text-white",
                   )}
                 >
                   {speed.name}
@@ -85,9 +81,7 @@ export function GasCalculator({
                 <p
                   className={cn(
                     "text-sm font-semibold tabular-nums",
-                    isSelected
-                      ? "text-white dark:text-gray-900"
-                      : "text-gray-900 dark:text-white",
+                    isSelected ? "text-white dark:text-gray-900" : "text-gray-900 dark:text-white",
                   )}
                 >
                   {speed.gwei} Gwei
@@ -102,9 +96,7 @@ export function GasCalculator({
                 >
                   {speed.cost} ETH
                   {ethPrice != null && (
-                    <span className="ml-1">
-                      ({formatUsd(parseFloat(speed.cost) * ethPrice)})
-                    </span>
+                    <span className="ml-1">({formatUsd(parseFloat(speed.cost) * ethPrice)})</span>
                   )}
                 </p>
               </div>

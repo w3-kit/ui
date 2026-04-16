@@ -40,9 +40,7 @@ export function ContractInteraction({
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4">
         <Code className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-          Contract
-        </h3>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Contract</h3>
         {address && (
           <span className="ml-auto rounded-full bg-gray-100 px-2.5 py-0.5 font-mono text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
             {truncateAddress(address)}
@@ -82,13 +80,8 @@ export function ContractInteraction({
           const result = results[fn.name];
 
           return (
-            <div
-              key={fn.name}
-              className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900"
-            >
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {fn.name}
-              </p>
+            <div key={fn.name} className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">{fn.name}</p>
 
               {fn.inputs.length > 0 && (
                 <div className="mt-2 space-y-1.5">

@@ -49,9 +49,7 @@ export function MultisigWallet({
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
         <div className="flex items-center gap-2.5">
           <Shield size={18} className="text-gray-900 dark:text-gray-100" />
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-            Multisig
-          </span>
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Multisig</span>
           <span className="rounded-lg bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
             {requiredApprovals}/{signers.length}
           </span>
@@ -149,7 +147,9 @@ export function MultisigWallet({
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                 <div
                   className="h-full rounded-full bg-gray-900 transition-all dark:bg-gray-100"
-                  style={{ width: `${Math.min((tx.approvals / tx.requiredApprovals) * 100, 100)}%` }}
+                  style={{
+                    width: `${Math.min((tx.approvals / tx.requiredApprovals) * 100, 100)}%`,
+                  }}
                 />
               </div>
               <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
@@ -198,7 +198,8 @@ export function MultisigWallet({
       {/* Footer */}
       <div className="border-t border-gray-100 px-5 py-3 text-center dark:border-gray-800">
         <span className="text-xs text-gray-400 dark:text-gray-500">
-          {transactions.length} transaction{transactions.length !== 1 ? "s" : ""} · {requiredApprovals} of {signers.length} required
+          {transactions.length} transaction{transactions.length !== 1 ? "s" : ""} ·{" "}
+          {requiredApprovals} of {signers.length} required
         </span>
       </div>
     </div>

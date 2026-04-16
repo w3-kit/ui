@@ -40,11 +40,7 @@ export function NFTCard({ nft, onClick, className }: NFTCardProps) {
       {/* Image */}
       <div className="relative aspect-square overflow-hidden">
         {nft.image ? (
-          <img
-            src={nft.image}
-            alt={nft.name}
-            className="h-full w-full object-cover"
-          />
+          <img src={nft.image} alt={nft.name} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
             <Image className="h-10 w-10 text-gray-300 dark:text-gray-600" />
@@ -61,9 +57,7 @@ export function NFTCard({ nft, onClick, className }: NFTCardProps) {
 
       {/* Info */}
       <div className="px-4 pb-4 pt-3">
-        <p className="truncate text-[15px] font-medium text-gray-900 dark:text-white">
-          {nft.name}
-        </p>
+        <p className="truncate text-[15px] font-medium text-gray-900 dark:text-white">{nft.name}</p>
 
         {(nft.price || nft.tokenId) && (
           <div className="mt-1 flex items-center justify-between">
@@ -78,9 +72,7 @@ export function NFTCard({ nft, onClick, className }: NFTCardProps) {
               </span>
             )}
             {nft.tokenId && (
-              <span className="text-xs text-gray-400 dark:text-gray-500">
-                #{nft.tokenId}
-              </span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">#{nft.tokenId}</span>
             )}
           </div>
         )}
@@ -98,9 +90,7 @@ export function NFTCard({ nft, onClick, className }: NFTCardProps) {
                 key={i}
                 className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600 dark:bg-gray-800 dark:text-gray-400"
               >
-                <span className="mr-1 text-gray-400 dark:text-gray-500">
-                  {attr.trait}:
-                </span>
+                <span className="mr-1 text-gray-400 dark:text-gray-500">{attr.trait}:</span>
                 {attr.value}
               </span>
             ))}

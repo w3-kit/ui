@@ -29,9 +29,7 @@ export function NFTCollectionGrid({
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
           <ImageOff className="h-8 w-8 text-gray-300 dark:text-gray-600 mb-3" />
           <p className="text-sm font-medium text-gray-900 dark:text-white">No items found</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            This collection is empty
-          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">This collection is empty</p>
         </div>
       </div>
     );

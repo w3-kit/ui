@@ -55,9 +55,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
         <Zap className="h-4 w-4 text-amber-500" />
-        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-          Flash Loan
-        </span>
+        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Flash Loan</span>
       </div>
 
       <div className="space-y-4 p-4">
@@ -78,9 +76,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                     : "border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-800 dark:text-gray-400 dark:hover:border-gray-700",
                 )}
               >
-                {p.icon && (
-                  <img src={p.icon} alt={p.name} className="h-5 w-5 rounded-full" />
-                )}
+                {p.icon && <img src={p.icon} alt={p.name} className="h-5 w-5 rounded-full" />}
                 {p.name}
                 <span className="text-xs text-gray-400 dark:text-gray-500">
                   {(p.fee * 100).toFixed(2)}%
@@ -102,9 +98,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
                 inputMode="decimal"
                 placeholder="0.00"
                 value={amount}
-                onChange={(e) =>
-                  /^\d*\.?\d*$/.test(e.target.value) && setAmount(e.target.value)
-                }
+                onChange={(e) => /^\d*\.?\d*$/.test(e.target.value) && setAmount(e.target.value)}
                 className="min-w-0 flex-1 bg-transparent text-base font-medium text-gray-900 placeholder-gray-400 outline-none tabular-nums dark:text-gray-100 dark:placeholder-gray-600"
               />
               <div className="relative">
@@ -166,11 +160,7 @@ export const FlashLoanExecutor: React.FC<FlashLoanExecutorProps> = ({
               : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200",
           )}
         >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Zap className="h-4 w-4" />
-          )}
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
           {loading ? "Executing..." : "Execute Flash Loan"}
         </button>
       </div>

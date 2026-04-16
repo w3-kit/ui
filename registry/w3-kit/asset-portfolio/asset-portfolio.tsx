@@ -53,7 +53,9 @@ export function AssetPortfolio({
         <p
           className={cn(
             "text-sm font-medium",
-            totalChange24h >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400",
+            totalChange24h >= 0
+              ? "text-green-600 dark:text-green-400"
+              : "text-red-600 dark:text-red-400",
           )}
         >
           {formatPercent(totalChange24h)}

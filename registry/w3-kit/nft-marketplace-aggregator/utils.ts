@@ -1,8 +1,6 @@
 import { NFTListing } from "./types";
 
-export function findBestPriceListing(
-  listings: NFTListing[],
-): NFTListing | null {
+export function findBestPriceListing(listings: NFTListing[]): NFTListing | null {
   if (listings.length === 0) return null;
 
   return listings.reduce((best, listing) => {

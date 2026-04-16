@@ -44,10 +44,7 @@ export function NetworkSwitcher({
   const [search, setSearch] = useState("");
   const [showTestnets, setShowTestnets] = useState(false);
 
-  const hasTestnets = useMemo(
-    () => networks.some((n) => n.testnet),
-    [networks],
-  );
+  const hasTestnets = useMemo(() => networks.some((n) => n.testnet), [networks]);
 
   const shouldShowToggle = showTestnetToggle ?? hasTestnets;
 
@@ -88,15 +85,11 @@ export function NetworkSwitcher({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
         <div className="flex items-center gap-2.5">
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-            Network
-          </span>
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Network</span>
           {activeNetwork && (
             <div className="flex items-center gap-1.5">
               <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {activeNetwork.name}
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{activeNetwork.name}</span>
             </div>
           )}
         </div>

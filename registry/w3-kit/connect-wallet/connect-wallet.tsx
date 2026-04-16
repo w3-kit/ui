@@ -39,9 +39,7 @@ export function ConnectWallet({
   const [copied, setCopied] = useState(false);
 
   const isConnected = !!connectedAccount;
-  const connectedWallet = isConnected
-    ? findWallet(wallets, connectedAccount.walletId)
-    : undefined;
+  const connectedWallet = isConnected ? findWallet(wallets, connectedAccount.walletId) : undefined;
   const recentWallet = findWallet(wallets, recentWalletId);
 
   const handleCopy = () => {
@@ -113,7 +111,11 @@ export function ConnectWallet({
               </div>
               {w.ecosystem && !opts?.compact && (
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {w.ecosystem === "evm" ? "Ethereum" : w.ecosystem === "solana" ? "Solana" : "Multi-chain"}
+                  {w.ecosystem === "evm"
+                    ? "Ethereum"
+                    : w.ecosystem === "solana"
+                      ? "Solana"
+                      : "Multi-chain"}
                 </span>
               )}
             </div>
@@ -154,17 +156,17 @@ export function ConnectWallet({
             )}
             <ChevronDown
               size={14}
-              className={cn(
-                "text-gray-400 transition-transform",
-                pickerOpen && "rotate-180",
-              )}
+              className={cn("text-gray-400 transition-transform", pickerOpen && "rotate-180")}
             />
           </button>
 
           {pickerOpen && (
             <div className="mt-2 w-64 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
               <button
-                onClick={() => { onDisconnect?.(); setPickerOpen(false); }}
+                onClick={() => {
+                  onDisconnect?.();
+                  setPickerOpen(false);
+                }}
                 className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 <LogOut size={16} />
@@ -187,11 +189,7 @@ export function ConnectWallet({
             loading && "pointer-events-none opacity-70",
           )}
         >
-          {loading ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Wallet size={16} />
-          )}
+          {loading ? <Loader2 size={16} className="animate-spin" /> : <Wallet size={16} />}
           {loading ? "Connecting..." : "Connect Wallet"}
           <ChevronDown
             size={14}
@@ -296,10 +294,7 @@ export function ConnectWallet({
                 </span>
                 <ChevronDown
                   size={16}
-                  className={cn(
-                    "text-gray-400 transition-transform",
-                    chainsOpen && "rotate-180",
-                  )}
+                  className={cn("text-gray-400 transition-transform", chainsOpen && "rotate-180")}
                 />
               </button>
               {chainsOpen && (

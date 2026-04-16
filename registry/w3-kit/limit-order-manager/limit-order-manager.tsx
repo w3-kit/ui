@@ -92,10 +92,7 @@ export function LimitOrderManager({
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-gray-800/60">
             {filtered.map((order) => (
-              <div
-                key={order.id}
-                className="flex items-center justify-between gap-3 py-3"
-              >
+              <div key={order.id} className="flex items-center justify-between gap-3 py-3">
                 <div className="flex items-center gap-3 min-w-0">
                   {order.tokenIcon ? (
                     <img

@@ -5,10 +5,7 @@ export function truncateAddress(address: string): string {
 }
 
 /** Get a wallet option by ID from the wallets array */
-export function findWallet(
-  wallets: { id: string }[],
-  walletId: string | undefined,
-) {
+export function findWallet(wallets: { id: string }[], walletId: string | undefined) {
   if (!walletId) return undefined;
   return wallets.find((w) => w.id === walletId);
 }
