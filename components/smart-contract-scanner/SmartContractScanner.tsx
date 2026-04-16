@@ -1,216 +1,171 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, Loader2, ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
+import { useState } from "react";
+import {
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  ShieldX,
+  Search,
+  Loader2,
+} from "lucide-react";
 import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { SecurityCheck, SmartContractScannerProps } from "./types";
-import { isValidAddress, getMockChecks } from "./utils";
+import { SmartContractScannerProps, SecurityCheck } from "./types";
+import { truncateAddress } from "./utils";
 
-export type { SecurityCheck, SmartContractScannerProps };
+const statusIcon = {
+  safe: ShieldCheck,
+  warning: ShieldAlert,
+  danger: ShieldX,
+} as const;
 
-const statusConfig = {
-  safe: {
-    icon: ShieldCheck,
-    label: "Safe",
-    color: "text-green-600 dark:text-green-400",
-    bg: "bg-green-50 dark:bg-green-950",
-    bar: "bg-green-500",
-  },
-  warning: {
-    icon: ShieldAlert,
-    label: "Warning",
-    color: "text-amber-600 dark:text-amber-400",
-    bg: "bg-amber-50 dark:bg-amber-950",
-    bar: "bg-amber-500",
-  },
-  danger: {
-    icon: ShieldX,
-    label: "Danger",
-    color: "text-red-600 dark:text-red-400",
-    bg: "bg-red-50 dark:bg-red-950",
-    bar: "bg-red-500",
-  },
-};
+const statusColor = {
+  safe: "text-green-600 dark:text-green-400",
+  warning: "text-amber-600 dark:text-amber-400",
+  danger: "text-red-600 dark:text-red-400",
+} as const;
 
-export function SmartContractScanner({ className, onScan }: SmartContractScannerProps) {
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [checks, setChecks] = useState<SecurityCheck[]>([]);
-  const [scanned, setScanned] = useState(false);
-  const [touched, setTouched] = useState(false);
+const statusBadge = {
+  safe: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400",
+  warning: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  danger: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400",
+} as const;
 
-  const isValid = isValidAddress(address);
-  const showError = touched && address.length > 0 && !isValid;
+function scoreColor(score: number) {
+  if (score > 70) return "border-green-500 text-green-600 dark:text-green-400";
+  if (score > 40) return "border-amber-500 text-amber-600 dark:text-amber-400";
+  return "border-red-500 text-red-600 dark:text-red-400";
+}
 
-  const handleScan = async () => {
-    if (!isValid) return;
-    setLoading(true);
-    onScan?.(address);
-    await new Promise((r) => setTimeout(r, 1500));
-    setChecks(getMockChecks());
-    setScanned(true);
-    setLoading(false);
+export function SmartContractScanner({
+  address,
+  score,
+  checks,
+  onScan,
+  loading = false,
+  className,
+}: SmartContractScannerProps) {
+  const [input, setInput] = useState("");
+  const hasResults = score !== undefined && checks !== undefined;
+  const passedCount = checks?.filter((c) => c.status === "safe").length ?? 0;
+
+  const handleScan = () => {
+    const value = input.trim();
+    if (value && onScan) onScan(value);
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && isValid && !loading) handleScan();
-  };
-
-  const score = scanned
-    ? Math.round((checks.filter((c) => c.status === "safe").length / checks.length) * 100)
-    : 0;
-  const safeCount = checks.filter((c) => c.status === "safe").length;
-  const warnCount = checks.filter((c) => c.status === "warning").length;
-  const dangerCount = checks.filter((c) => c.status === "danger").length;
 
   return (
     <div
       className={cn(
-        "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden",
+        "max-w-sm rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
         className,
       )}
     >
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-        <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
-          Contract Scanner
-        </p>
+      <div className="flex items-center gap-2 px-4 pt-4 pb-3">
+        <Shield className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <span className="text-sm font-medium text-gray-900 dark:text-white">
+          Scanner
+        </span>
+        {address && (
+          <span className="ml-auto rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+            {truncateAddress(address)}
+          </span>
+        )}
       </div>
 
-      <div className="p-4 space-y-4">
-        {/* Input */}
-        <div>
+      <div className="px-4 pb-4 space-y-4">
+        {/* Input state — no results yet */}
+        {!hasResults && !loading && (
           <div className="flex gap-2">
-            <Input
-              placeholder="Contract address (0x...)"
-              value={address}
-              onChange={(e) => {
-                setAddress(e.target.value);
-                setTouched(true);
-              }}
-              onKeyDown={handleKeyDown}
-              className={cn("font-mono text-xs", showError && "border-red-300 dark:border-red-800")}
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleScan()}
+              placeholder="0x..."
+              className="flex-1 rounded-lg border border-gray-200 bg-transparent px-3 py-2 font-mono text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-600 dark:focus:ring-gray-600"
             />
-            <Button onClick={handleScan} disabled={!isValid || loading} size="sm">
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Search className="h-4 w-4" />
-              )}
-            </Button>
+            <button
+              onClick={handleScan}
+              disabled={!input.trim()}
+              className="rounded-lg bg-gray-900 px-3 py-2 text-white transition-colors hover:bg-gray-800 disabled:opacity-40 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+            >
+              <Search className="h-4 w-4" />
+            </button>
           </div>
-          {showError && (
-            <p className="text-[11px] text-red-600 dark:text-red-400 mt-1">
-              Enter a valid Ethereum address (0x + 40 hex characters)
-            </p>
-          )}
-        </div>
-
-        {/* Pre-scan hint */}
-        {!scanned && !loading && (
-          <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-2">
-            Enter a contract address to analyze its security, ownership, and potential risks
-          </p>
         )}
 
         {/* Loading state */}
         {loading && (
-          <div className="flex flex-col items-center py-6 gap-2">
-            <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
-            <p className="text-xs text-gray-500 dark:text-gray-400">Analyzing contract…</p>
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
           </div>
         )}
 
         {/* Results */}
-        {scanned && !loading && (
+        {hasResults && !loading && (
           <>
-            {/* Score */}
-            <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-[11px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400">
-                  Security Score
-                </p>
-                <div className="flex items-center gap-2 text-[11px]">
-                  {safeCount > 0 && (
-                    <span className="text-green-600 dark:text-green-400">{safeCount} safe</span>
-                  )}
-                  {warnCount > 0 && (
-                    <span className="text-amber-600 dark:text-amber-400">{warnCount} warning</span>
-                  )}
-                  {dangerCount > 0 && (
-                    <span className="text-red-600 dark:text-red-400">{dangerCount} danger</span>
-                  )}
-                </div>
-              </div>
-              <p
+            {/* Score circle */}
+            <div className="flex justify-center py-2">
+              <div
                 className={cn(
-                  "text-2xl font-semibold tabular-nums",
-                  score >= 80
-                    ? "text-green-600 dark:text-green-400"
-                    : score >= 50
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-red-600 dark:text-red-400",
+                  "flex h-20 w-20 items-center justify-center rounded-full border-4",
+                  scoreColor(score),
                 )}
               >
-                {score}/100
-              </p>
-              {/* Score bar */}
-              <div className="flex h-1.5 rounded-full overflow-hidden mt-2 bg-gray-200 dark:bg-gray-800">
-                <div
-                  className={cn(
-                    "h-full rounded-full transition-all duration-500",
-                    score >= 80 ? "bg-green-500" : score >= 50 ? "bg-amber-500" : "bg-red-500",
-                  )}
-                  style={{ width: `${score}%` }}
-                />
+                <span className="text-2xl font-bold tabular-nums">{score}</span>
               </div>
             </div>
 
-            {/* Checks list */}
-            <div className="space-y-1">
-              {checks.map((check) => {
-                const config = statusConfig[check.status];
-                const Icon = config.icon;
+            {/* Check list */}
+            <ul className="space-y-1.5">
+              {checks.map((check: SecurityCheck) => {
+                const Icon = statusIcon[check.status];
                 return (
-                  <div
-                    key={check.id}
-                    className="flex items-start gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-150"
+                  <li
+                    key={check.name}
+                    className="flex items-start gap-2.5 rounded-lg px-2 py-2"
                   >
-                    <div
-                      className={cn(
-                        "flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5",
-                        config.bg,
-                      )}
-                    >
-                      <Icon className={cn("h-3.5 w-3.5", config.color)} />
-                    </div>
-                    <div className="min-w-0">
+                    <Icon
+                      className={cn("mt-0.5 h-4 w-4 shrink-0", statusColor[check.status])}
+                    />
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {check.name}
-                        </p>
+                        </span>
                         <span
                           className={cn(
-                            "text-[10px] font-medium uppercase tracking-wider",
-                            config.color,
+                            "rounded-full px-1.5 py-0.5 text-[10px] font-medium uppercase leading-none",
+                            statusBadge[check.status],
                           )}
                         >
-                          {config.label}
+                          {check.status}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                        {check.description}
-                      </p>
+                      {check.description && (
+                        <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                          {check.description}
+                        </p>
+                      )}
                     </div>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </>
         )}
       </div>
+
+      {/* Footer */}
+      {hasResults && !loading && (
+        <div className="border-t border-gray-100 px-4 py-2.5 dark:border-gray-800">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {passedCount} check{passedCount !== 1 ? "s" : ""} passed
+          </p>
+        </div>
+      )}
     </div>
   );
 }
