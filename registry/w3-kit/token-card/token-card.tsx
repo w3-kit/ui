@@ -48,6 +48,17 @@ export function TokenCard({ token, onClick, className }: TokenCardProps) {
         <p className="text-2xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
           {formatCurrency(token.price)}
         </p>
+        {token.priceChange24h !== undefined && (
+          <p
+            className={cn(
+              "mt-0.5 text-sm font-medium",
+              change >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400",
+            )}
+          >
+            {formatPercent(change)}{" "}
+            <span className="text-xs font-normal text-gray-500 dark:text-gray-400">24h</span>
+          </p>
+        )}
       </div>
 
       {/* Stat grid */}

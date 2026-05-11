@@ -99,7 +99,14 @@ export function MultisigWallet({
             >
               {t}
               {t === "pending" && pendingCount > 0 && (
-                <span className="ml-1 rounded-full bg-white/20 px-1.5 text-[10px]">
+                <span
+                  className={cn(
+                    "ml-1 rounded-full px-1.5 text-[10px]",
+                    tab === t
+                      ? "bg-white/20 dark:bg-gray-900/20"
+                      : "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
+                  )}
+                >
                   {pendingCount}
                 </span>
               )}
@@ -146,13 +153,20 @@ export function MultisigWallet({
             <div className="mt-2.5 flex items-center gap-3">
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                 <div
-                  className="h-full rounded-full bg-gray-900 transition-all dark:bg-gray-100"
+                  className={cn(
+                    "h-full rounded-full transition-all",
+                    tx.status === "executed"
+                      ? "bg-green-500"
+                      : tx.status === "rejected"
+                        ? "bg-red-500"
+                        : "bg-gray-900 dark:bg-gray-100",
+                  )}
                   style={{
                     width: `${Math.min((tx.approvals / tx.requiredApprovals) * 100, 100)}%`,
                   }}
                 />
               </div>
-              <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+              <span className="shrink-0 font-mono text-xs text-gray-500 dark:text-gray-400">
                 {tx.approvals}/{tx.requiredApprovals}
               </span>
             </div>

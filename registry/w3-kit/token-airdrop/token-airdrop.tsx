@@ -6,7 +6,16 @@ import { cn } from "@/lib/utils";
 import type { TokenAirdropProps } from "./types";
 import { statusColor } from "./utils";
 
-export function TokenAirdrop({ airdrops, onClaim, claimingId, className }: TokenAirdropProps) {
+export function TokenAirdrop({
+  airdrops,
+  onClaim,
+  claimingId,
+  showFooter = false,
+  showActiveCount = false,
+  className,
+}: TokenAirdropProps) {
+  const activeCount = airdrops.filter((a) => a.status === "active").length;
+
   return (
     <div
       className={cn(
@@ -18,9 +27,15 @@ export function TokenAirdrop({ airdrops, onClaim, claimingId, className }: Token
       <div className="flex items-center gap-3 px-5 py-4">
         <Gift className="h-5 w-5 text-gray-500 dark:text-gray-400" />
         <h3 className="text-base font-semibold text-gray-900 dark:text-white">Airdrops</h3>
-        <span className="ml-auto rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-          {airdrops.length}
-        </span>
+        {showActiveCount ? (
+          <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+            {activeCount} claimable
+          </span>
+        ) : (
+          <span className="ml-auto rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+            {airdrops.length}
+          </span>
+        )}
       </div>
 
       {/* Airdrop list */}
@@ -36,12 +51,22 @@ export function TokenAirdrop({ airdrops, onClaim, claimingId, className }: Token
           const isActive = airdrop.status === "active";
 
           return (
-            <div key={airdrop.id} className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900">
-              <div className="flex items-center justify-between">
+            <div
+              key={airdrop.id}
+              className="flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900"
+            >
+              {airdrop.logoURI && (
+                <img
+                  src={airdrop.logoURI}
+                  alt={airdrop.token}
+                  className="h-8 w-8 shrink-0 rounded-full"
+                />
+              )}
+              <div className="flex flex-1 items-center justify-between">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {airdrop.amount} {airdrop.token}
+                      {airdrop.name ?? `${airdrop.amount} ${airdrop.token}`}
                     </p>
                     <span
                       className={cn(
@@ -53,6 +78,11 @@ export function TokenAirdrop({ airdrops, onClaim, claimingId, className }: Token
                     </span>
                   </div>
                   <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    {airdrop.name && (
+                      <span className="tabular-nums">
+                        {airdrop.amount} {airdrop.token} ·{" "}
+                      </span>
+                    )}
                     {airdrop.startDate} - {airdrop.endDate}
                   </p>
                 </div>
@@ -74,6 +104,14 @@ export function TokenAirdrop({ airdrops, onClaim, claimingId, className }: Token
           );
         })}
       </div>
+
+      {showFooter && (
+        <div className="border-t border-gray-200 px-5 py-3 text-center dark:border-gray-800">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {airdrops.length} airdrop{airdrops.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

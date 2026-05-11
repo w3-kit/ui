@@ -11,6 +11,8 @@ export interface WalletOption {
   installed?: boolean;
   /** Install URL (shown when not installed) */
   installUrl?: string;
+  /** Mark wallet as popular — shows a "Popular" badge in the picker */
+  popular?: boolean;
 }
 
 export interface ConnectedAccount {

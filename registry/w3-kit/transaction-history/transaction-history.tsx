@@ -101,7 +101,7 @@ export function TransactionHistory({
               {/* Description + hash */}
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {config.label}
+                  {tx.description ?? config.label}
                 </p>
                 <p className="font-mono text-xs text-gray-500 dark:text-gray-400">
                   {truncateHash(tx.hash)}

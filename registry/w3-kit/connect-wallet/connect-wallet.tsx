@@ -102,6 +102,11 @@ export function ConnectWallet({
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {w.name}
                 </span>
+                {w.popular && (
+                  <span className="rounded-md bg-gray-900/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-700 dark:bg-white/10 dark:text-gray-300">
+                    Popular
+                  </span>
+                )}
                 {w.installed === false && (
                   <span className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
                     Not installed

@@ -139,9 +139,10 @@ export function AssetPortfolio({
       </ul>
 
       {/* Footer */}
-      <div className="border-t border-gray-200 px-4 py-2.5 dark:border-gray-800">
+      <div className="border-t border-gray-200 px-4 py-2.5 text-center dark:border-gray-800">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           {sorted.length} asset{sorted.length !== 1 ? "s" : ""}
+          {totalValue > 0 && <> &middot; {formatCurrency(totalValue)}</>}
         </p>
       </div>
     </div>

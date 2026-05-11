@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Clock, Loader2 } from "lucide-react";
+import { Check, Clock, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TokenVestingProps } from "./types";
 import { vestingPercent } from "./utils";
@@ -12,7 +12,15 @@ const statusColor: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
 };
 
-export function TokenVesting({ schedules, onClaim, claimingId, className }: TokenVestingProps) {
+export function TokenVesting({
+  schedules,
+  onClaim,
+  claimingId,
+  showCount = false,
+  showProgressLabels = false,
+  showFooter = false,
+  className,
+}: TokenVestingProps) {
   return (
     <div
       className={cn(
@@ -24,6 +32,11 @@ export function TokenVesting({ schedules, onClaim, claimingId, className }: Toke
       <div className="flex items-center gap-3 px-5 py-4">
         <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
         <h3 className="text-base font-semibold text-gray-900 dark:text-white">Vesting</h3>
+        {showCount && (
+          <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+            {schedules.length}
+          </span>
+        )}
       </div>
 
       {/* Schedule list */}
@@ -39,32 +52,64 @@ export function TokenVesting({ schedules, onClaim, claimingId, className }: Toke
           const pct = vestingPercent(schedule.vestedAmount, schedule.totalAmount);
           const isClaimable = schedule.status === "active" && pct < 100;
 
+          const totalNum = parseFloat(schedule.totalAmount) || 0;
+          const vestedNum = parseFloat(schedule.vestedAmount) || 0;
+          const remaining = Math.max(0, totalNum - vestedNum);
+          const fullyVested =
+            schedule.status === "completed" ||
+            (totalNum > 0 && pct >= 100 && !schedule.claimableAmount);
+
           return (
             <div key={schedule.id} className="rounded-xl bg-gray-50 px-3 py-3 dark:bg-gray-900">
               {/* Top row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {schedule.token}
+              <div className="flex items-center gap-2">
+                {schedule.logoURI && (
+                  <img
+                    src={schedule.logoURI}
+                    alt={schedule.token}
+                    className="h-7 w-7 shrink-0 rounded-full"
+                  />
+                )}
+                <div className="flex flex-1 items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {schedule.token}
+                    </p>
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize",
+                        statusColor[schedule.status] ?? statusColor.pending,
+                      )}
+                    >
+                      {schedule.status}
+                    </span>
+                  </div>
+                  <p className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
+                    {schedule.vestedAmount} / {schedule.totalAmount}
                   </p>
-                  <span
-                    className={cn(
-                      "rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize",
-                      statusColor[schedule.status] ?? statusColor.pending,
-                    )}
-                  >
-                    {schedule.status}
-                  </span>
                 </div>
-                <p className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
-                  {schedule.vestedAmount} / {schedule.totalAmount}
-                </p>
               </div>
 
               {/* Progress bar */}
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+              {showProgressLabels && (
+                <div className="mt-2 flex items-center justify-between text-[11px] tabular-nums text-gray-500 dark:text-gray-400">
+                  <span>{pct}% vested</span>
+                  <span>{remaining.toLocaleString("en-US")} remaining</span>
+                </div>
+              )}
+              <div
+                className={cn(
+                  "h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700",
+                  showProgressLabels ? "mt-1" : "mt-2",
+                )}
+              >
                 <div
-                  className="h-full rounded-full bg-gray-900 transition-all duration-500 dark:bg-white"
+                  className={cn(
+                    "h-full rounded-full transition-all duration-500",
+                    schedule.status === "completed"
+                      ? "bg-green-500"
+                      : "bg-gray-900 dark:bg-white",
+                  )}
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -85,13 +130,35 @@ export function TokenVesting({ schedules, onClaim, claimingId, className }: Toke
                     isClaiming && "cursor-not-allowed opacity-60",
                   )}
                 >
-                  {isClaiming ? <Loader2 className="h-4 w-4 animate-spin" /> : "Claim"}
+                  {isClaiming ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : schedule.claimableAmount ? (
+                    `Claim ${schedule.claimableAmount}`
+                  ) : (
+                    "Claim"
+                  )}
                 </button>
+              )}
+
+              {/* Completed message */}
+              {fullyVested && !isClaimable && (
+                <div className="mt-2.5 flex items-center justify-center gap-1.5 rounded-lg border border-green-500/20 bg-green-500/10 px-3 py-2 text-xs font-medium text-green-700 dark:text-green-400">
+                  <Check className="h-3.5 w-3.5" />
+                  Fully vested &amp; claimed
+                </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {showFooter && (
+        <div className="border-t border-gray-200 px-5 py-3 text-center dark:border-gray-800">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {schedules.length} schedule{schedules.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
