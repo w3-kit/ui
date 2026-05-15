@@ -1,10 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Wallet, Check, Loader2, Copy, LogOut, ChevronDown } from "lucide-react";
+import { Wallet, Check, Loader2, Copy, LogOut, ChevronDown, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ConnectWalletProps, WalletOption } from "./types";
 import { truncateAddress, findWallet } from "./utils";
+
+type WalletBucketKey = "evm" | "solana" | "both" | "other";
+
+const BUCKET_ORDER: WalletBucketKey[] = ["evm", "solana", "both", "other"];
+
+const BUCKET_LABELS: Record<WalletBucketKey, string> = {
+  evm: "Ethereum",
+  solana: "Solana",
+  both: "Multi-chain",
+  other: "Other wallets",
+};
 
 function WalletIcon({ wallet, size = 24 }: { wallet: WalletOption; size?: number }) {
   if (typeof wallet.icon === "string") {
@@ -41,6 +52,16 @@ export function ConnectWallet({
   const isConnected = !!connectedAccount;
   const connectedWallet = isConnected ? findWallet(wallets, connectedAccount.walletId) : undefined;
   const recentWallet = findWallet(wallets, recentWalletId);
+  const groupedWallets = wallets.reduce<Record<WalletBucketKey, WalletOption[]>>(
+    (acc, wallet) => {
+      const bucket = wallet.ecosystem ?? "other";
+      acc[bucket].push(wallet);
+      return acc;
+    },
+    { evm: [], solana: [], both: [], other: [] },
+  );
+  const visibleBuckets = BUCKET_ORDER.filter((bucket) => groupedWallets[bucket].length > 0);
+  const showBucketHeaders = visibleBuckets.length >= 2;
 
   const handleCopy = () => {
     if (connectedAccount?.address) {
@@ -53,6 +74,69 @@ export function ConnectWallet({
   const handleWalletClick = (walletId: string) => {
     onConnect(walletId);
     setPickerOpen(false);
+  };
+
+  const renderWalletButton = (wallet: WalletOption, compact?: boolean) => (
+    <button
+      key={wallet.id}
+      onClick={() => handleWalletClick(wallet.id)}
+      disabled={loading}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-xl p-3 text-left transition-all",
+        "hover:bg-gray-100 dark:hover:bg-gray-800",
+        loading && "pointer-events-none opacity-40",
+      )}
+    >
+      <WalletIcon wallet={wallet} size={compact ? 24 : 28} />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            {wallet.name}
+          </span>
+          {wallet.popular && (
+            <span className="flex items-center gap-0.5 rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400">
+              <Star className="h-3 w-3" />
+              Popular
+            </span>
+          )}
+          {wallet.installed === false && (
+            <span className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+              Not installed
+            </span>
+          )}
+        </div>
+        {wallet.ecosystem && !compact && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {wallet.ecosystem === "evm"
+              ? "Ethereum"
+              : wallet.ecosystem === "solana"
+                ? "Solana"
+                : "Multi-chain"}
+          </span>
+        )}
+      </div>
+      <span className="text-sm text-gray-400 dark:text-gray-500">→</span>
+    </button>
+  );
+
+  const renderWalletGroups = (compact?: boolean) => {
+    if (!showBucketHeaders) {
+      return wallets.map((wallet) => renderWalletButton(wallet, compact));
+    }
+
+    return visibleBuckets.map((bucket, index) => (
+      <div key={bucket} className="flex flex-col gap-0.5">
+        <p
+          className={cn(
+            "text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500",
+            index === 0 ? "mb-1 mt-1" : "mb-1 mt-3",
+          )}
+        >
+          {BUCKET_LABELS[bucket]}
+        </p>
+        {groupedWallets[bucket].map((wallet) => renderWalletButton(wallet, compact))}
+      </div>
+    ));
   };
 
   /* ── Shared wallet list ──────────────────────────────────────────── */
@@ -84,44 +168,7 @@ export function ConnectWallet({
         </>
       )}
 
-      {wallets.map((w) => {
-        return (
-          <button
-            key={w.id}
-            onClick={() => handleWalletClick(w.id)}
-            disabled={loading}
-            className={cn(
-              "flex w-full items-center gap-3 rounded-xl p-3 text-left transition-all",
-              "hover:bg-gray-100 dark:hover:bg-gray-800",
-              loading && "pointer-events-none opacity-40",
-            )}
-          >
-            <WalletIcon wallet={w} size={opts?.compact ? 24 : 28} />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {w.name}
-                </span>
-                {w.installed === false && (
-                  <span className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                    Not installed
-                  </span>
-                )}
-              </div>
-              {w.ecosystem && !opts?.compact && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {w.ecosystem === "evm"
-                    ? "Ethereum"
-                    : w.ecosystem === "solana"
-                      ? "Solana"
-                      : "Multi-chain"}
-                </span>
-              )}
-            </div>
-            <span className="text-sm text-gray-400 dark:text-gray-500">→</span>
-          </button>
-        );
-      })}
+      {renderWalletGroups(opts?.compact)}
     </div>
   );
 
