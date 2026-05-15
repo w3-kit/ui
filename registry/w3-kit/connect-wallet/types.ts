@@ -5,6 +5,8 @@ export interface WalletOption {
   name: string;
   /** Icon URL or React node */
   icon: string | React.ReactNode;
+  /** Whether to highlight this wallet as a popular option */
+  popular?: boolean;
   /** Ecosystem: "evm" | "solana" | "both" */
   ecosystem?: "evm" | "solana" | "both";
   /** Whether this wallet is installed/detected */

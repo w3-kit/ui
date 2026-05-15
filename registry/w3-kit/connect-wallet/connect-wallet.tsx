@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Wallet, Check, Loader2, Copy, LogOut, ChevronDown } from "lucide-react";
+import { Wallet, Check, Loader2, Copy, LogOut, ChevronDown, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ConnectWalletProps, WalletOption } from "./types";
 import { truncateAddress, findWallet } from "./utils";
@@ -93,6 +93,12 @@ export function ConnectWallet({
           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
             {wallet.name}
           </span>
+          {wallet.popular && (
+            <span className="flex items-center gap-0.5 rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400">
+              <Star className="h-3 w-3" />
+              Popular
+            </span>
+          )}
           {wallet.installed === false && (
             <span className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
               Not installed
