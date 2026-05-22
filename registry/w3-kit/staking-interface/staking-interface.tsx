@@ -11,6 +11,8 @@ export function StakingInterface({
   onStake,
   onUnstake,
   stakingPoolId,
+  footerLabel,
+  emptyMessage = "No staking pools available",
   className,
 }: StakingInterfaceProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -50,6 +52,11 @@ export function StakingInterface({
 
       {/* Pool list */}
       <div className="divide-y divide-gray-100 dark:divide-gray-800/60">
+        {pools.length === 0 && (
+          <p className="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            {emptyMessage}
+          </p>
+        )}
         {pools.map((pool) => {
           const expanded = expandedId === pool.id;
           const loading = stakingPoolId === pool.id;
@@ -175,6 +182,13 @@ export function StakingInterface({
           );
         })}
       </div>
+
+      {/* Footer */}
+      {footerLabel && (
+        <div className="border-t border-gray-200 px-4 py-2.5 text-center dark:border-gray-800">
+          <p className="text-xs text-gray-500 dark:text-gray-400">{footerLabel}</p>
+        </div>
+      )}
     </div>
   );
 }

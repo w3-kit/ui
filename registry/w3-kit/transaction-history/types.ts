@@ -7,6 +7,7 @@ export interface Transaction {
   from: string;
   to: string;
   timestamp: number;
+  description?: string;
 }
 
 export interface TransactionHistoryProps {

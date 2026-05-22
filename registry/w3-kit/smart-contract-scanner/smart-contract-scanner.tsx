@@ -24,27 +24,60 @@ const statusBadge = {
   danger: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400",
 } as const;
 
-function scoreColor(score: number) {
-  if (score > 70) return "border-green-500 text-green-600 dark:text-green-400";
-  if (score > 40) return "border-amber-500 text-amber-600 dark:text-amber-400";
-  return "border-red-500 text-red-600 dark:text-red-400";
+type RiskTier = "low" | "medium" | "high";
+
+function riskTier(score: number): RiskTier {
+  if (score > 70) return "low";
+  if (score > 40) return "medium";
+  return "high";
 }
+
+const riskTierLabel: Record<RiskTier, string> = {
+  low: "Low Risk",
+  medium: "Medium Risk",
+  high: "High Risk",
+};
+
+const riskTierBorder: Record<RiskTier, string> = {
+  low: "border-green-500 text-green-600 dark:text-green-400",
+  medium: "border-amber-500 text-amber-600 dark:text-amber-400",
+  high: "border-red-500 text-red-600 dark:text-red-400",
+};
+
+const riskTierText: Record<RiskTier, string> = {
+  low: "text-green-600 dark:text-green-400",
+  medium: "text-amber-600 dark:text-amber-400",
+  high: "text-red-600 dark:text-red-400",
+};
 
 export function SmartContractScanner({
   address,
   score,
   checks,
+  riskLabel,
+  exampleAddress,
   onScan,
+  onReset,
   loading = false,
   className,
 }: SmartContractScannerProps) {
   const [input, setInput] = useState("");
   const hasResults = score !== undefined && checks !== undefined;
   const passedCount = checks?.filter((c) => c.status === "safe").length ?? 0;
+  const warningCount = checks?.filter((c) => c.status === "warning").length ?? 0;
+  const dangerCount = checks?.filter((c) => c.status === "danger").length ?? 0;
+  const totalChecks = checks?.length ?? 0;
+  const tier = score !== undefined ? riskTier(score) : undefined;
+  const resolvedRiskLabel = riskLabel ?? (tier ? riskTierLabel[tier] : undefined);
 
   const handleScan = () => {
     const value = input.trim();
     if (value && onScan) onScan(value);
+  };
+
+  const handleReset = () => {
+    setInput("");
+    onReset?.();
   };
 
   return (
@@ -59,31 +92,56 @@ export function SmartContractScanner({
         <Shield className="h-4 w-4 text-gray-500 dark:text-gray-400" />
         <span className="text-sm font-medium text-gray-900 dark:text-white">Scanner</span>
         {address && (
-          <span className="ml-auto rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+          <span className="rounded-md bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
             {truncateAddress(address)}
           </span>
+        )}
+        {hasResults && onReset && (
+          <button
+            type="button"
+            onClick={handleReset}
+            className="ml-auto text-xs font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            New scan
+          </button>
         )}
       </div>
 
       <div className="px-4 pb-4 space-y-4">
         {/* Input state — no results yet */}
         {!hasResults && !loading && (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleScan()}
-              placeholder="0x..."
-              className="flex-1 rounded-lg border border-gray-200 bg-transparent px-3 py-2 font-mono text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-600 dark:focus:ring-gray-600"
-            />
-            <button
-              onClick={handleScan}
-              disabled={!input.trim()}
-              className="rounded-lg bg-gray-900 px-3 py-2 text-white transition-colors hover:bg-gray-800 disabled:opacity-40 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
-            >
-              <Search className="h-4 w-4" />
-            </button>
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleScan()}
+                placeholder="0x..."
+                aria-label="Contract address"
+                className="flex-1 rounded-lg border border-gray-200 bg-transparent px-3 py-2 font-mono text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-600 dark:focus:ring-gray-600"
+              />
+              <button
+                onClick={handleScan}
+                disabled={!input.trim()}
+                aria-label="Scan contract"
+                className="rounded-lg bg-gray-900 px-3 py-2 text-white transition-colors hover:bg-gray-800 disabled:opacity-40 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+            </div>
+            {exampleAddress && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Try:{" "}
+                <button
+                  type="button"
+                  onClick={() => setInput(exampleAddress)}
+                  className="font-mono text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+                >
+                  {truncateAddress(exampleAddress)}
+                </button>
+              </p>
+            )}
           </div>
         )}
 
@@ -97,17 +155,44 @@ export function SmartContractScanner({
         {/* Results */}
         {hasResults && !loading && (
           <>
-            {/* Score circle */}
-            <div className="flex justify-center py-2">
+            {/* Score circle + risk label */}
+            <div className="flex flex-col items-center gap-1 py-2">
               <div
                 className={cn(
                   "flex h-20 w-20 items-center justify-center rounded-full border-4",
-                  scoreColor(score),
+                  tier && riskTierBorder[tier],
                 )}
               >
                 <span className="text-2xl font-bold tabular-nums">{score}</span>
               </div>
+              {resolvedRiskLabel && tier && (
+                <span className={cn("text-xs font-medium", riskTierText[tier])}>
+                  {resolvedRiskLabel}
+                </span>
+              )}
             </div>
+
+            {/* Findings strip */}
+            {totalChecks > 0 && (
+              <div className="flex justify-center gap-3 text-xs text-gray-600 dark:text-gray-400">
+                <span className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  {passedCount} passed
+                </span>
+                {warningCount > 0 && (
+                  <span className="flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                    {warningCount} warning{warningCount !== 1 ? "s" : ""}
+                  </span>
+                )}
+                {dangerCount > 0 && (
+                  <span className="flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                    {dangerCount} critical
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Check list */}
             <ul className="space-y-1.5">
@@ -145,13 +230,15 @@ export function SmartContractScanner({
       </div>
 
       {/* Footer */}
-      {hasResults && !loading && (
-        <div className="border-t border-gray-100 px-4 py-2.5 dark:border-gray-800">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {passedCount} check{passedCount !== 1 ? "s" : ""} passed
-          </p>
-        </div>
-      )}
+      <div className="border-t border-gray-100 px-4 py-2.5 text-center dark:border-gray-800">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {hasResults && !loading
+            ? `${passedCount}/${totalChecks} checks passed`
+            : loading
+              ? "Scanning…"
+              : "Paste a contract address to scan"}
+        </p>
+      </div>
     </div>
   );
 }

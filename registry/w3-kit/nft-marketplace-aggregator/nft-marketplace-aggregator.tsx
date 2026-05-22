@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Store, BadgeCheck, ShoppingCart, ImageOff } from "lucide-react";
+import { Store, BadgeCheck, ShoppingCart, ImageOff, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NFTListing, NFTMarketplaceAggregatorProps } from "./types";
 import { findBestPriceListing } from "./utils";
@@ -130,7 +130,32 @@ export function NFTMarketplaceAggregator({
                     {listing.usdPrice}
                   </span>
                 )}
+                {(listing.rank !== undefined || listing.rarity !== undefined) && (
+                  <span className="text-[11px] tabular-nums text-gray-400 dark:text-gray-500">
+                    {listing.rank !== undefined
+                      ? `Rank #${listing.rank}`
+                      : `${(listing.rarity! * 100).toFixed(2)}%`}
+                  </span>
+                )}
+                {listing.lastUpdate && (
+                  <span className="text-[11px] tabular-nums text-gray-400 dark:text-gray-500">
+                    {listing.lastUpdate}
+                  </span>
+                )}
               </div>
+
+              {/* View link */}
+              {listing.link && (
+                <a
+                  href={listing.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View on ${listing.marketplace}`}
+                  className="ml-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              )}
 
               {/* Buy button */}
               {onBuy && (
