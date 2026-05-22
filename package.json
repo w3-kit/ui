@@ -34,7 +34,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.0.0",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.0.0",
+    "@types/node": "^25.9.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@w3-kit/config": "^0.1.0",
