@@ -9,6 +9,10 @@ export interface NFTListing {
   currency?: string;
   usdPrice?: string;
   verified?: boolean;
+  rank?: number;
+  rarity?: number;
+  lastUpdate?: string;
+  link?: string;
 }
 
 export interface NFTMarketplaceAggregatorProps {

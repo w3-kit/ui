@@ -72,6 +72,8 @@ export function TokenSwap({
   exchangeRate,
   slippage,
   loading = false,
+  showRateInHeader = false,
+  showFooter = false,
   className,
 }: TokenSwapProps) {
   const [fromAmount, setFromAmount] = useState("");
@@ -105,10 +107,16 @@ export function TokenSwap({
       <div className="mb-4 flex items-center gap-2">
         <ArrowDownUp className="h-5 w-5" />
         <h2 className="text-base font-semibold">Swap</h2>
-        {slippage !== undefined && (
-          <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-            Slippage {slippage}%
+        {showRateInHeader && fromToken && toToken && exchangeRate !== undefined ? (
+          <span className="ml-auto text-xs tabular-nums text-gray-500 dark:text-gray-400">
+            {formatRate(exchangeRate, fromToken.symbol, toToken.symbol)}
           </span>
+        ) : (
+          slippage !== undefined && (
+            <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+              Slippage {slippage}%
+            </span>
+          )
         )}
       </div>
 
@@ -210,10 +218,20 @@ export function TokenSwap({
             <Loader2 className="h-4 w-4 animate-spin" />
             Swapping...
           </>
+        ) : !fromAmount || parseFloat(fromAmount) <= 0 ? (
+          "Enter amount"
         ) : (
           "Swap"
         )}
       </button>
+
+      {showFooter && (
+        <div className="-mx-5 mt-4 border-t border-gray-200 px-5 pt-3 text-center dark:border-gray-800">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {tokens.length} token{tokens.length !== 1 ? "s" : ""} available
+          </span>
+        </div>
+      )}
     </div>
   );
 }

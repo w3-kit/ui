@@ -97,6 +97,14 @@ export function NFTCard({ nft, onClick, className }: NFTCardProps) {
           </div>
         )}
       </div>
+
+      {nft.collection && (
+        <div className="border-t border-gray-200 px-4 py-2.5 text-center dark:border-gray-800">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {nft.collection} Collection
+          </span>
+        </div>
+      )}
     </div>
   );
 }

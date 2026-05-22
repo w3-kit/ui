@@ -15,5 +15,7 @@ export interface StakingInterfaceProps {
   onStake?: (poolId: string, amount: string) => void;
   onUnstake?: (poolId: string, amount: string) => void;
   stakingPoolId?: string; // pool currently being staked to (loading)
+  footerLabel?: string; // optional caption shown in the footer strip
+  emptyMessage?: string; // shown when pools is empty
   className?: string;
 }

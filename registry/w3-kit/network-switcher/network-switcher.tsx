@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Check, Loader2, Search, X } from "lucide-react";
+import { Check, ChevronRight, Loader2, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NetworkSwitcherProps, Network } from "./types";
 
@@ -84,28 +84,30 @@ export function NetworkSwitcher({
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
-        <div className="flex items-center gap-2.5">
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Network</span>
+        <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Network</span>
+        <div className="flex items-center gap-2">
           {activeNetwork && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1 dark:bg-gray-800">
               <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-xs text-gray-500 dark:text-gray-400">{activeNetwork.name}</span>
+              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                {activeNetwork.name}
+              </span>
             </div>
           )}
+          {shouldShowToggle && (
+            <button
+              onClick={() => setShowTestnets(!showTestnets)}
+              className={cn(
+                "rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
+                showTestnets
+                  ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
+                  : "border border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600",
+              )}
+            >
+              Testnets
+            </button>
+          )}
         </div>
-        {shouldShowToggle && (
-          <button
-            onClick={() => setShowTestnets(!showTestnets)}
-            className={cn(
-              "rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
-              showTestnets
-                ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                : "border border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600",
-            )}
-          >
-            Testnets
-          </button>
-        )}
       </div>
 
       {/* Search */}
@@ -156,9 +158,14 @@ export function NetworkSwitcher({
             >
               <NetworkIcon network={network} size={28} />
               <div className="flex-1 min-w-0">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                   {network.name}
                 </span>
+                {(network.currency || network.symbol) && (
+                  <span className="block text-xs text-gray-500 dark:text-gray-400">
+                    {network.currency ?? network.symbol}
+                  </span>
+                )}
               </div>
               <span className="font-mono text-[11px] text-gray-400 dark:text-gray-500">
                 {network.chainId}
@@ -167,7 +174,13 @@ export function NetworkSwitcher({
                 <Loader2 size={14} className="shrink-0 animate-spin text-gray-400" />
               ) : isActive ? (
                 <Check size={14} className="shrink-0 text-gray-900 dark:text-gray-100" />
-              ) : null}
+              ) : (
+                <ChevronRight
+                  size={14}
+                  className="shrink-0 text-gray-300 dark:text-gray-600"
+                  aria-hidden="true"
+                />
+              )}
             </button>
           );
         })}

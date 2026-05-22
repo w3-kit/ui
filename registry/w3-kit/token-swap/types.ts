@@ -30,6 +30,10 @@ export interface TokenSwapProps {
   slippage?: number;
   /** Show loading state on swap button */
   loading?: boolean;
+  /** Show inline rate (1 from ≈ N to) in the header */
+  showRateInHeader?: boolean;
+  /** Show footer with available token count */
+  showFooter?: boolean;
   /** Additional CSS classes */
   className?: string;
 }
