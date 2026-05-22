@@ -1,0 +1,38 @@
+name: Stale Issues
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Daily 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v10
+        with:
+          days-before-issue-stale: 60
+          days-before-issue-close: 30
+          stale-issue-label: 'stale'
+          stale-issue-message: |
+            This issue has had no activity in 60 days. Flagging `stale`.
+            If it's still relevant, comment or add it to a due-dated milestone within 30 days, otherwise it will be auto-closed.
+          close-issue-message: |
+            Auto-closing after 90 days of inactivity. Reopen with fresh details if still relevant.
+          close-issue-reason: 'not_planned'
+
+          # Exempt: any issue with a due-dated milestone, blocked label, or assignee
+          exempt-issue-labels: 'blocked,non-actionable'
+          exempt-all-milestones: false
+          exempt-milestones: ''
+          exempt-assignees: '' # Issues with an assignee are not exempt; stale still applies if no activity
+
+          # Never touch PRs
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+
+          operations-per-run: 100
+          ascending: true

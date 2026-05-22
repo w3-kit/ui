@@ -1,0 +1,61 @@
+name: Dependabot auto-merge
+
+# Auto-approves and enables GitHub's auto-merge for Dependabot PRs when they are safe:
+#   - patch-level updates (any dependency)
+#   - minor-level updates for devDependencies only
+# Major updates and minor updates on runtime deps are left for human review.
+#
+# Auto-merge waits for branch-protection required checks to pass before merging.
+# Without branch protection, auto-merge falls through to immediate merge.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Approve + enable auto-merge (patch)
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approving patch-level dependency update."
+          gh pr merge --auto --squash "$PR_URL"
+
+      - name: Approve + enable auto-merge (minor devDependency)
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+          && steps.metadata.outputs.dependency-type == 'direct:development'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approving minor dev-dependency update."
+          gh pr merge --auto --squash "$PR_URL"
+
+      - name: Flag for human review (otherwise)
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-major'
+          || (steps.metadata.outputs.update-type == 'version-update:semver-minor'
+              && steps.metadata.outputs.dependency-type != 'direct:development')
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          DEP_TYPE: ${{ steps.metadata.outputs.dependency-type }}
+        run: |
+          gh pr comment "$PR_URL" --body "⚠️ Not auto-merging: \`$UPDATE_TYPE\` on \`$DEP_TYPE\`. Requires human review."
