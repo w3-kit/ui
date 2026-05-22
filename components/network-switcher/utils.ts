@@ -37,13 +37,10 @@ export async function switchNetwork(network: Network): Promise<void> {
             },
           ],
         });
-      } catch (
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        addError: unknown
-      ) {
-        throw new Error("Failed to add network");
+      } catch (addError: unknown) {
+        throw new Error("Failed to add network", { cause: addError });
       }
     }
-    throw new Error("Failed to switch network");
+    throw new Error("Failed to switch network", { cause: switchError });
   }
 }
