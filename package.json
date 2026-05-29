@@ -37,7 +37,7 @@
     "@types/node": "^25.9.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@w3-kit/config": "^0.1.0",
+    "@w3-kit/config": "^0.2.0",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.4.0",
     "postcss": "^8.5.15",
