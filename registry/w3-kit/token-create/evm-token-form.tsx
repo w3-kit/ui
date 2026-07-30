@@ -1,0 +1,161 @@
+"use client";
+
+import React from "react";
+import { cn } from "@/lib/utils";
+import type { EvmTokenFormData } from "./types";
+import { EVM_TOKEN_NAME_MAX, TOKEN_SYMBOL_MAX, validateEvmTokenForm, type FieldError } from "./utils";
+
+export interface EvmTokenFormProps {
+  value: EvmTokenFormData;
+  onChange: (next: EvmTokenFormData) => void;
+  errors?: FieldError[];
+  disabled?: boolean;
+}
+
+const errorFor = (errors: FieldError[] | undefined, field: FieldError["field"]) =>
+  errors?.find((e) => e.field === field)?.message;
+
+function fieldClass(hasError?: boolean) {
+  return cn(
+    "w-full rounded-lg border bg-transparent px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400",
+    "focus:outline-none focus:ring-2 dark:text-gray-100",
+    hasError
+      ? "border-red-400 focus:border-red-500 focus:ring-red-200 dark:border-red-500/60"
+      : "border-gray-200 focus:border-gray-300 focus:ring-gray-200 dark:border-gray-700 dark:focus:border-gray-600 dark:focus:ring-gray-700",
+  );
+}
+
+export function EvmTokenForm({ value, onChange, errors, disabled }: EvmTokenFormProps) {
+  const update = <K extends keyof EvmTokenFormData>(k: K, v: EvmTokenFormData[K]) =>
+    onChange({ ...value, [k]: v });
+
+  return (
+    <form
+      aria-label="ERC-20 token configuration"
+      className="flex flex-col gap-4"
+      onSubmit={(e) => e.preventDefault()}
+      noValidate
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            Name
+          </span>
+          <input
+            type="text"
+            value={value.name}
+            maxLength={EVM_TOKEN_NAME_MAX}
+            disabled={disabled}
+            onChange={(e) => update("name", e.target.value)}
+            placeholder="My Token"
+            aria-invalid={!!errorFor(errors, "name")}
+            className={fieldClass(!!errorFor(errors, "name"))}
+          />
+          {errorFor(errors, "name") && (
+            <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+              {errorFor(errors, "name")}
+            </p>
+          )}
+        </label>
+
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            Symbol
+          </span>
+          <input
+            type="text"
+            value={value.symbol}
+            maxLength={TOKEN_SYMBOL_MAX}
+            disabled={disabled}
+            onChange={(e) => update("symbol", e.target.value.toUpperCase())}
+            placeholder="MTK"
+            aria-invalid={!!errorFor(errors, "symbol")}
+            className={fieldClass(!!errorFor(errors, "symbol"))}
+          />
+          {errorFor(errors, "symbol") && (
+            <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+              {errorFor(errors, "symbol")}
+            </p>
+          )}
+        </label>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            Decimals
+          </span>
+          <input
+            type="number"
+            min={0}
+            max={18}
+            step={1}
+            value={value.decimals}
+            disabled={disabled}
+            onChange={(e) =>
+              update("decimals", Math.max(0, Math.min(18, Number(e.target.value) || 0)))
+            }
+            className={fieldClass(!!errorFor(errors, "decimals"))}
+          />
+          {errorFor(errors, "decimals") && (
+            <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+              {errorFor(errors, "decimals")}
+            </p>
+          )}
+        </label>
+
+        <label className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            Initial supply
+          </span>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={value.initialSupply}
+            disabled={disabled}
+            onChange={(e) => update("initialSupply", e.target.value)}
+            placeholder="1000000"
+            aria-invalid={!!errorFor(errors, "initialSupply")}
+            className={fieldClass(!!errorFor(errors, "initialSupply"))}
+          />
+          {errorFor(errors, "initialSupply") && (
+            <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+              {errorFor(errors, "initialSupply")}
+            </p>
+          )}
+        </label>
+      </div>
+
+      <fieldset className="flex flex-col gap-2" aria-label="Token extensions">
+        <legend className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+          Extensions
+        </legend>
+        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <input
+            type="checkbox"
+            checked={value.mintable}
+            disabled={disabled}
+            onChange={(e) => update("mintable", e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-800"
+          />
+          Mintable — owner can issue more supply later
+        </label>
+        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <input
+            type="checkbox"
+            checked={value.burnable}
+            disabled={disabled}
+            onChange={(e) => update("burnable", e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-800"
+          />
+          Burnable — holders can destroy their tokens
+        </label>
+      </fieldset>
+    </form>
+  );
+}
+
+/** Convenience: validate-only wrapper for callers. */
+export function validateEvm(value: EvmTokenFormData): FieldError[] {
+  return validateEvmTokenForm(value);
+}
