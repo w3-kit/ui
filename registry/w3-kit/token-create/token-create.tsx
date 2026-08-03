@@ -68,7 +68,13 @@ export function TokenCreate({
   const [result, setResult] = useState<DeployResult | null>(null);
 
   const selectedChain = useMemo(
-    () => chains.find((c) => c.chainId === selectedChainId),
+    // Normalize both sides to string so a numeric chainId in `chains`
+    // matches a string defaultChainId (and vice versa) — strict ===
+    // would silently miss.
+    () =>
+      chains.find(
+        (c) => String(c.chainId) === String(selectedChainId ?? ""),
+      ),
     [chains, selectedChainId],
   );
 
@@ -113,7 +119,6 @@ export function TokenCreate({
     try {
       const req: DeployRequest = {
         chain: selectedChain as Chain,
-        family: selectedChain.ecosystem,
         data: selectedChain.ecosystem === "evm" ? evmData : solanaData,
       };
       const deployed = await onDeploy(req);

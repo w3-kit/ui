@@ -25,7 +25,7 @@ function mockDeployer(req: DeployRequest): Promise<DeployResult> {
         reject(new Error("Mocked RPC error: insufficient funds for gas."));
         return;
       }
-      if (req.family === "evm") {
+      if (req.chain.ecosystem === "evm") {
         resolve({ address: MOCK_EVM_ADDRESS, txHash: MOCK_EVM_TXHASH });
       } else {
         resolve({ address: MOCK_SOL_ADDRESS, txHash: MOCK_SOL_TXHASH });

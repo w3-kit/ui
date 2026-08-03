@@ -40,12 +40,12 @@ export interface SolanaTokenFormData {
 
 /**
  * Payload delivered to `onDeploy`. The consumer is expected to branch on
- * `family` — ERC-20 path on EVM, SPL on Solana — using whichever SDK /
- * contract template fits their stack.
+ * `chain.ecosystem` — ERC-20 path on EVM, SPL on Solana — using whichever
+ * SDK / contract template fits their stack. The `family` field used to
+ * mirror `chain.ecosystem` here, but it was a redundant source of truth.
  */
 export interface DeployRequest {
   chain: Chain;
-  family: "evm" | "solana";
   data: EvmTokenFormData | SolanaTokenFormData;
 }
 

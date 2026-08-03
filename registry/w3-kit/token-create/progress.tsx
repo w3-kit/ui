@@ -13,11 +13,16 @@ export interface ProgressProps {
 }
 
 export function Progress({ steps, current, className }: ProgressProps) {
-  const currentIndex = steps.findIndex((s) => s.id === current);
+  // `submitting` is a transient phase overlaid on `preview`. Collapse it
+  // onto the same step index so the stepper doesn't render as inert while
+  // the spinner is showing.
+  const visualStep = current === "submitting" ? "preview" : current;
+  const currentIndex = steps.findIndex((s) => s.id === visualStep);
 
   return (
     <ol
       aria-label="Token creation progress"
+      aria-busy={current === "submitting"}
       className={cn("flex w-full items-center gap-2", className)}
     >
       {steps.map((step, idx) => {

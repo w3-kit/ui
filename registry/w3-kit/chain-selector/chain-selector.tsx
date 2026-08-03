@@ -44,11 +44,16 @@ export function ChainSelector({
   const [showTestnets, setShowTestnets] = useState(false);
 
   const hasTestnets = useMemo(() => chains.some((c) => c.testnet), [chains]);
+  // `shouldShowToggle` only controls whether the toggle BUTTON is rendered.
+  // The filter must always apply when testnets exist, otherwise hiding the
+  // button via `showTestnetToggle={false}` would silently surface testnets
+  // with no way to hide them.
   const shouldShowToggle = showTestnetToggle ?? hasTestnets;
+  const filterTestnets = hasTestnets && !showTestnets;
 
   const filtered = useMemo(() => {
     let list = chains;
-    if (shouldShowToggle && !showTestnets) {
+    if (filterTestnets) {
       list = list.filter((c) => !c.testnet);
     }
     if (search.trim()) {
@@ -62,7 +67,7 @@ export function ChainSelector({
       );
     }
     return list;
-  }, [chains, search, showTestnets, shouldShowToggle]);
+  }, [chains, search, filterTestnets]);
 
   const grouped = useMemo(() => {
     const evm = filtered.filter((c) => c.ecosystem === "evm");
@@ -70,20 +75,88 @@ export function ChainSelector({
     return { evm, sol };
   }, [filtered]);
 
+  // Flat list in DOM order so keyboard navigation is deterministic.
+  const flatChains = useMemo(
+    () => [...grouped.evm, ...grouped.sol],
+    [grouped.evm, grouped.sol],
+  );
+
+  // Focused index for roving tabindex. Defaults to the selected chain, or 0.
+  const [focusIndex, setFocusIndex] = useState(() => {
+    const idx = flatChains.findIndex(
+      (c) => String(c.chainId) === String(selectedChainId ?? ""),
+    );
+    return idx === -1 ? 0 : idx;
+  });
+
+  // Keep focusIndex valid when the chain list shrinks (e.g. user filters).
+  useMemo(() => {
+    if (focusIndex >= flatChains.length) setFocusIndex(0);
+  }, [flatChains.length, focusIndex]);
+
+  const focusChainAt = (idx: number) => {
+    const wrapped = (idx + flatChains.length) % flatChains.length;
+    setFocusIndex(wrapped);
+    const el = document.querySelector<HTMLElement>(
+      `[data-chain-radio="${flatChains[wrapped].chainId}"]`,
+    );
+    el?.focus();
+  };
+
   const handleSelect = (chainId: number | string) => {
-    if (chainId === selectedChainId) return;
+    if (String(chainId) === String(selectedChainId ?? "")) return;
     onSelect(chainId);
   };
 
-  const renderRow = (chain: Chain) => {
-    const isSelected = chain.chainId === selectedChainId;
+  const renderRow = (chain: Chain, isFocused: boolean) => {
+    const isSelected = String(chain.chainId) === String(selectedChainId ?? "");
     return (
-      <button
+      <div
         key={chain.chainId.toString()}
+        role="radio"
+        tabIndex={isFocused ? 0 : -1}
+        aria-checked={isSelected}
+        aria-label={chain.name}
+        data-chain-radio={chain.chainId}
         onClick={() => handleSelect(chain.chainId)}
-        aria-pressed={isSelected}
+        onKeyDown={(e) => {
+          // ArrowDown / ArrowRight: next row.
+          // ArrowUp / ArrowLeft: previous row (with wrap-around).
+          // Home / End: jump to ends. Enter / Space: select.
+          switch (e.key) {
+            case "ArrowDown":
+            case "ArrowRight": {
+              e.preventDefault();
+              const i = flatChains.findIndex((c) => c.chainId === chain.chainId);
+              focusChainAt(i + 1);
+              break;
+            }
+            case "ArrowUp":
+            case "ArrowLeft": {
+              e.preventDefault();
+              const i = flatChains.findIndex((c) => c.chainId === chain.chainId);
+              focusChainAt(i - 1);
+              break;
+            }
+            case "Home":
+              e.preventDefault();
+              focusChainAt(0);
+              break;
+            case "End":
+              e.preventDefault();
+              focusChainAt(flatChains.length - 1);
+              break;
+            case "Enter":
+            case " ":
+            case "Spacebar":
+              e.preventDefault();
+              handleSelect(chain.chainId);
+              break;
+            default:
+          }
+        }}
         className={cn(
-          "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
+          "flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
           "focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700",
           isSelected
             ? "bg-gray-100 dark:bg-gray-800"
@@ -112,7 +185,7 @@ export function ChainSelector({
         {isSelected && (
           <Check size={14} className="shrink-0 text-gray-900 dark:text-gray-100" />
         )}
-      </button>
+      </div>
     );
   };
 
@@ -190,7 +263,12 @@ export function ChainSelector({
             >
               EVM
             </p>
-            <div className="flex flex-col gap-0.5">{grouped.evm.map(renderRow)}</div>
+            <div className="flex flex-col gap-0.5">
+              {grouped.evm.map((c) => {
+                const i = flatChains.findIndex((x) => x.chainId === c.chainId);
+                return renderRow(c, i === focusIndex);
+              })}
+            </div>
           </section>
         )}
         {grouped.sol.length > 0 && (
@@ -201,7 +279,12 @@ export function ChainSelector({
             >
               Solana
             </p>
-            <div className="flex flex-col gap-0.5">{grouped.sol.map(renderRow)}</div>
+            <div className="flex flex-col gap-0.5">
+              {grouped.sol.map((c) => {
+                const i = flatChains.findIndex((x) => x.chainId === c.chainId);
+                return renderRow(c, i === focusIndex);
+              })}
+            </div>
           </section>
         )}
         {filtered.length === 0 && (

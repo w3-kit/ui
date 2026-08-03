@@ -78,13 +78,13 @@ export const defaultChains: Chain[] = [...defaultEvmChains, ...defaultSolanaChai
 
 /** Build an explorer link for a tx hash on the given chain. */
 export function explorerTxUrl(chain: Chain, txHash: string): string | null {
-  if (!chain.explorerHost) return null;
+  if (!chain.explorerHost || !txHash) return null;
   return `https://${chain.explorerHost}/tx/${txHash}`;
 }
 
 /** Build an explorer link for an address on the given chain. */
 export function explorerAddressUrl(chain: Chain, address: string): string | null {
-  if (!chain.explorerHost) return null;
+  if (!chain.explorerHost || !address) return null;
   // Solana's token-address pages use `/token/` rather than `/address/`.
   const path = chain.ecosystem === "solana" ? "token" : "address";
   return `https://${chain.explorerHost}/${path}/${address}`;
