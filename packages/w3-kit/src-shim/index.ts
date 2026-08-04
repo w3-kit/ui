@@ -23,11 +23,7 @@ export {
 } from "./token-create.js";
 
 export { ChainSelector, default as ChainSelectorDefault } from "./chain-selector.js";
-export type {
-  Chain,
-  ChainEcosystem,
-  ChainSelectorProps,
-} from "./chain-selector.js";
+export type { Chain, ChainEcosystem, ChainSelectorProps } from "./chain-selector.js";
 
 export {
   defaultEvmChains,

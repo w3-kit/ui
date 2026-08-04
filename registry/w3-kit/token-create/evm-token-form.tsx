@@ -3,7 +3,12 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import type { EvmTokenFormData } from "./types";
-import { EVM_TOKEN_NAME_MAX, TOKEN_SYMBOL_MAX, validateEvmTokenForm, type FieldError } from "./utils";
+import {
+  EVM_TOKEN_NAME_MAX,
+  TOKEN_SYMBOL_MAX,
+  validateEvmTokenForm,
+  type FieldError,
+} from "./utils";
 
 export interface EvmTokenFormProps {
   value: EvmTokenFormData;

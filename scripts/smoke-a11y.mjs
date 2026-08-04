@@ -13,7 +13,7 @@ import { JSDOM } from "jsdom";
 // a real consumer's <html>: lang set, title set, body present. axe checks
 // those out-of-the-box.
 const dom = new JSDOM(
-  "<!doctype html><html lang=\"en\"><head><title>Token create</title></head><body></body></html>",
+  '<!doctype html><html lang="en"><head><title>Token create</title></head><body></body></html>',
   { url: "http://localhost/", pretendToBeVisual: true },
 );
 
@@ -57,12 +57,8 @@ const axe = await import("axe-core");
 const React = (await import("react")).default ?? (await import("react"));
 const ReactDOMServer = (await import("react-dom/server")).default;
 
-const { ChainSelector } = await import(
-  "../registry/w3-kit/chain-selector/chain-selector.tsx"
-);
-const { TokenCreate } = await import(
-  "../registry/w3-kit/token-create/token-create.tsx"
-);
+const { ChainSelector } = await import("../registry/w3-kit/chain-selector/chain-selector.tsx");
+const { TokenCreate } = await import("../registry/w3-kit/token-create/token-create.tsx");
 
 async function runAxe(label) {
   const results = await axe.default.run(globalThis.document, {
@@ -149,8 +145,7 @@ const cases = [
       chains,
       onDeploy: async () => ({
         address: "0xAbcdef0000000000000000000000000000000001",
-        txHash:
-          "0xfeed00000000000000000000000000000000000000000000000000000000",
+        txHash: "0xfeed00000000000000000000000000000000000000000000000000000000",
       }),
     }),
   ],
@@ -170,15 +165,9 @@ for (const [label, el] of cases) {
 // Verify the form-level components independently. They take props that
 // the public TokenCreate builds, but we test them in isolation because
 // they're the load-bearing ARIA surface.
-const { EvmTokenForm } = await import(
-  "../registry/w3-kit/token-create/evm-token-form.tsx"
-);
-const { SolanaTokenForm } = await import(
-  "../registry/w3-kit/token-create/solana-token-form.tsx"
-);
-const { ResultCard } = await import(
-  "../registry/w3-kit/token-create/result-card.tsx"
-);
+const { EvmTokenForm } = await import("../registry/w3-kit/token-create/evm-token-form.tsx");
+const { SolanaTokenForm } = await import("../registry/w3-kit/token-create/solana-token-form.tsx");
+const { ResultCard } = await import("../registry/w3-kit/token-create/result-card.tsx");
 
 const evmErrors = [{ field: "name", message: "Name is required." }];
 
@@ -217,8 +206,7 @@ const extraCases = [
       chain: chains[0],
       result: {
         address: "0xAbcdef0000000000000000000000000000000001",
-        txHash:
-          "0xfeed00000000000000000000000000000000000000000000000000000000",
+        txHash: "0xfeed00000000000000000000000000000000000000000000000000000000",
       },
     }),
   ],

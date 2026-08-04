@@ -63,9 +63,7 @@ export function Progress({ steps, current, className }: ProgressProps) {
               <span
                 className={cn(
                   "mx-1 h-px flex-1",
-                  idx < currentIndex
-                    ? "bg-gray-900 dark:bg-white"
-                    : "bg-gray-200 dark:bg-gray-800",
+                  idx < currentIndex ? "bg-gray-900 dark:bg-white" : "bg-gray-200 dark:bg-gray-800",
                 )}
                 aria-hidden="true"
               />
@@ -90,10 +88,7 @@ export function PendingOverlay({ message, complete, className }: PendingOverlayP
     <div
       role="status"
       aria-live="polite"
-      className={cn(
-        "flex flex-col items-center gap-3 py-8 text-center",
-        className,
-      )}
+      className={cn("flex flex-col items-center gap-3 py-8 text-center", className)}
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
         {complete ? (
@@ -106,9 +101,7 @@ export function PendingOverlay({ message, complete, className }: PendingOverlayP
         {complete ? "Transaction confirmed" : message}
       </p>
       {!complete && (
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Don't close this tab.
-        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Don't close this tab.</p>
       )}
     </div>
   );

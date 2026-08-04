@@ -22,9 +22,7 @@ function CopyableAddress({ value, ariaLabel }: { value: string; ariaLabel: strin
   const [copied, setCopied] = useState(false);
   const onCopy = () => {
     if (typeof navigator === "undefined") return;
-    navigator.clipboard
-      .writeText(value)
-      .catch(() => {});
+    navigator.clipboard.writeText(value).catch(() => {});
     setCopied(true);
     window.setTimeout(() => setCopied(false), 2000);
   };
@@ -39,11 +37,7 @@ function CopyableAddress({ value, ariaLabel }: { value: string; ariaLabel: strin
         aria-label={ariaLabel}
         className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
       >
-        {copied ? (
-          <Check size={14} className="text-green-500" />
-        ) : (
-          <Copy size={14} />
-        )}
+        {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
       </button>
     </div>
   );

@@ -1,7 +1,4 @@
-import type {
-  EvmTokenFormData,
-  SolanaTokenFormData,
-} from "./types";
+import type { EvmTokenFormData, SolanaTokenFormData } from "./types";
 
 /** Used by the EVM form. ERC-20 names allow most printable ASCII. */
 export const EVM_TOKEN_NAME_MAX = 64;
@@ -52,9 +49,7 @@ const SOLANA_CONSTRAINTS: ChainConstraints = {
 };
 
 /** Validate the shared name/symbol block. */
-function validateNameAndSymbol(
-  data: { name: string; symbol: string },
-): FieldError[] {
+function validateNameAndSymbol(data: { name: string; symbol: string }): FieldError[] {
   const errors: FieldError[] = [];
 
   const name = data.name.trim();
@@ -134,12 +129,7 @@ function validateDecimalsAndSupply(
 export function validateEvmTokenForm(data: EvmTokenFormData): FieldError[] {
   return [
     ...validateNameAndSymbol(data),
-    ...validateDecimalsAndSupply(
-      data,
-      EVM_CONSTRAINTS,
-      "",
-      "uint256 maximum",
-    ),
+    ...validateDecimalsAndSupply(data, EVM_CONSTRAINTS, "", "uint256 maximum"),
   ];
 }
 

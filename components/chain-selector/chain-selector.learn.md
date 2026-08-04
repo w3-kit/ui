@@ -2,13 +2,13 @@
 
 ## What is a chain?
 
-"Chain" is shorthand for *blockchain network*. Every wallet, transaction, token, and contract lives on exactly one chain at a time. When you switch chains in a wallet app, the *same address* becomes a *different account* on the new network with its own balance and history.
+"Chain" is shorthand for _blockchain network_. Every wallet, transaction, token, and contract lives on exactly one chain at a time. When you switch chains in a wallet app, the _same address_ becomes a _different account_ on the new network with its own balance and history.
 
 A chain isn't just a cryptocurrency — it's a whole state machine with its own rules. Ethereum, Polygon, and Arbitrum all run the EVM (Ethereum Virtual Machine), so they share tooling, but their consensus rules, gas markets, and block confirmations differ. Solana is a separate VM family; an Ethereum-style contract won't run there.
 
 ## Why a chain selector exists in dApps
 
-Most tokenized actions — swaps, mints, transfers — are chain-specific. Before TokenCreate can deploy an ERC-20, it needs to know *which* EVM chain you're deploying to. Before it can mint an SPL token, it needs to know which Solana cluster (mainnet, devnet). A single UI component that fans out into multiple downstream paths needs an upfront choice point.
+Most tokenized actions — swaps, mints, transfers — are chain-specific. Before TokenCreate can deploy an ERC-20, it needs to know _which_ EVM chain you're deploying to. Before it can mint an SPL token, it needs to know which Solana cluster (mainnet, devnet). A single UI component that fans out into multiple downstream paths needs an upfront choice point.
 
 This component is that choice point.
 
@@ -26,7 +26,7 @@ When `searchable` is set, the list filters across `name`, `symbol`, `currency`, 
 
 ### Testnet toggle
 
-Some chains have `testnet: true`. The toggle is shown when *any* chain in the list is a testnet. Off by default — most users want mainnet, and toggling off a testnet should never accidentally hide the chain forever.
+Some chains have `testnet: true`. The toggle is shown when _any_ chain in the list is a testnet. Off by default — most users want mainnet, and toggling off a testnet should never accidentally hide the chain forever.
 
 ### Accessibility
 
@@ -45,4 +45,4 @@ This component is intentionally dumb about RPCs so it can be used in marketing p
 
 ## Security considerations
 
-A real dApp should *never* trust a chain selector's output alone — the user could have a stale wallet state. Treat the selector as intent ("the user wants chain 8453") and verify on submission ("the wallet is currently connected to chain 8453"). If there's a mismatch, prompt a chain switch rather than silently re-routing.
+A real dApp should _never_ trust a chain selector's output alone — the user could have a stale wallet state. Treat the selector as intent ("the user wants chain 8453") and verify on submission ("the wallet is currently connected to chain 8453"). If there's a mismatch, prompt a chain switch rather than silently re-routing.

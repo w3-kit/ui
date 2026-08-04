@@ -76,16 +76,11 @@ export function ChainSelector({
   }, [filtered]);
 
   // Flat list in DOM order so keyboard navigation is deterministic.
-  const flatChains = useMemo(
-    () => [...grouped.evm, ...grouped.sol],
-    [grouped.evm, grouped.sol],
-  );
+  const flatChains = useMemo(() => [...grouped.evm, ...grouped.sol], [grouped.evm, grouped.sol]);
 
   // Focused index for roving tabindex. Defaults to the selected chain, or 0.
   const [focusIndex, setFocusIndex] = useState(() => {
-    const idx = flatChains.findIndex(
-      (c) => String(c.chainId) === String(selectedChainId ?? ""),
-    );
+    const idx = flatChains.findIndex((c) => String(c.chainId) === String(selectedChainId ?? ""));
     return idx === -1 ? 0 : idx;
   });
 
@@ -182,9 +177,7 @@ export function ChainSelector({
         <span className="font-mono text-[11px] text-gray-400 dark:text-gray-500">
           {chain.chainId}
         </span>
-        {isSelected && (
-          <Check size={14} className="shrink-0 text-gray-900 dark:text-gray-100" />
-        )}
+        {isSelected && <Check size={14} className="shrink-0 text-gray-900 dark:text-gray-100" />}
       </div>
     );
   };

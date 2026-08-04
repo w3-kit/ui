@@ -35,22 +35,22 @@ export default function Page() {
 
 A guided flow for deploying a new token. Renders a chain picker → ecosystem-specific form (EVM ERC-20 or Solana SPL) → transaction preview → progress → result with explorer links.
 
-| Prop            | Type                                            | Description                                       |
-| --------------- | ----------------------------------------------- | ------------------------------------------------- |
-| `chains`        | `Chain[]`                                       | Pass-through to `<ChainSelector />`.              |
-| `defaultChainId`| `number \| string`                              | Initial selection.                                |
-| `onDeploy`      | `(req: DeployRequest) => Promise<DeployResult>` | Your deploy logic. Resolves with address + txHash. |
-| `className`     | `string`                                        | Optional extra classes on the root container.     |
+| Prop             | Type                                            | Description                                        |
+| ---------------- | ----------------------------------------------- | -------------------------------------------------- |
+| `chains`         | `Chain[]`                                       | Pass-through to `<ChainSelector />`.               |
+| `defaultChainId` | `number \| string`                              | Initial selection.                                 |
+| `onDeploy`       | `(req: DeployRequest) => Promise<DeployResult>` | Your deploy logic. Resolves with address + txHash. |
+| `className`      | `string`                                        | Optional extra classes on the root container.      |
 
 ### `<ChainSelector />`
 
-| Prop            | Type                              | Description                          |
-| --------------- | --------------------------------- | ------------------------------------ |
-| `chains`        | `Chain[]`                         | EVM and/or Solana chains.            |
-| `selectedChainId`| `number \| string`               | Currently selected chain's `chainId`.|
-| `onSelect`      | `(chainId: number \| string) => void` | Fired on user selection.        |
-| `searchable`    | `boolean`                         | Optional search input.               |
-| `showTestnetToggle` | `boolean`                      | Override the auto-detected toggle.   |
+| Prop                | Type                                  | Description                           |
+| ------------------- | ------------------------------------- | ------------------------------------- |
+| `chains`            | `Chain[]`                             | EVM and/or Solana chains.             |
+| `selectedChainId`   | `number \| string`                    | Currently selected chain's `chainId`. |
+| `onSelect`          | `(chainId: number \| string) => void` | Fired on user selection.              |
+| `searchable`        | `boolean`                             | Optional search input.                |
+| `showTestnetToggle` | `boolean`                             | Override the auto-detected toggle.    |
 
 `@w3-kit/ui` also exports helper utilities:
 

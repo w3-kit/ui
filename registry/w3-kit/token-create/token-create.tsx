@@ -14,10 +14,7 @@ import type {
   TokenCreateProps,
   TokenCreateStep,
 } from "./types";
-import {
-  validateEvmTokenForm,
-  validateSolanaTokenForm,
-} from "./utils";
+import { validateEvmTokenForm, validateSolanaTokenForm } from "./utils";
 import { EvmTokenForm } from "./evm-token-form";
 import { SolanaTokenForm } from "./solana-token-form";
 import { TxPreview } from "./tx-preview";
@@ -48,12 +45,7 @@ const initialSolanaData: SolanaTokenFormData = {
   mintAuthority: "self",
 };
 
-export function TokenCreate({
-  chains,
-  defaultChainId,
-  onDeploy,
-  className,
-}: TokenCreateProps) {
+export function TokenCreate({ chains, defaultChainId, onDeploy, className }: TokenCreateProps) {
   const [step, setStep] = useState<TokenCreateStep>("chain");
   const [selectedChainId, setSelectedChainId] = useState<number | string | undefined>(
     defaultChainId,
@@ -61,9 +53,7 @@ export function TokenCreate({
   const [evmData, setEvmData] = useState<EvmTokenFormData>(initialEvmData);
   const [solanaData, setSolanaData] = useState<SolanaTokenFormData>(initialSolanaData);
   const [evmErrors, setEvmErrors] = useState<ReturnType<typeof validateEvmTokenForm>>([]);
-  const [solanaErrors, setSolanaErrors] = useState<ReturnType<typeof validateSolanaTokenForm>>(
-    [],
-  );
+  const [solanaErrors, setSolanaErrors] = useState<ReturnType<typeof validateSolanaTokenForm>>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [result, setResult] = useState<DeployResult | null>(null);
 
@@ -71,10 +61,7 @@ export function TokenCreate({
     // Normalize both sides to string so a numeric chainId in `chains`
     // matches a string defaultChainId (and vice versa) — strict ===
     // would silently miss.
-    () =>
-      chains.find(
-        (c) => String(c.chainId) === String(selectedChainId ?? ""),
-      ),
+    () => chains.find((c) => String(c.chainId) === String(selectedChainId ?? "")),
     [chains, selectedChainId],
   );
 
@@ -195,17 +182,9 @@ export function TokenCreate({
               </span>
             </div>
             {isEvm ? (
-              <EvmTokenForm
-                value={evmData}
-                onChange={setEvmData}
-                errors={evmErrors}
-              />
+              <EvmTokenForm value={evmData} onChange={setEvmData} errors={evmErrors} />
             ) : (
-              <SolanaTokenForm
-                value={solanaData}
-                onChange={setSolanaData}
-                errors={solanaErrors}
-              />
+              <SolanaTokenForm value={solanaData} onChange={setSolanaData} errors={solanaErrors} />
             )}
             <button
               type="button"

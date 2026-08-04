@@ -62,24 +62,12 @@ for (const name of COMPONENTS) {
 
 // 3) Stage a minimal @/lib/utils shim so cross-component imports resolve.
 mkdirSync(join(STAGE_DIR, "lib"), { recursive: true });
-copyFileSync(
-  join(repoRoot, "lib", "utils.ts"),
-  join(STAGE_DIR, "lib", "utils.ts"),
-);
+copyFileSync(join(repoRoot, "lib", "utils.ts"), join(STAGE_DIR, "lib", "utils.ts"));
 
 // 4) Stage the public entry files. They re-export from the staged folders.
-copyFileSync(
-  join(pkgRoot, "src-shim", "index.ts"),
-  join(STAGE_DIR, "index.ts"),
-);
-copyFileSync(
-  join(pkgRoot, "src-shim", "chain-selector.ts"),
-  join(STAGE_DIR, "chain-selector.ts"),
-);
-copyFileSync(
-  join(pkgRoot, "src-shim", "token-create.ts"),
-  join(STAGE_DIR, "token-create.ts"),
-);
+copyFileSync(join(pkgRoot, "src-shim", "index.ts"), join(STAGE_DIR, "index.ts"));
+copyFileSync(join(pkgRoot, "src-shim", "chain-selector.ts"), join(STAGE_DIR, "chain-selector.ts"));
+copyFileSync(join(pkgRoot, "src-shim", "token-create.ts"), join(STAGE_DIR, "token-create.ts"));
 
 // 5) Compile. We always run post-process after — partial emits can still be
 //    salvaged for downstream tsx/bundler consumers.
