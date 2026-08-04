@@ -12,7 +12,8 @@
     "build": "tsc -p packages/create-w3-kit",
     "lint": "eslint .",
     "format:check": "prettier --check .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "smoke:a11y": "tsx scripts/smoke-a11y.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",

@@ -20,5 +20,12 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "packages/create-w3-kit", "packages/mcp-server"]
+  "exclude": [
+    "node_modules",
+    "packages/create-w3-kit",
+    "packages/mcp-server",
+    "packages/w3-kit/src-shim",
+    "packages/w3-kit/dist",
+    "packages/w3-kit/node_modules"
+  ]
 }

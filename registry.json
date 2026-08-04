@@ -185,6 +185,27 @@
       ]
     },
     {
+      "name": "chain-selector",
+      "type": "registry:component",
+      "title": "Chain Selector",
+      "description": "Chain-agnostic chain picker with EVM/Solana grouping, search, and testnet toggle.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/chain-selector/chain-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/chain-selector/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/chain-selector/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "address-book",
       "type": "registry:component",
       "title": "Address Book",
@@ -558,6 +579,59 @@
         },
         {
           "path": "registry/w3-kit/subscription-payments/utils.ts",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "token-create",
+      "type": "registry:component",
+      "title": "Token Create",
+      "description": "Chain-agnostic guided flow for deploying a new ERC-20 (EVM) or SPL (Solana) token, with form validation, transaction preview, and result explorer links.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/w3-kit/token-create/token-create.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/evm-token-form.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/solana-token-form.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/tx-preview.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/progress.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/result-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/token-create/utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/chain-selector/chain-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/chain-selector/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/w3-kit/chain-selector/utils.ts",
           "type": "registry:component"
         }
       ]
